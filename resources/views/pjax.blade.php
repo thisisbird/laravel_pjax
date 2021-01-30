@@ -1,3 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel='stylesheet' href='https://unpkg.com/nprogress@0.2.0/nprogress.css'/>
+</head>
+<body>
+    
+
+
 ...
 <a href="/pjax"> 要載入的頁面連結1 </a>
 <a href="/pjax2"> 要載入的頁面連結2 </a>
@@ -13,10 +26,17 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.pjax/1.9.6/jquery.pjax.min.js"></script>
+<script src='https://unpkg.com/nprogress@0.2.0/nprogress.js'></script>
+
 <script>
     $(document).pjax('a', '#pjax-container');
     $(document).on("pjax:timeout", function(event) {
         // 阻止超時導致連結跳轉事件發生
         event.preventDefault()
     });
+    $(document).on('pjax:start', function() { NProgress.start(); });
+    $(document).on('pjax:end',   function() { NProgress.done();  });
 </script>
+
+</body>
+</html>
