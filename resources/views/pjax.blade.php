@@ -1,6 +1,8 @@
 ...
 <a href="/pjax"> 要載入的頁面連結1 </a>
-<a href="/index/ajaxcontent"> 要載入的頁面連結2 </a>
+<a href="/pjax2"> 要載入的頁面連結2 </a>
+<a href="/pjax3"> 要載入的頁面連結3 </a>
+<a href="/index/ajaxcontent"> 要載入的頁面連結33 </a>
 ...
 <!-- 新增 Pjax 設定：(必須有一個空元素放載入的內容) -->
 <div class="main-content" id="pjax-container">

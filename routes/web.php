@@ -20,6 +20,12 @@ Route::get('/', function () {
 Route::get('/pjax', function () {
     return view('pjax');
 });
+Route::get('/pjax2', function () {
+    return view('pjax2');
+});
+Route::get('/pjax3', function () {
+    return view('pjax3');
+});
 
 Route::get('/index/ajaxcontent','App\Http\Controllers\IndexController@ajaxContent');// 載入頁面
 
