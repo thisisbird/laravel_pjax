@@ -15,3 +15,10 @@ Route::group([
     $router->get('/', 'HomeController@index');
 
 });
+
+Route::group([
+    'prefix'        => config('admin.route.prefix'),
+    'middleware'    => config('admin.route.middleware'),
+], function (Router $router) {
+    $router->resource('backend_user', 'App\Http\Controllers\Backend\BackendUserController');
+});

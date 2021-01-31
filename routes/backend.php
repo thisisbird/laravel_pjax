@@ -30,6 +30,6 @@ Route::get('/pjax3', function () {
 
 Route::get('/index/ajaxcontent','App\Http\Controllers\IndexController@ajaxContent');// 載入頁面
 
-Route::group(['middleware'=> 'auth:web'], function (Router $router) {
+Route::group(['middleware'=> 'auth.backend:backend'], function (Router $router) {
     $router->resource('user', 'App\Http\Controllers\Frontend\UserController');
 });
