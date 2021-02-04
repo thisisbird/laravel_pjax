@@ -27,6 +27,9 @@ Route::get('/pjax2', function () {
 Route::get('/pjax3', function () {
     return view('pjax3');
 });
+Route::get('/pjax4', function () {
+    return view('pjax4');
+});
 
 Route::get('/index/ajaxcontent','App\Http\Controllers\IndexController@ajaxContent');// 載入頁面
 
