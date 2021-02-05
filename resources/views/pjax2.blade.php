@@ -1,3 +1,11 @@
+<style>
+    body{
+        margin: 100px auto;
+        background-color: yellowgreen;
+        width: 600px;
+        height: 600px;
+    }
+</style>
 ...猜猜我有沒有pjax <br>
 <a href="/pjax"> 要載入的頁面連結1 </a>
 <a href="/pjax2"> 要載入的頁面連結2 </a>

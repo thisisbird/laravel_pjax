@@ -7,6 +7,14 @@
     <title>Document</title>
     <link rel='stylesheet' href='https://unpkg.com/nprogress@0.2.0/nprogress.css'/>
 </head>
+<style>
+    body{
+        margin: 100px auto;
+        background-color: yellowgreen;
+        width: 600px;
+        height: 600px;
+    }
+</style>
 <body>
     
 
