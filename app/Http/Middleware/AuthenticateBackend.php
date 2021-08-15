@@ -15,7 +15,7 @@ class AuthenticateBackend extends Middleware
     protected function redirectTo($request)
     {
         if (! $request->expectsJson()) {
-            return route('login2');
+            return route('backend.user.login');
         }
     }
 }

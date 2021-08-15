@@ -17,19 +17,16 @@ use Illuminate\Routing\Router;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('login', 'App\Http\Controllers\Backend\UserController@index');
+Route::post('login', 'App\Http\Controllers\Backend\UserController@login')->name('backend.user.login');
+Route::get('registration', 'App\Http\Controllers\Backend\UserController@registration')->name('backend.user.registration');
+Route::post('registration', 'App\Http\Controllers\Backend\UserController@postRegistration')->name('backend.user.postRegistration');
+Route::get('signOut', 'App\Http\Controllers\Backend\UserController@signOut')->name('backend.user.signOut');
 
-Route::get('/pjax', function () {
-    return view('pjax');
-});
-Route::get('/pjax2', function () {
-    return view('pjax2');
-});
-Route::get('/pjax3', function () {
-    return view('pjax3');
-});
 
 Route::get('/index/ajaxcontent','App\Http\Controllers\IndexController@ajaxContent');// 載入頁面
 
 Route::group(['middleware'=> 'auth.backend:backend'], function (Router $router) {
-    $router->resource('user', 'App\Http\Controllers\Frontend\UserController');
+    // $router->resource('user', 'App\Http\Controllers\Frontend\UserController');
+    $router->get('dashboard', 'App\Http\Controllers\Backend\UserController@dashboard')->name('backend.user.dashboard');
 });
