@@ -23,7 +23,7 @@ var optionsProfileVisit = {
 		categories: ["Jan","Feb","Mar","Apr","May","Jun","Jul", "Aug","Sep","Oct","Nov","Dec"],
 	},
 }
-let optionsVisitorsProfile  = {
+var optionsVisitorsProfile  = {
 	series: [70, 30],
 	labels: ['Male', 'Female'],
 	colors: ['#435ebe','#55c6e8'],
@@ -92,11 +92,11 @@ var optionsEurope = {
 	},
 };
 
-let optionsAmerica = {
+var optionsAmerica = {
 	...optionsEurope,
 	colors: ['#008b75'],
 }
-let optionsIndonesia = {
+var optionsIndonesia = {
 	...optionsEurope,
 	colors: ['#dc3545'],
 }

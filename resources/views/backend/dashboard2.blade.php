@@ -267,6 +267,10 @@
     </section>
 </div>
 <script>
-    console.log(2);
+        $(function() {
+        loadScript("{{asset('mazer-1.1/dist')}}/assets/js/pages/dashboard.js",'dashboard', function () {
+        // 初始化，使用jQuery給予前端div container物件
+        });
+    });
 </script>
 @endsection
