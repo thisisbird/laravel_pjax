@@ -29,7 +29,8 @@ class UserController extends Controller
             'password' => 'required',
         ]);
         $credentials = $request->only('account', 'password');
-        if (Auth::guard('backend')->attempt($credentials)) {
+        $remember = $request->remember ?? 0;
+        if (Auth::guard('backend')->attempt($credentials,$remember)) {
             //intended 紀錄之前的網址
             return redirect()->intended('back/dashboard')
                         ->withSuccess('Signed in');
@@ -76,6 +77,14 @@ class UserController extends Controller
     {
         if(Auth::guard('backend')->check()){
             return view('backend.dashboard');
+        }
+  
+        return redirect()->route('backend.user.login')->withSuccess('You are not allowed to access');
+    }
+    public function dashboard2()
+    {
+        if(Auth::guard('backend')->check()){
+            return view('backend.dashboard2');
         }
   
         return redirect()->route('backend.user.login')->withSuccess('You are not allowed to access');

@@ -1,7 +1,7 @@
 @extends('backend.layout.app')
 @section('content')
 <div class="page-heading">
-    <h3>Profile Statistics</h3>
+    <h3>Profile Statistics2</h3>
 </div>
 <div class="page-content">
     <section class="row">
@@ -267,6 +267,6 @@
     </section>
 </div>
 <script>
-    console.log(1);
+    console.log(2);
 </script>
 @endsection
