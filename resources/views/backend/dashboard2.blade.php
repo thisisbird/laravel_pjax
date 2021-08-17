@@ -268,9 +268,11 @@
 </div>
 <script>
         $(function() {
-        loadScript("{{asset('mazer-1.1/dist')}}/assets/js/pages/dashboard.js",'dashboard', function () {
-        // 初始化，使用jQuery給予前端div container物件
+            loadScript("{{asset('mazer-1.1/dist')}}/assets/vendors/apexcharts/apexcharts.js",'apexcharts', function () {
+                loadScript("{{asset('mazer-1.1/dist')}}/assets/js/pages/dashboard.js",'dashboard', function () {
+                    // to
+                });
+            });
         });
-    });
 </script>
 @endsection

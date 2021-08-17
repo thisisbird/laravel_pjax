@@ -37,7 +37,7 @@
     <script src="{{asset('mazer-1.1/dist')}}/assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
     <script src="{{asset('mazer-1.1/dist')}}/assets/js/bootstrap.bundle.min.js"></script>
 
-    <script src="{{asset('mazer-1.1/dist')}}/assets/vendors/apexcharts/apexcharts.js"></script>
+    {{-- <script src="{{asset('mazer-1.1/dist')}}/assets/vendors/apexcharts/apexcharts.js"></script> --}}
     {{-- <script src="{{asset('mazer-1.1/dist')}}/assets/js/pages/dashboard.js"></script> --}}
 
     <script src="{{asset('mazer-1.1/dist')}}/assets/js/main.js"></script>
