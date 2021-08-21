@@ -12,17 +12,25 @@ use App\Http\Controllers\Controller;
 class UserController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        if(Auth::guard('backend')->check()){
-            return redirect()->route('backend.user.dashboard');
+        if($request->search){
+            $users = BackendUser::where('name','like','%'.$request->search.'%')->orWhere('email','like','%'.$request->search.'%')->orWhere('account','like','%'.$request->search.'%')->get();
+        }else{
+            $users = BackendUser::all();
         }
-        return view('backend.user.login');
+        return view('backend.user.index',compact('users','request'));
     }  
       
 
     public function login(Request $request)
     {
+        if ($request->isMethod('get')) {
+            if(Auth::guard('backend')->check()){
+                return redirect()->route('backend.user.dashboard');
+            }
+            return view('backend.user.login');
+        }
 
         $request->validate([
             'account' => 'required',
@@ -72,7 +80,12 @@ class UserController extends Controller
       ]);
     }    
     
-
+    public function signOut() {
+        Session::flush();
+        Auth::guard('backend')->logout();
+  
+        return Redirect()->route('backend.user.login');
+    }
     public function dashboard()
     {
         if(Auth::guard('backend')->check()){
@@ -88,13 +101,5 @@ class UserController extends Controller
         }
   
         return redirect()->route('backend.user.login')->withSuccess('You are not allowed to access');
-    }
-    
-
-    public function signOut() {
-        Session::flush();
-        Auth::guard('backend')->logout();
-  
-        return Redirect()->route('backend.user.login');
     }
 }

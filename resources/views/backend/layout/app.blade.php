@@ -41,15 +41,17 @@
     {{-- <script src="{{asset('mazer-1.1/dist')}}/assets/js/pages/dashboard.js"></script> --}}
 
     <script src="{{asset('mazer-1.1/dist')}}/assets/js/main.js"></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.pjax/1.9.6/jquery.pjax.min.js"></script>
     <script src='https://unpkg.com/nprogress@0.2.0/nprogress.js'></script>
 
     <script>
-        $(document).pjax('a', '#pjax-container');
+        $(document).pjax('a:not(a[target="_blank"])', '#pjax-container');
         $(document).on("pjax:timeout", function(event) {
             // 阻止超時導致連結跳轉事件發生
             event.preventDefault()
+        });
+        $(document).on('submit', 'form[pjax-container]', function (event) {
+            $.pjax.submit(event, '#pjax-container')
         });
         $(document).on('pjax:start', function() { NProgress.start(); });
         $(document).on('pjax:end',   function() { NProgress.done();  });
