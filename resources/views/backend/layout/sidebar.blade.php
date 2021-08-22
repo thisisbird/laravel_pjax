@@ -13,7 +13,7 @@
         <div class="sidebar-menu">
             <ul class="menu">
                 <li class="sidebar-title">Menu</li>
-                <li class="sidebar-item ">
+                <li class="sidebar-item">
                     <a href="{{route('backend.user.index')}}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>使用者列表</span>
@@ -371,6 +371,11 @@
 
 <script>
     $(document).ready(function() {
+        var selectedMenu = "{!! url()->current() !!}";
+        var selector = $('.sidebar-menu').find('a[href="'+ selectedMenu +'"]');
+        selector.parent().addClass('active');
+        selector.parents('ul.treeview-menu').css('display', 'block');
+        selector.parents('li.treeview').addClass('menu-open');
         $('.sidebar-item').click(function() {
             $('.sidebar-item').removeClass('active');
             $(this).closest('.sidebar-item').addClass('active')

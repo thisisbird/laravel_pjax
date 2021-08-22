@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="{{asset('mazer-1.1/dist')}}/assets/vendors/perfect-scrollbar/perfect-scrollbar.css">
     <link rel="stylesheet" href="{{asset('mazer-1.1/dist')}}/assets/vendors/bootstrap-icons/bootstrap-icons.css">
     <link rel="stylesheet" href="{{asset('mazer-1.1/dist')}}/assets/css/app.css">
+    <link rel="stylesheet" href="{{asset('mazer-1.1/dist')}}/assets/vendors/fontawesome/all.min.css">
     <link rel="shortcut icon" href="{{asset('mazer-1.1/dist')}}/assets/images/favicon.svg" type="image/x-icon">
     <link rel='stylesheet' href='https://unpkg.com/nprogress@0.2.0/nprogress.css'/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -34,6 +35,7 @@
             @include('backend.layout.footer')
         </div>
     </div>
+    <script src="{{asset('mazer-1.1/dist')}}/assets/vendors/fontawesome/all.min.js"></script>
     <script src="{{asset('mazer-1.1/dist')}}/assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
     <script src="{{asset('mazer-1.1/dist')}}/assets/js/bootstrap.bundle.min.js"></script>
 
