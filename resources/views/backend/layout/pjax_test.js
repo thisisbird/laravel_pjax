@@ -51,6 +51,9 @@ $(document).on('pjax:complete', function (xhr) {
     NProgress.done();
 });
 
+$(document).on('pjax:start', function() { NProgress.start(); });
+$(document).on('pjax:end',   function() { NProgress.done();  });
+
 $(function () {
     $('.sidebar-menu li:not(.treeview) > a').on('click', function () {
         var $parent = $(this).parent().addClass('active');

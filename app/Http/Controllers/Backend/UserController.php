@@ -19,6 +19,7 @@ class UserController extends Controller
         }else{
             $users = BackendUser::all();
         }
+        // return view('backend.layout-concept.app',compact('users','request'));
         return view('backend.user.index',compact('users','request'));
     }  
       

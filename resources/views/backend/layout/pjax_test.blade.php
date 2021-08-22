@@ -30,6 +30,9 @@
     <!-- sweetalert -->
     <link rel="stylesheet" href="{{ asset('js_expand/sweetalert/dist/sweetalert.css') }}">
 
+    <link rel='stylesheet' href='https://unpkg.com/nprogress@0.2.0/nprogress.css'/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -94,6 +97,9 @@
 <script>
     var csrf_token = '{{ csrf_token() }}';
 </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.pjax/1.9.6/jquery.pjax.min.js"></script>
+<script src='https://unpkg.com/nprogress@0.2.0/nprogress.js'></script>
 
 <!-- nprogress -->
 <script src="{{ asset('js_expand/nprogress/nprogress.js') }}"></script>
