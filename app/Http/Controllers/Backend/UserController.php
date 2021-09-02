@@ -8,7 +8,7 @@ use Session;
 use App\Models\User;
 use App\Models\BackendUser;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Backend\Controller;
 class UserController extends Controller
 {
 
