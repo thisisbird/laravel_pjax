@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="{{asset('concept')}}/assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
     <link rel='stylesheet' href='https://unpkg.com/nprogress@0.2.0/nprogress.css'/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    {{-- <script src="{{asset('concept')}}/assets/vendor/jquery/jquery-3.3.1.min.js"></script> --}}
+    <script src="{{asset('js/pixi.min.js')}}"></script>
 
     <title>Concept - Bootstrap 4 Admin Dashboard Template</title>
 </head>
@@ -88,6 +88,8 @@
             <!-- end main wrapper  -->
             <!-- ============================================================== -->
             <!-- Optional JavaScript -->
+
+
             <!-- jquery 3.3.1 -->
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.pjax/1.9.6/jquery.pjax.min.js"></script>
             <script src='https://unpkg.com/nprogress@0.2.0/nprogress.js'></script>

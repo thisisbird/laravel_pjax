@@ -11,31 +11,36 @@
                 <ul class="navbar-nav flex-column">
                     @foreach ($sidebar_menu as $key => $item)
                     @if(isset($item['type']) && $item['type'] == 'divider')
-                        <li class="nav-divider">
-                            {{$item['title']}}
-                        </li>
+                    <li class="nav-divider">
+                        {{$item['title']}}
+                    </li>
                     @else
                     <li class="nav-item ">
                         @if(isset($item['submenu']) && count($item['submenu']))
-                        <a class="nav-link" href="{{$item['url']}}" data-toggle="collapse" aria-expanded="false" data-target="#submenu-{{$key}}" aria-controls="submenu-{{$key}}"><i class="{{$item['icon']}}"></i>{{$item['title']}} <span class="badge badge-success">6</span></a>
+                        <a class="nav-link" href="{{$item['url']}}" data-toggle="collapse" aria-expanded="false"
+                            data-target="#submenu-{{$key}}" aria-controls="submenu-{{$key}}"><i
+                                class="{{$item['icon']}}"></i>{{$item['title']}} <span
+                                class="badge badge-success">6</span></a>
                         <div id="submenu-{{$key}}" class="collapse submenu" style="">
                             <ul class="nav flex-column">
                                 @foreach ($item['submenu'] as $key2 => $item_submenu)
                                 <li class="nav-item">
                                     @if(isset($item_submenu['submenu']) && count($item_submenu['submenu']))
-                                    <a class="nav-link" href="{{$item_submenu['url']}}" data-toggle="collapse" aria-expanded="false"
-                                        data-target="#submenu-{{$key}}-{{$key2}}" aria-controls="submenu-{{$key}}-{{$key2}}">{{$item_submenu['title']}}</a>
+                                    <a class="nav-link" href="{{$item_submenu['url']}}" data-toggle="collapse"
+                                        aria-expanded="false" data-target="#submenu-{{$key}}-{{$key2}}"
+                                        aria-controls="submenu-{{$key}}-{{$key2}}">{{$item_submenu['title']}}</a>
                                     <div id="submenu-{{$key}}-{{$key2}}" class="collapse submenu" style="">
                                         <ul class="nav flex-column">
                                             @foreach ($item_submenu['submenu'] as $key3 => $item_submenu2)
                                             <li class="nav-item">
-                                                <a class="nav-link" href="{{$item_submenu2['url']}}">{{$item_submenu2['title']}}</a>
+                                                <a class="nav-link"
+                                                    href="{{$item_submenu2['url']}}">{{$item_submenu2['title']}}</a>
                                             </li>
                                             @endforeach
                                         </ul>
                                     </div>
                                     @else
-                                        <a class="nav-link" href="{{$item_submenu['url']}}">{{$item_submenu['title']}}</a>
+                                    <a class="nav-link" href="{{$item_submenu['url']}}">{{$item_submenu['title']}}</a>
                                     @endif
                                 </li>
                                 @endforeach
@@ -43,11 +48,11 @@
                         </div>
                         @else
                         <a class="nav-link" href="{{$item['url']}}"><i
-                                class="fa fa-fw fa-user-circle"></i>{{$item['title']}} <span class="badge badge-success">6</span></a>
+                                class="fa fa-fw fa-user-circle"></i>{{$item['title']}} <span
+                                class="badge badge-success">6</span></a>
                         @endif
                     </li>
                     @endif
-
                     @endforeach
                 </ul>
             </div>
