@@ -7,129 +7,128 @@
     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
         <div class="card">
             <div class="card-body">
+                <div id="PIXI"></div>
                 <div id="PIXI2"></div>
-           </div>
+            </div>
         </div>
     </div>
 
 </div>
 
 <script>
-    const app2 = new PIXI.Application({
+    var style = {
+        font: '18px Courier, monospace',
+        fill: '#ffffff'
+    };
+    const app = new PIXI.Application({
         antialias: true,
         width: 2000,
-        height: 2000,
+        height: 500,
     });
-    document.getElementById("PIXI2").appendChild(app2.view);
+    let q = {};
+    document.getElementById("PIXI").appendChild(app.view);
+    for (let i = 0; i < 500*10; i++) {
+        q[i] = i + "q";
+    }
+    let x = 0 //
+    let y = 0 //高度
+    let w = 1; //寬度
+    let ww = 2; //間距
 
-    const graphics = new PIXI.Graphics();
-    let x = 0//
-    let y = 0//高度
-    let w = 1;//寬度
-    let ww = 1.5;//間距
-    for (let i = 0; i < 50000; i++) {
-        x+= ww;
-        if(i % 1000 == 0){
+    let graphics = new PIXI.Graphics();
+    for (let i = 0; i < 500*10; i++) {
+
+        x += ww;
+        if (i % 1000 == 0) {
             y += 30;
             x = 0;
         }
         graphics.beginFill(0xDE3249);
-        graphics.drawRect(1 + x, y, w, 25 );
+        graphics.drawRect(1 + x, y, w, 25);
+        graphics.name = q[i];
         graphics.endFill();
     }
-    // Rectangle
-    graphics.beginFill(0xDE3249);
-    graphics.drawRect(50, 50, 100, 100);
-    graphics.endFill();
+    app.stage.addChild(graphics);
+    // designate circle as being interactive so it handles events
+    graphics.interactive = true;
 
-    // Rectangle + line style 1
-    graphics.lineStyle(2, 0xFEEB77, 1);
-    graphics.beginFill(0x650A5A);
-    graphics.drawRect(200, 50, 100, 100);
-    graphics.endFill();
+    // graphics.hitArea = new PIXI.Rectangle(150, 150, 1000,1000);
+    graphics.mouseover = function (mouseData) {
+        var message = new PIXI.Text(this.name, style);
+        message.x = mouseData.data.global.x;
+        message.y = mouseData.data.global.y;
+        /**
+        const x = event.data.global.x;
+          const y = event.data.global.y;
+        */
+        graphics.message = message;
+        graphics.addChild(message);
+    }
 
-    // Rectangle + line style 2
-    graphics.lineStyle(10, 0xFFBD01, 1);
-    graphics.beginFill(0xC34288);
-    graphics.drawRect(350, 50, 100, 100);
-    graphics.endFill();
-
-    // Rectangle 2
-    graphics.lineStyle(2, 0xFFFFFF, 1);
-    graphics.beginFill(0xAA4F08);
-    graphics.drawRect(530, 50, 140, 100);
-    graphics.endFill();
-
-    // Circle
-    graphics.lineStyle(0); // draw a circle, set the lineStyle to zero so the circle doesn't have an outline
-    graphics.beginFill(0xDE3249, 1);
-    graphics.drawCircle(100, 250, 50);
-    graphics.endFill();
-
-    // Circle + line style 1
-    graphics.lineStyle(2, 0xFEEB77, 1);
-    graphics.beginFill(0x650A5A, 1);
-    graphics.drawCircle(250, 250, 50);
-    graphics.endFill();
-
-    // Circle + line style 2
-    graphics.lineStyle(10, 0xFFBD01, 1);
-    graphics.beginFill(0xC34288, 1);
-    graphics.drawCircle(400, 250, 50);
-    graphics.endFill();
-
-    // Ellipse + line style 2
-    graphics.lineStyle(2, 0xFFFFFF, 1);
-    graphics.beginFill(0xAA4F08, 1);
-    graphics.drawEllipse(600, 250, 80, 50);
-    graphics.endFill();
-
-    // draw a shape
-    graphics.beginFill(0xFF3300);
-    graphics.lineStyle(4, 0xffd900, 1);
-    graphics.moveTo(50, 350);
-    graphics.lineTo(250, 350);
-    graphics.lineTo(100, 400);
-    graphics.lineTo(50, 350);
-    graphics.closePath();
-    graphics.endFill();
-
-    // draw a rounded rectangle
-    graphics.lineStyle(2, 0xFF00FF, 1);
-    graphics.beginFill(0x650A5A, 0.25);
-    graphics.drawRoundedRect(50, 440, 100, 100, 16);
-    graphics.endFill();
-
-
-    //drawStar不支援!?!?
-    // // draw star
-    // graphics.lineStyle(2, 0xFFFFFF);
-    // graphics.beginFill(0x35CC5A, 1);
-    // graphics.drawStar(360, 370, 5, 50);
-    // graphics.endFill();
-
-    // // draw star 2
-    // graphics.lineStyle(2, 0xFFFFFF);
-    // graphics.beginFill(0xFFCC5A, 1);
-    // graphics.drawStar(280, 510, 7, 50);
-    // graphics.endFill();
-
-    // // draw star 3
-    // graphics.lineStyle(4, 0xFFFFFF);
-    // graphics.beginFill(0x55335A, 1);
-    // graphics.drawStar(470, 450, 4, 50);
-    // graphics.endFill();
-
-    // draw polygon
-    const path = [600, 370, 700, 460, 780, 420, 730, 570, 590, 520];
-
-    graphics.lineStyle(0);
-    graphics.beginFill(0x3500FA, 1);
-    graphics.drawPolygon(path);
-    graphics.endFill();
-
-    app2.stage.addChild(graphics);
+    // make graphics half-transparent when mouse leaves
+    graphics.mouseout = function (mouseData) {
+        // this.alpha = 0.5;
+        graphics.removeChild(graphics.message);
+        delete graphics.message;
+    }
 
 </script>
+<script>
+    var style = {
+        font: '18px Courier, monospace',
+        fill: '#ffffff'
+    };
+    const app2 = new PIXI.Application({
+        antialias: true,
+        width: 2000,
+        height: 500,
+    });
+    let qq = {};
+    document.getElementById("PIXI2").appendChild(app2.view);
+    for (let i = 0; i < 500*10; i++) {
+        qq[i] = i + "q";
+    }
+    let x2 = 0 //
+    let y2 = 0 //高度
+    let w2 = 1; //寬度
+    let ww2 = 2; //間距
 
+    for (let i = 0; i < 500*10; i++) {
+        let graphics = new PIXI.Graphics();
+
+        x2 += ww2;
+        if (i % 1000 == 0) {
+            y2 += 30;
+            x2 = 0;
+        }
+        graphics.beginFill(0xDE3249);
+        graphics.drawRect(1 + x2, y2, w2, 25);
+        graphics.name = qq[i];
+        graphics.endFill();
+        app2.stage.addChild(graphics);
+        // designate circle as being interactive so it handles events
+        graphics.interactive = true;
+
+        // graphics.hitArea = new PIXI.Rectangle(150, 150, 1000,1000);
+        graphics.mouseover = function (mouseData) {
+            var message = new PIXI.Text(this.name, style);
+            message.x = mouseData.data.global.x;
+            message.y = mouseData.data.global.y;
+            /**
+            const x = event.data.global.x;
+              const y = event.data.global.y;
+            */
+            graphics.message = message;
+            graphics.addChild(message);
+        }
+
+        // make graphics half-transparent when mouse leaves
+        graphics.mouseout = function (mouseData) {
+            // this.alpha = 0.5;
+            graphics.removeChild(graphics.message);
+            delete graphics.message;
+        }
+    }
+
+</script>
 @endsection

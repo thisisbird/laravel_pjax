@@ -16,5 +16,9 @@ class PixiController extends Controller
     {
         return view('backend.pixi.test2');
     }
+    public function test3(Request $request)
+    {
+        return view('backend.pixi.test3');
+    }
 
 }

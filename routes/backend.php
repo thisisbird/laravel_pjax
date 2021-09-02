@@ -35,4 +35,5 @@ Route::group(['middleware'=> 'auth.backend:backend'], function (Router $router) 
 Route::group(['middleware'=> 'auth.backend:backend'], function (Router $router) {
     $router->get('pixi', 'App\Http\Controllers\Backend\PixiController@test')->name('backend.pixi.test');
     $router->get('pixi2', 'App\Http\Controllers\Backend\PixiController@test2')->name('backend.pixi.test2');
+    $router->get('pixi3', 'App\Http\Controllers\Backend\PixiController@test3')->name('backend.pixi.test3');
 });

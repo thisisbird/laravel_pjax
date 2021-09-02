@@ -26,6 +26,7 @@ class Controller extends BaseController
         $menu[$i] = ['title' => 'PIXI', 'url' => '#','icon'=>'fa fa-fw fa-user-circle'];
         $menu[$i]['submenu'][0] = ['title' => '測試', 'url' => route('backend.pixi.test')];
         $menu[$i]['submenu'][1] = ['title' => '測試2', 'url' => route('backend.pixi.test2')];
+        $menu[$i]['submenu'][2] = ['title' => '測試3', 'url' => route('backend.pixi.test3')];
         return view()->share('sidebar_menu', $menu);
     }
 }
