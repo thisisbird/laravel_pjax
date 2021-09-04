@@ -7,8 +7,8 @@
     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
         <div class="card">
             <div class="card-body">
-                <form>
-                    <input class="form-control form-control-lg" type="search" placeholder="Search" aria-label="Search">
+                <form action="{{route('backend.user.index')}}" method="GET" pjax-container>
+                    <input class="form-control form-control-lg" type="search" placeholder="Search" aria-label="Search" name="search" value="{{$request->search}}">
                     <button class="btn btn-primary search-btn" type="submit">Search</button>
                 </form>
             </div>
@@ -60,7 +60,7 @@
                     <div class="col-xl-3 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="float-xl-right float-none mt-xl-0 mt-4">
                             <a href="#" class="btn-wishlist m-r-10"><i class="far fa-star"></i></a>
-                            <a href="#" class="btn btn-secondary">Send Messages</a>
+                            <a href="{{route('backend.user.edit',$user->id)}}" class="btn btn-secondary">Edit</a>
                         </div>
                     </div>
                 </div>

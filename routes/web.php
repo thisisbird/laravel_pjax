@@ -34,5 +34,5 @@ Route::get('/pjax4', function () {
 Route::get('/index/ajaxcontent','App\Http\Controllers\IndexController@ajaxContent');// 載入頁面
 
 Route::group(['middleware'=> 'auth:web'], function (Router $router) {
-    $router->resource('user', 'App\Http\Controllers\Frontend\UserController');
+    // $router->resource('user', 'App\Http\Controllers\Frontend\UserController');
 });

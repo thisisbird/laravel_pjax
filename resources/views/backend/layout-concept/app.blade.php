@@ -100,6 +100,8 @@
             <script src="{{asset('concept')}}/assets/vendor/slimscroll/jquery.slimscroll.js"></script>
             <!-- main js -->
             <script src="{{asset('concept')}}/assets/libs/js/main-js.js"></script>
+            <script src="{{asset('concept')}}/assets/vendor/parsley/parsley.js"></script>
+
             <script>
                 $(document).pjax('a:not(a[target="_blank"])', '#pjax-container');
                 $(document).on("pjax:timeout", function(event) {

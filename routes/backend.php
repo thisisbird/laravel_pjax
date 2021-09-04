@@ -30,6 +30,9 @@ Route::group(['middleware'=> 'auth.backend:backend'], function (Router $router) 
     $router->get('dashboard', 'App\Http\Controllers\Backend\UserController@dashboard')->name('backend.user.dashboard');
     $router->get('dashboard2', 'App\Http\Controllers\Backend\UserController@dashboard2')->name('backend.user.dashboard2');
     $router->get('user', 'App\Http\Controllers\Backend\UserController@index')->name('backend.user.index');
+    $router->get('user/{id}/edit', 'App\Http\Controllers\Backend\UserController@edit')->name('backend.user.edit');
+    $router->post('user/{id}', 'App\Http\Controllers\Backend\UserController@update')->name('backend.user.update');
+    
 });
 
 Route::group(['middleware'=> 'auth.backend:backend'], function (Router $router) {

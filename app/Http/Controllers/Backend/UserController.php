@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Backend;
 use Illuminate\Http\Request;
 use Hash;
 use Session;
-use App\Models\User;
 use App\Models\BackendUser;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Backend\Controller;
@@ -81,11 +80,29 @@ class UserController extends Controller
       ]);
     }    
     
+    public function edit($id)
+    {
+        $user = BackendUser::findorFail($id);
+        return view('backend.user.edit',compact('user'));
+        
+    }
+    public function update($id,Request $req){
+        return redirect()->back()->withErrors(['asdbb'=>'asd2','b'=>'c'])->withInput();
+
+        $user = BackendUser::findorFail($id);
+        $user->name = $req->name;
+        $user->account = $req->account;
+        $user->email = $req->email;
+        $user->save();
+        return redirect()->route('backend.user.index');
+    }
+    
+
     public function signOut() {
         Session::flush();
         Auth::guard('backend')->logout();
   
-        return Redirect()->route('backend.user.login');
+        return redirect()->route('backend.user.login');
     }
     public function dashboard()
     {
