@@ -1,4 +1,4 @@
-{{-- @dd($sidebar_menu) --}}
+@inject('sidebar', 'App\Http\Controllers\Backend\Controller')
 <div class="nav-left-sidebar sidebar-dark">
     <div class="menu-list">
         <nav class="navbar navbar-expand-lg navbar-light">
@@ -9,7 +9,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav flex-column">
-                    @foreach ($sidebar_menu as $key => $item)
+                    @foreach ($sidebar->sidebar() as $key => $item)
                     @if(isset($item['type']) && $item['type'] == 'divider')
                     <li class="nav-divider">
                         {{$item['title']}}

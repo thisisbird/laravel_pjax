@@ -15,6 +15,8 @@
 </div>
 
 <script>
+    $(function() {
+
     let app = new PIXI.Application({
         width: 1000,
         height: 360
@@ -25,7 +27,7 @@
     let y = 0 //高度
     let w = 1; //寬度
     let ww = 2; //間距
-    for (let i = 0; i < 84000; i++) {
+    for (let i = 0; i < 10000; i++) {
         x += ww;
         if (i % 1000 == 0) {
             y += 30;
@@ -65,6 +67,7 @@
     }
 
     // Add a variable to count up the seconds our demo has been running
+});
 
 </script>
 @endsection

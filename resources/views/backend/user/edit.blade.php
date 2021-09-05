@@ -30,7 +30,7 @@
                     <div class="form-group row">
                         <label class="col-12 col-sm-3 col-form-label text-sm-right">Equal To</label>
                         <div class="col-sm-4 col-lg-3 mb-3 mb-sm-0">
-                            <input id="pass2" type="password" placeholder="Password" class="form-control">
+                            <input id="pass2" type="password" placeholder="Password" class="form-control" name="password">
                         </div>
                         <div class="col-sm-4 col-lg-3">
                             <input type="password" data-parsley-equalto="#pass2"

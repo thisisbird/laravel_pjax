@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="{{asset('mazer-1.1/dist')}}/assets/vendors/bootstrap-icons/bootstrap-icons.css">
     <link rel="stylesheet" href="{{asset('mazer-1.1/dist')}}/assets/css/app.css">
     <link rel="stylesheet" href="{{asset('mazer-1.1/dist')}}/assets/css/pages/auth.css">
+    <link rel="stylesheet" href="{{asset('concept')}}/assets/libs/css/style.css">
+
 </head>
 
 <body>
@@ -27,19 +29,19 @@
                     <form action="{{route('backend.user.registration')}}" method="POST">
                         @csrf
                         <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="text" class="form-control form-control-xl" placeholder="Email" name="email">
+                            <input type="text" class="form-control form-control-xl" placeholder="Email" name="email" value="{{ old('email') }}">
                             <div class="form-control-icon">
                                 <i class="bi bi-envelope"></i>
                             </div>
                         </div>
                         <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="text" class="form-control form-control-xl" placeholder="Username" name="name">
+                            <input type="text" class="form-control form-control-xl" placeholder="Username" name="name" value="{{ old('name') }}">
                             <div class="form-control-icon">
                                 <i class="bi bi-person"></i>
                             </div>
                         </div>
                         <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="text" class="form-control form-control-xl" placeholder="Account" name="account">
+                            <input type="text" class="form-control form-control-xl" placeholder="Account" name="account" value="{{ old('account') }}">
                             <div class="form-control-icon">
                                 <i class="bi bi-person"></i>
                             </div>
@@ -57,6 +59,11 @@
                                 <i class="bi bi-shield-lock"></i>
                             </div>
                         </div>
+                        @if($errors->count())
+                            @foreach ($errors->all() as $error)
+                            <ul class="parsley-errors-list filled"><li class="parsley-required">{{$error}}</li></ul>
+                            @endforeach
+                            @endif
                         <button class="btn btn-primary btn-block btn-lg shadow-lg mt-5">Sign Up</button>
                     </form>
                     <div class="text-center mt-5 text-lg fs-4">

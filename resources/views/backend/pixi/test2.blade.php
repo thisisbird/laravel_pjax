@@ -16,18 +16,21 @@
 </div>
 
 <script>
+    total = 500
+    $(function() {
+
     var style = {
         font: '18px Courier, monospace',
         fill: '#ffffff'
     };
     const app = new PIXI.Application({
-        antialias: true,
+        antialias: false,
         width: 2000,
         height: 500,
     });
     let q = {};
     document.getElementById("PIXI").appendChild(app.view);
-    for (let i = 0; i < 500*10; i++) {
+    for (let i = 0; i < total; i++) {
         q[i] = i + "q";
     }
     let x = 0 //
@@ -36,7 +39,7 @@
     let ww = 2; //間距
 
     let graphics = new PIXI.Graphics();
-    for (let i = 0; i < 500*10; i++) {
+    for (let i = 0; i < total; i++) {
 
         x += ww;
         if (i % 1000 == 0) {
@@ -71,21 +74,23 @@
         graphics.removeChild(graphics.message);
         delete graphics.message;
     }
-
+});
 </script>
 <script>
-    var style = {
-        font: '18px Courier, monospace',
-        fill: '#ffffff'
-    };
+    $(function() {
+
+var style = {
+    font: '18px Courier, monospace',
+    fill: '#ffffff'
+};
     const app2 = new PIXI.Application({
-        antialias: true,
+        antialias: false,
         width: 2000,
         height: 500,
     });
     let qq = {};
     document.getElementById("PIXI2").appendChild(app2.view);
-    for (let i = 0; i < 500*10; i++) {
+    for (let i = 0; i < total; i++) {
         qq[i] = i + "q";
     }
     let x2 = 0 //
@@ -93,7 +98,7 @@
     let w2 = 1; //寬度
     let ww2 = 2; //間距
 
-    for (let i = 0; i < 500*10; i++) {
+    for (let i = 0; i < total; i++) {
         let graphics = new PIXI.Graphics();
 
         x2 += ww2;
@@ -129,6 +134,7 @@
             delete graphics.message;
         }
     }
+});
 
 </script>
 @endsection

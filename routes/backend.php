@@ -16,7 +16,7 @@ use Illuminate\Routing\Router;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('backend.index');
 Route::any('login', 'App\Http\Controllers\Backend\UserController@login')->name('backend.user.login');
 Route::get('registration', 'App\Http\Controllers\Backend\UserController@registration')->name('backend.user.registration');
 Route::post('registration', 'App\Http\Controllers\Backend\UserController@postRegistration');
@@ -33,10 +33,12 @@ Route::group(['middleware'=> 'auth.backend:backend'], function (Router $router) 
     $router->get('user/{id}/edit', 'App\Http\Controllers\Backend\UserController@edit')->name('backend.user.edit');
     $router->post('user/{id}', 'App\Http\Controllers\Backend\UserController@update')->name('backend.user.update');
     
-});
-
-Route::group(['middleware'=> 'auth.backend:backend'], function (Router $router) {
     $router->get('pixi', 'App\Http\Controllers\Backend\PixiController@test')->name('backend.pixi.test');
     $router->get('pixi2', 'App\Http\Controllers\Backend\PixiController@test2')->name('backend.pixi.test2');
     $router->get('pixi3', 'App\Http\Controllers\Backend\PixiController@test3')->name('backend.pixi.test3');
+    $router->get('pixi4', function () {return view('backend.pixi.test4');})->name('backend.pixi.test4');
+
+    
+    $router->get('stock/kline', function () {return view('backend.stock.kline');})->name('backend.stock.kline');
 });
+
