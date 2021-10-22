@@ -11,9 +11,9 @@ use Illuminate\Routing\Router;
 | Here is where you can register web routes for your application. These
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
-|
 */
 
+// * 到 Permissions.php 新增sidebar連結
 Route::get('/', function () {
     return view('welcome');
 })->name('backend.index');
@@ -32,6 +32,13 @@ Route::group(['middleware'=> 'auth.backend:backend'], function (Router $router) 
     $router->get('user', 'App\Http\Controllers\Backend\UserController@index')->name('backend.user.index');
     $router->get('user/{id}/edit', 'App\Http\Controllers\Backend\UserController@edit')->name('backend.user.edit');
     $router->post('user/{id}', 'App\Http\Controllers\Backend\UserController@update')->name('backend.user.update');
+
+
+    $router->get('role/', 'App\Http\Controllers\Backend\RoleController@index')->name('backend.role.index');
+    $router->get('role/{id}', 'App\Http\Controllers\Backend\RoleController@edit')->name('backend.role.edit');
+    $router->post('role/', 'App\Http\Controllers\Backend\RoleController@update')->name('backend.role.update');
+    $router->delete('role/{id}', 'App\Http\Controllers\Backend\RoleController@delete')->name('backend.role.delete');
+
     
     $router->get('pixi', 'App\Http\Controllers\Backend\PixiController@test')->name('backend.pixi.test');
     $router->get('pixi2', 'App\Http\Controllers\Backend\PixiController@test2')->name('backend.pixi.test2');
