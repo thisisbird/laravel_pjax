@@ -11,15 +11,21 @@ class RoleController extends Controller
     //
     public function index(Request $request){
 
-        $sidebar = Permissions::sidebar();
-        // dd($sidebar);
-        $roles = Role::get();
+
+        if ($request->search) {
+            $roles = Role::where('name', 'like', '%' . $request->search . '%')->get();
+        } else {
+            $roles = Role::get();
+        }
         return view('backend.role.index',compact('roles','request'));
     }
     public function edit(Request $request,$id){
 
-        $sidebar = Permissions::sidebar();
-        $roles = Role::get();
+        if ($request->search) {
+            $roles = Role::where('name', 'like', '%' . $request->search . '%')->get();
+        } else {
+            $roles = Role::get();
+        }
         $select_role = Role::find($id);
         return view('backend.role.index',compact('roles','request','select_role'));
     }
@@ -55,7 +61,6 @@ class RoleController extends Controller
                 Permissions::insert($data);
             }
         } catch (\Exception $e) {
-            dd($e);
             return redirect()->back()->withErrors($e->getMessage());
             return response()->json(['result' => $e->getMessage()], 422);
         }

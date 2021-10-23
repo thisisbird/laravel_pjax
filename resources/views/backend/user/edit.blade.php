@@ -11,6 +11,17 @@
                 <form id="validationform" data-parsley-validate="" novalidate="" action="{{route('backend.user.update',$user->id)}}" method="POST" pjax-container>
                     @csrf
                     <div class="form-group row">
+                        <label class="col-12 col-sm-3 col-form-label text-sm-right">role</label>
+                        <div class="col-12 col-sm-8 col-lg-6">
+                        <select class="form-control" name="role_id">
+                                <option value="0">請選擇角色權限</option>
+                            @foreach ($roles as $role)
+                                <option value="{{$role->id}}" {{$user->role && $user->role->id == $role->id ? 'selected':''}}>{{$role->name}}</option>
+                            @endforeach
+                        </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label class="col-12 col-sm-3 col-form-label text-sm-right">name</label>
                         <div class="col-12 col-sm-8 col-lg-6">
                             <input type="text" required="" placeholder="Type something" class="form-control" value="{{$user->name}}" name="name">

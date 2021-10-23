@@ -9,7 +9,7 @@ use App\Models\BackendUser;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Backend\Controller;
 use Illuminate\Support\Facades\Validator;
-
+use App\Models\Backend\Role;
 class UserController extends Controller
 {
 
@@ -29,6 +29,7 @@ class UserController extends Controller
     {
         if ($request->isMethod('get')) {
             if (Auth::guard('backend')->check()) {
+                Session::put('permissions_id', Auth::guard('backend')->user()->role->permissions->pluck('permissions_id')->toArray());//設置權限
                 return redirect()->route('backend.user.dashboard');
             }
             return view('backend.user.login');
@@ -42,6 +43,7 @@ class UserController extends Controller
         $remember = $request->remember ?? 0;
         if (Auth::guard('backend')->attempt($credentials, $remember)) {
             //intended 紀錄之前的網址
+            Session::put('permissions_id', Auth::guard('backend')->user()->role->permissions->pluck('permissions_id')->toArray());//設置權限
             return redirect()->intended('back/dashboard')
                 ->withSuccess('Signed in');
         }
@@ -94,6 +96,7 @@ class UserController extends Controller
             'account' => $data['account'],
             'name' => $data['name'],
             'email' => $data['email'],
+            'role_id' => $data['role_id'],
             'password' => Hash::make($data['password'])
         ]);
     }
@@ -101,7 +104,8 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = BackendUser::findorFail($id);
-        return view('backend.user.edit', compact('user'));
+        $roles = Role::get();
+        return view('backend.user.edit', compact('user','roles'));
     }
     
     public function update($id, Request $req)
@@ -127,6 +131,7 @@ class UserController extends Controller
         $user->name = $req->name;
         $user->account = $req->account;
         $user->email = $req->email;
+        $user->role_id = $req->role_id;
         $user->save();
         return redirect()->route('backend.user.index');
     }

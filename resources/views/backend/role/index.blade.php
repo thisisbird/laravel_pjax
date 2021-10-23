@@ -60,7 +60,7 @@
                     <div class="col-xl-3 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="float-xl-right float-none mt-xl-0 mt-4">
                             <a href="#" class="btn-wishlist m-r-10"><i class="far fa-star"></i></a>
-                            <a href="{{route('backend.role.edit',$role->id)}}" class="btn btn-secondary">Edit</a>
+                            <a href="{{route('backend.role.edit',$role->id)}}{{$request->search ? '?search='.$request->search:''}}" class="btn btn-secondary">Edit</a>
                         </div>
                     </div>
                 </div>
@@ -101,11 +101,16 @@
                     <label for="basicInput">角色名稱</label>
                     <input type="text" class="form-control" id="basicInput" placeholder="角色名稱" name="name" value="{{isset($select_role) ? $select_role['name'] : ''}}">
                 </div>
+                @if($errors->count())
+                @foreach ($errors->all() as $error)
+                <ul class="parsley-errors-list filled"><li class="parsley-required">{{$error}}</li></ul>
+                @endforeach
+                @endif
             </div>
 
             <div class="card-body border-top">
                 <h3 class="font-16">權限</h3>
-                @foreach (App\Models\Backend\Permissions::sidebar() as $roles)
+                @foreach (App\Models\Backend\Permissions::sidebar()['all_sidebar'] as $roles)
                 @if(@$roles['type'] != 'divider')
                     <div class="custom-control custom-checkbox">
                         <input type="checkbox" class="custom-control-input" id="customCheck{{$roles['id']}}" name="permissions_id[]" value="{{$roles['id']}}" {{isset($select_role) && in_array($roles['id'], $select_role->permissions->pluck('permissions_id')->toArray()) ? 'checked':'' }}>
