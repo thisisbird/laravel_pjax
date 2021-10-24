@@ -76,7 +76,7 @@ return [
         ],
         'backend_users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\BackendUser::class,
+            'model' => App\Models\Backend\User::class,
         ],
 
         // 'users' => [

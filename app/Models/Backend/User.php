@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Backend;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Backend\Role;
-class BackendUser extends Authenticatable
+class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
@@ -21,7 +21,8 @@ class BackendUser extends Authenticatable
         'name',
         'email',
         'password',
-        'account'
+        'account',
+        'role_id'
     ];
 
     /**

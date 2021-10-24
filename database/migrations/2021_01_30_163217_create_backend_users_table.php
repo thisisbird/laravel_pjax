@@ -16,11 +16,12 @@ class CreateBackendUsersTable extends Migration
         Schema::create('backend_users', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('email');
+            $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('remember_token')->nullable();
             $table->string('account')->unique();
+            $table->tinyInteger('role_id');
             $table->timestamps();
         });
     }

@@ -115,6 +115,9 @@
                 $(document).on('pjax:end',   function() { NProgress.done();  });
                 
             </script>
+
+            @yield('foot')
+
 </body>
  
 </html>

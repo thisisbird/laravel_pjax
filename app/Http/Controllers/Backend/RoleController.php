@@ -8,10 +8,7 @@ use App\Models\Backend\Permissions;
 use App\Models\Backend\Role;
 class RoleController extends Controller
 {
-    //
     public function index(Request $request){
-
-
         if ($request->search) {
             $roles = Role::where('name', 'like', '%' . $request->search . '%')->get();
         } else {
@@ -30,8 +27,6 @@ class RoleController extends Controller
         return view('backend.role.index',compact('roles','request','select_role'));
     }
     public function update(Request $request){
-        $request->permissions;
-        $request->name;
         try{
             if($request->action_type == 'create'){
                 $role = new Role();
@@ -60,13 +55,10 @@ class RoleController extends Controller
                 }
                 Permissions::insert($data);
             }
+            return redirect()->back();
         } catch (\Exception $e) {
             return redirect()->back()->withErrors($e->getMessage());
-            return response()->json(['result' => $e->getMessage()], 422);
         }
-        return redirect()->back();
-        // $roles = Role::get();
-        // return view('backend.role.index',compact('roles','request'));
     }
     public function delete(Request $request){
         $roles = Role::get();

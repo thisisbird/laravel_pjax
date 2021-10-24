@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Backend;
 use Illuminate\Http\Request;
 use Hash;
 use Session;
-use App\Models\BackendUser;
+use App\Models\Backend\User;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Backend\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -16,11 +16,10 @@ class UserController extends Controller
     public function index(Request $request)
     {
         if ($request->search) {
-            $users = BackendUser::where('name', 'like', '%' . $request->search . '%')->orWhere('email', 'like', '%' . $request->search . '%')->orWhere('account', 'like', '%' . $request->search . '%')->get();
+            $users = User::where('name', 'like', '%' . $request->search . '%')->orWhere('email', 'like', '%' . $request->search . '%')->orWhere('account', 'like', '%' . $request->search . '%')->get();
         } else {
-            $users = BackendUser::all();
+            $users = User::all();
         }
-        // return view('backend.layout-concept.app',compact('users','request'));
         return view('backend.user.index', compact('users', 'request'));
     }
 
@@ -61,13 +60,6 @@ class UserController extends Controller
 
     public function postRegistration(Request $request)
     {
-        $request->validate([
-            'name' => 'required',
-            'account' => 'required|unique:backend_users',
-            'email' => 'required|email|unique:backend_users',
-            'password' => 'required|min:6',
-        ]);
-
         $rules = array(
             'name' => 'required',
             'account' => 'required|unique:backend_users',
@@ -85,6 +77,7 @@ class UserController extends Controller
         $check = $this->create($data);
         if($check){
             Auth::guard('backend')->loginUsingId($check->id);
+            Session::put('permissions_id', Auth::guard('backend')->user()->role->permissions->pluck('permissions_id')->toArray());//設置權限
         }
         return redirect()->route('backend.user.dashboard')->withSuccess('You have signed-in');
     }
@@ -92,25 +85,24 @@ class UserController extends Controller
 
     public function create(array $data)
     {
-        return BackendUser::create([
+        return User::create([
             'account' => $data['account'],
             'name' => $data['name'],
             'email' => $data['email'],
-            'role_id' => $data['role_id'],
+            'role_id' => $data['role_id'] ?? 1,
             'password' => Hash::make($data['password'])
         ]);
     }
 
     public function edit($id)
     {
-        $user = BackendUser::findorFail($id);
+        $user = User::findorFail($id);
         $roles = Role::get();
         return view('backend.user.edit', compact('user','roles'));
     }
     
     public function update($id, Request $req)
     {
-
         if($req->password === null){
             $req->request->remove('password');
         }
@@ -127,7 +119,7 @@ class UserController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $user = BackendUser::findorFail($id);
+        $user = User::findorFail($id);
         $user->name = $req->name;
         $user->account = $req->account;
         $user->email = $req->email;
@@ -141,7 +133,6 @@ class UserController extends Controller
     {
         Session::flush();
         Auth::guard('backend')->logout();
-
         return redirect()->route('backend.user.login');
     }
     public function dashboard()

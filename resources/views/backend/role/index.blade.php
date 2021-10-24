@@ -138,14 +138,14 @@
 
             <div class="card-body border-top">
                 {{-- <a href="#" class="btn btn-success btn-lg btn-block">新增</a> --}}
-                @isset($select_role)
-                    <input type="hidden" name="role_id" value="{{$select_role['id']}}">
+                @isset($select_menu)
+                    <input type="hidden" name="role_id" value="{{$select_menu['id']}}">
                     <input type="hidden" name="action_type" value="update">
                     <button class="btn btn-secondary btn-lg btn-block" type="submit" style="width: 100%;">更新</button>
                     <a href="{{route('backend.role.index')}}" class="btn btn-dark btn-lg btn-block">取消</a>
                 @else
                     <input type="hidden" name="action_type" value="create">
-                    <button class="btn btn-success btn-lg btn-block" type="submit">新增</button>
+                    <button class="btn btn-success btn-lg btn-block" type="submit" style="width: 100%;">新增</button>
                 @endisset
             </div>
             </form>

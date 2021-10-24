@@ -39,7 +39,11 @@ Route::group(['middleware'=> 'auth.backend:backend'], function (Router $router) 
     $router->post('role/', 'App\Http\Controllers\Backend\RoleController@update')->name('backend.role.update');
     $router->delete('role/{id}', 'App\Http\Controllers\Backend\RoleController@delete')->name('backend.role.delete');
 
-    
+    $router->get('item_menu/', 'App\Http\Controllers\Backend\ItemMenuController@index')->name('backend.itemMenu.index');
+    $router->get('item_menu/{id}', 'App\Http\Controllers\Backend\ItemMenuController@edit')->name('backend.itemMenu.edit');
+    $router->post('item_menu/', 'App\Http\Controllers\Backend\ItemMenuController@update')->name('backend.itemMenu.update');
+    $router->delete('item_menu', 'App\Http\Controllers\Backend\ItemMenuController@delete')->name('backend.itemMenu.delete');
+
     $router->get('pixi', 'App\Http\Controllers\Backend\PixiController@test')->name('backend.pixi.test');
     $router->get('pixi2', 'App\Http\Controllers\Backend\PixiController@test2')->name('backend.pixi.test2');
     $router->get('pixi3', 'App\Http\Controllers\Backend\PixiController@test3')->name('backend.pixi.test3');
