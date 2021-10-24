@@ -1,15 +1,13 @@
 @extends('backend.layout-concept.app')
 @section('content')
 <div class="row">
-                
-
     <!-- ============================================================== -->
     <!-- search bar  -->
     <!-- ============================================================== -->
     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
         <div class="card">
             <div class="card-body">
-                <form action="{{route('backend.role.index')}}" method="GET" pjax-container>
+                <form action="{{route('backend.mallItem.index')}}" method="GET" pjax-container>
                     <input class="form-control form-control-lg" type="search" placeholder="Search" aria-label="Search" name="search" value="{{$request->search}}">
                     <button class="btn btn-primary search-btn" type="submit">Search</button>
                 </form>
@@ -19,12 +17,12 @@
     <!-- ============================================================== -->
     <!-- end search bar  -->
     <!-- ============================================================== -->
-    <div class="col-xl-9 col-lg-8 col-md-8 col-sm-12 col-12">
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
         <!-- ============================================================== -->
         <!-- card influencer one -->
         <!-- ============================================================== -->
-        @foreach ($roles as $role)
-        <div class="card {{isset($select_role) && $select_role->id == $role->id ? 'bg-brand':''}}">
+        @foreach ($datas as $data)
+        <div class="card {{isset($select_data) && $select_data->id == $data->id ? 'bg-brand':''}}">
             <div class="card-body">
                 <div class="row align-items-center">
                     <div class="col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -35,7 +33,7 @@
                         <div class="pl-xl-3">
                             <div class="m-b-0">
                                 <div class="user-avatar-name d-inline-block">
-                                    <h2 class="font-24 m-b-10">{{$role->name}}</h2>
+                                    <h2 class="font-24 m-b-10">{{$data->name}}</h2>
                                 </div>
                                 <div class="rating-star d-inline-block pl-xl-2 mb-2 mb-xl-0">
                                     <i class="fa fa-fw fa-star"></i>
@@ -48,7 +46,7 @@
                             </div>
                             <div class="user-avatar-address">
                                 <p class="mb-2"><i class="fa fa-map-marker-alt mr-2  text-primary"></i>Salt Lake City,
-                                    UT <span class="m-l-10">Male<span class="m-l-20">29 Year Old</span><span class="m-l-20">{{$role->email}}</span><span class="m-l-20">{{$role->account}}</span></span>
+                                    UT <span class="m-l-10">Male<span class="m-l-20">29 Year Old</span><span class="m-l-20">{{$data->email}}</span><span class="m-l-20">{{$data->account}}</span></span>
                                 </p>
                                 <div class="mt-3">
                                     <a href="#" class="mr-1 badge badge-light">Fitness</a><a href="#"
@@ -62,7 +60,7 @@
                     <div class="col-xl-3 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="float-xl-right float-none mt-xl-0 mt-4">
                             <a href="#" class="btn-wishlist m-r-10"><i class="far fa-star"></i></a>
-                            <a href="{{route('backend.role.edit',$role->id)}}{{$request->search ? '?search='.$request->search:''}}" class="btn btn-secondary">Edit</a>
+                            <a href="{{route('backend.mallItem.edit',$data->id)}}{{$request->search ? '?search='.$request->search:''}}" class="btn btn-secondary">Edit</a>
                         </div>
                     </div>
                 </div>
@@ -93,62 +91,89 @@
     <!-- ============================================================== -->
     <!-- influencer sidebar  -->
     <!-- ============================================================== -->
-    <div class="col-xl-3 col-lg-4 col-md-4 col-sm-12 col-12">
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        {{-- //email --}}
+
+            <div class="email-head">
+                <div class="email-head-title">Compose new message<span class="icon mdi mdi-edit"></span></div>
+            </div>
+            <div class="email-compose-fields">
+                <div class="to">
+                    <div class="form-group row pt-0">
+                        <label class="col-md-1 control-label">To:</label>
+                        <div class="col-md-11">
+                            <select class="js-example-basic-multiple" multiple="multiple">
+                                <option value="Yellow" selected="selected">Yellow</option>
+                                <option value="White">White</option>
+                                <option value="Blue" selected="selected">Blue</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="to cc">
+                    <div class="form-group row pt-2">
+                        <label class="col-md-1 control-label">Cc</label>
+                        <div class="col-md-11">
+                            <select class="js-example-basic-multiple" multiple="multiple">
+                                <option value="Alabama">Alabama</option>
+                                <option value="Alaska" selected="selected">Alaska</option>
+                                <option value="Melbourne">Melbourne</option>
+                                <option value="Victoria" selected="selected">Victoria</option>
+                                <option value="Newyork">Newyork</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="subject">
+                    <div class="form-group row pt-2">
+                        <label class="col-md-1 control-label">Subject</label>
+                        <div class="col-md-11">
+                            <input class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="email editor">
+                <div class="col-md-12 p-0">
+                    <div class="form-group">
+                        <label class="control-label sr-only" for="summernote">Descriptions </label>
+                        <textarea class="form-control" id="summernote" name="editordata" rows="6" placeholder="Write Descriptions"></textarea>
+                    </div>
+                </div>
+                <div class="email action-send">
+                    <div class="col-md-12 ">
+                        <div class="form-group">
+                            <button class="btn btn-primary btn-space" type="submit"><i class="icon s7-mail"></i> Send</button>
+                            <button class="btn btn-secondary btn-space" type="button"><i class="icon s7-close"></i> Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {{-- //email --}}
         <div class="card">
-            <form action="{{route('backend.role.update')}}" method="POST" pjax-container>
+            <form action="{{route('backend.mallItem.update')}}" method="POST" pjax-container>
                 @csrf
             <div class="card-body">
-                <h3 class="font-16">建立角色</h3>
+                <h3 class="font-16">建立商品</h3>
                 <div class="form-group">
-                    <label for="basicInput">角色名稱</label>
-                    <input type="text" class="form-control" id="basicInput" placeholder="角色名稱" name="name" value="{{isset($select_role) ? $select_role['name'] : ''}}">
+                    <label for="basicInput">商品名稱</label>
+                    <input type="text" class="form-control" id="basicInput" placeholder="商品名稱" name="name" value="{{isset($select_data) ? $select_data['name'] : ''}}">
                 </div>
                 @if($errors->count())
-                @foreach ($errors->all() as $error)
-                <ul class="parsley-errors-list filled"><li class="parsley-required">{{$error}}</li></ul>
-                @endforeach
+                    @foreach ($errors->all() as $error)
+                    <ul class="parsley-errors-list filled"><li class="parsley-required">{{$error}}</li></ul>
+                    @endforeach
                 @endif
-                {{-- @if($success->count())
-                    @dd($success->all())
-                @endif --}}
-
             </div>
 
-            <div class="card-body border-top">
-                <h3 class="font-16">權限</h3>
-                @foreach (App\Models\Backend\Permissions::sidebar()['all_sidebar'] as $roles)
-                @if(@$roles['type'] != 'divider')
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="customCheck{{$roles['id']}}" name="permissions_id[]" value="{{$roles['id']}}" {{isset($select_role) && in_array($roles['id'], $select_role->permissions->pluck('permissions_id')->toArray()) ? 'checked':'' }}>
-                        <label class="custom-control-label" for="customCheck{{$roles['id']}}">{{$roles['title']}}</label>
-                        @if(@$roles['submenu'])
-                            @foreach ($roles['submenu'] as $roles_submenu)
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="customCheck{{$roles_submenu['id']}}" name="permissions_id[]" value="{{$roles_submenu['id']}}" {{isset($select_role) && in_array($roles_submenu['id'], $select_role->permissions->pluck('permissions_id')->toArray()) ? 'checked':'' }}>
-                                <label class="custom-control-label" for="customCheck{{$roles_submenu['id']}}">{{$roles_submenu['title']}}</label>
-                                @if(@$roles_submenu['submenu'])
-                                    @foreach ($roles_submenu['submenu'] as $roles_submenu_submenu)
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck{{$roles_submenu_submenu['id']}}" name="permissions_id[]" value="{{$roles_submenu_submenu['id']}}" {{isset($select_role) && in_array($roles_submenu_submenu['id'], $select_role->permissions->pluck('permissions_id')->toArray()) ? 'checked':'' }}>
-                                        <label class="custom-control-label" for="customCheck{{$roles_submenu_submenu['id']}}">{{$roles_submenu_submenu['title']}}</label>
-                                    </div>
-                                    @endforeach
-                                @endif
-                            </div>
-                            @endforeach
-                        @endif
-                    </div>
-                @endif
-                @endforeach
-            </div>
+            
 
             <div class="card-body border-top">
-                {{-- <a href="#" class="btn btn-success btn-lg btn-block">新增</a> --}}
-                @isset($select_role)
-                    <input type="hidden" name="role_id" value="{{$select_role['id']}}">
+                @isset($select_data)
+                    <input type="hidden" name="data_id" value="{{$select_data['id']}}">
                     <input type="hidden" name="action_type" value="update">
                     <button class="btn btn-secondary btn-lg btn-block" type="submit" style="width: 100%;">更新</button>
-                    <a href="{{route('backend.role.index')}}" class="btn btn-dark btn-lg btn-block">取消</a>
+                    <a href="{{route('backend.mallItem.index')}}" class="btn btn-dark btn-lg btn-block">取消</a>
                 @else
                     <input type="hidden" name="action_type" value="create">
                     <button class="btn btn-success btn-lg btn-block" type="submit" style="width: 100%;">新增</button>
@@ -161,5 +186,17 @@
     <!-- end influencer sidebar  -->
     <!-- ============================================================== -->
 </div>
+    <script>
+    $(document).ready(function() {
+        $('.js-example-basic-multiple').select2({ tags: true });
+    });
+    </script>
+    <script>
+    $(document).ready(function() {
+        $('#summernote').summernote({
+            height: 300
 
+        });
+    });
+    </script>
 @endsection

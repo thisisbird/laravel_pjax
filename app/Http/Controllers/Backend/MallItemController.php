@@ -3,28 +3,27 @@
 namespace App\Http\Controllers\Backend;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Backend\Controller;
-use App\Models\Backend\Permissions;
-use App\Models\Backend\Role;
-class RoleController extends Controller
+use App\Models\Backend\MallItem;
+
+class MallItemController extends Controller
 {
     public function index(Request $request){
         if ($request->search) {
-            $roles = Role::where('name', 'like', '%' . $request->search . '%')->get();
+            $datas = MallItem::where('name', 'like', '%' . $request->search . '%')->get();
         } else {
-            $roles = Role::get();
+            $datas = MallItem::get();
         }
-        return view('backend.role.index',compact('roles','request'));
+        return view('backend.mall_item.index',compact('datas','request'));
     }
     public function edit(Request $request,$id){
 
         if ($request->search) {
-            $roles = Role::where('name', 'like', '%' . $request->search . '%')->get();
+            $datas = MallItem::where('name', 'like', '%' . $request->search . '%')->get();
         } else {
-            $roles = Role::get();
+            $datas = MallItem::get();
         }
-        $select_role = Role::find($id);
-        return view('backend.role.index',compact('roles','request','select_role'));
+        $select_data = MallItem::find($id);
+        return view('backend.mall_item.index',compact('datas','request','select_data'));
     }
     public function update(Request $request){
         try{
@@ -61,7 +60,25 @@ class RoleController extends Controller
         }
     }
     public function delete(Request $request){
-        $roles = Role::get();
-        return view('backend.role.index',compact('roles','request'));
+        try{
+            DB::beginTransaction();
+            if($request->menu_id){
+                $data = ItemMenu::find($request->menu_id);
+                if($data){
+                    $menu2 = ItemMenu::where('p_id',$data->id);
+                    if($menu2->get()->count()){
+                        $menu2_ids = $menu2->pluck('id');
+                        ItemMenu::whereIn('p_id',$menu2_ids)->delete();
+                        $menu2->delete();
+                    }
+                    $data->delete();
+                }
+            }
+            DB::commit();
+            return redirect()->back()->withSuccess('刪除成功');;
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->withErrors($e->getMessage());
+        }
     }
 }

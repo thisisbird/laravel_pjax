@@ -82,9 +82,11 @@
                     <select class="form-control" name="p_id">
                         <option value=0>頂層</option>
                         @foreach ($menus as $menu_1)
-                        <option value="{{$menu_1->id}}" {{isset($select_menu) && $select_menu->p_id == $menu_1->id ? 'selected':''}}>&nbsp;∟{{$menu_1->name}}</option>
+                        <option value="{{$menu_1->id}}" {{isset($select_menu) && $select_menu->p_id == $menu_1->id ? 'selected':''}} {{isset($select_menu) && $select_menu->id == $menu_1->id ? 'disabled':''}}>&nbsp;∟{{$menu_1->name}}</option>
                         @foreach ($menu_1->children as $menu_2)
-                            <option value="{{$menu_2->id}}" {{isset($select_menu) && $select_menu->p_id == $menu_2->id ? 'selected':''}}>&nbsp;&nbsp;&nbsp;&nbsp;∟{{$menu_2->name}}</option>
+                            <option value="{{$menu_2->id}}" {{isset($select_menu) && $select_menu->p_id == $menu_2->id ? 'selected':''}} 
+                                {{isset($select_menu) && $select_menu->id == $menu_2->id ? 'disabled':''}}
+                                {{isset($select_menu) && $select_menu->id == $menu_2->p_id ? 'disabled':''}}>&nbsp;&nbsp;&nbsp;&nbsp;∟{{$menu_2->name}}</option>
                         @endforeach
                         @endforeach
                     </select>

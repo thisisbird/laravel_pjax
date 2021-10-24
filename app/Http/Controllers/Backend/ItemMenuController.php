@@ -59,7 +59,7 @@ class ItemMenuController extends Controller
                     $data->save();
                 }
             }
-            return redirect()->back();
+            return redirect()->back()->withSuccess('更新成功');;
         } catch (\Exception $e) {
             return redirect()->back()->withErrors($e->getMessage());
         }
@@ -80,9 +80,8 @@ class ItemMenuController extends Controller
                 }
             }
             DB::commit();
-            return redirect()->back();
+            return redirect()->back()->withSuccess('刪除成功');;
         } catch (\Exception $e) {
-            dd($e);
             DB::rollback();
             return redirect()->back()->withErrors($e->getMessage());
         }

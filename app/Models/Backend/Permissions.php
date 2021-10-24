@@ -28,7 +28,7 @@ class Permissions extends Model
         $i = 2;
         $menu[$i] = ['title' => '商品管理', 'url' => '#', 'icon' => 'fa fa-fw fa-user-circle', 'id' => 21];
         $menu[$i]['submenu'][0] = ['title' => '商城分類', 'url' => route('backend.itemMenu.index'), 'id' => 22];
-        // $menu[$i]['submenu'][1] = ['title' => '商品資訊', 'url' => route('backend.item.index'), 'id' => 23];
+        $menu[$i]['submenu'][1] = ['title' => '商品資訊', 'url' => route('backend.mallItem.index'), 'id' => 23];
 
         
         // $i = 2;

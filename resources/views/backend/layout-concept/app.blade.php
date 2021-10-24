@@ -10,9 +10,25 @@
     <link href="{{asset('concept')}}/assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('concept')}}/assets/libs/css/style.css">
     <link rel="stylesheet" href="{{asset('concept')}}/assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
-    <link rel='stylesheet' href='https://unpkg.com/nprogress@0.2.0/nprogress.css'/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script src="{{asset('js/pixi.min.js')}}"></script>
+    <link rel="stylesheet" href="{{asset('concept')}}/assets/vendor/select2/css/select2.css">
+    <link rel="stylesheet" href="{{asset('concept')}}/assets/vendor/summernote/css/summernote-bs4.css">
+    <link rel="stylesheet" href="{{asset('mazer-1.1/dist')}}/assets/vendors/toastify/toastify.css">
+    <link rel='stylesheet' href='{{asset('css')}}/nprogress.css'/>
+
+    <script src="{{asset('mazer-1.1/dist')}}/assets/vendors/toastify/toastify.js"></script>
+
+
+
+<!-- jquery 2.1.4 -->
+    <script src="{{asset('js')}}/jquery2.1.4.js"></script>
+
+    <!-- bootstap bundle js -->
+    <script src="{{asset('concept')}}/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
+    <!-- slimscroll js -->
+    <script src="{{asset('concept')}}/assets/vendor/slimscroll/jquery.slimscroll.js"></script>
+    <script src="{{asset('concept')}}/assets/vendor/select2/js/select2.min.js"></script>
+    <script src="{{asset('concept')}}/assets/vendor/summernote/js/summernote-bs4.js"></script>
+
 
     <title>Concept - Bootstrap 4 Admin Dashboard Template</title>
 </head>
@@ -71,6 +87,32 @@
                     <!-- ============================================================== -->
                     <div id="pjax-container">
                         @yield('content')
+                        @if(session('success'))
+                        <script>
+                            Toastify({
+                                text: "{{session('success')}}",
+                                duration: 3000,
+                                close:true,
+                                gravity:"bottom",
+                                position: "center",
+                                backgroundColor: "#4fbe87",
+                            }).showToast();
+                        </script>
+                        @endif
+                        @if($errors->count())
+                            @foreach ($errors->all() as $error)
+                            <script>
+                                Toastify({
+                                text: "{{$error}}",
+                                duration: 3000,
+                                close:true,
+                                gravity:"bottom",
+                                position: "center",
+                                backgroundColor: "#ef172c",
+                            }).showToast();
+                            </script>
+                            @endforeach
+                        @endif
                     </div>
                     <!-- ============================================================== -->
                     <!-- footer -->
@@ -90,18 +132,13 @@
             <!-- Optional JavaScript -->
 
 
-            <!-- jquery 3.3.1 -->
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.pjax/1.9.6/jquery.pjax.min.js"></script>
-            <script src='https://unpkg.com/nprogress@0.2.0/nprogress.js'></script>
-        
-            <!-- bootstap bundle js -->
-            <script src="{{asset('concept')}}/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
-            <!-- slimscroll js -->
-            <script src="{{asset('concept')}}/assets/vendor/slimscroll/jquery.slimscroll.js"></script>
+            
             <!-- main js -->
+            {{-- <script src="{{asset('js')}}/jquery2.1.4.js"></script> --}}
             <script src="{{asset('concept')}}/assets/libs/js/main-js.js"></script>
             <script src="{{asset('concept')}}/assets/vendor/parsley/parsley.js"></script>
-
+            <script src="{{asset('js')}}/jquery.pjax.min.js"></script>
+            <script src='{{asset('js')}}/nprogress.js'></script>
             <script>
                 $(document).pjax('a:not(a[target="_blank"])', '#pjax-container');
                 $(document).on("pjax:timeout", function(event) {
@@ -113,10 +150,7 @@
                 });
                 $(document).on('pjax:start', function() { NProgress.start(); });
                 $(document).on('pjax:end',   function() { NProgress.done();  });
-                
             </script>
-
-            @yield('foot')
 
 </body>
  

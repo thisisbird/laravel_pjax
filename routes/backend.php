@@ -44,10 +44,15 @@ Route::group(['middleware'=> 'auth.backend:backend'], function (Router $router) 
     $router->post('item_menu/', 'App\Http\Controllers\Backend\ItemMenuController@update')->name('backend.itemMenu.update');
     $router->delete('item_menu', 'App\Http\Controllers\Backend\ItemMenuController@delete')->name('backend.itemMenu.delete');
 
-    $router->get('pixi', 'App\Http\Controllers\Backend\PixiController@test')->name('backend.pixi.test');
-    $router->get('pixi2', 'App\Http\Controllers\Backend\PixiController@test2')->name('backend.pixi.test2');
-    $router->get('pixi3', 'App\Http\Controllers\Backend\PixiController@test3')->name('backend.pixi.test3');
-    $router->get('pixi4', function () {return view('backend.pixi.test4');})->name('backend.pixi.test4');
+    $router->get('mall_item/', 'App\Http\Controllers\Backend\MallItemController@index')->name('backend.mallItem.index');
+    $router->get('mall_item/{id}', 'App\Http\Controllers\Backend\MallItemController@edit')->name('backend.mallItem.edit');
+    $router->post('mall_item/', 'App\Http\Controllers\Backend\MallItemController@update')->name('backend.mallItem.update');
+    $router->delete('mall_item', 'App\Http\Controllers\Backend\MallItemController@delete')->name('backend.mallItem.delete');
+
+    // $router->get('pixi', 'App\Http\Controllers\Backend\PixiController@test')->name('backend.pixi.test');
+    // $router->get('pixi2', 'App\Http\Controllers\Backend\PixiController@test2')->name('backend.pixi.test2');
+    // $router->get('pixi3', 'App\Http\Controllers\Backend\PixiController@test3')->name('backend.pixi.test3');
+    // $router->get('pixi4', function () {return view('backend.pixi.test4');})->name('backend.pixi.test4');
 
     
     $router->get('stock/kline', function () {return view('backend.stock.kline');})->name('backend.stock.kline');
