@@ -75,7 +75,6 @@ class UserController extends Controller
         $check = $this->create($data);
         if($check){
             Auth::guard('backend')->loginUsingId($check->id);
-            Session::put('permissions_id', Auth::guard('backend')->user()->role->permissions->pluck('permissions_id')->toArray());//設置權限
         }
         return redirect()->route('backend.user.dashboard')->withSuccess('You have signed-in');
     }
@@ -104,6 +103,7 @@ class UserController extends Controller
         if($req->password === null){
             $req->request->remove('password');
         }
+        
         $rules = array(
             'name' => 'required',
             'account' => "required|unique:backend_users,account,{$id}", //unique:table,欄位,排除的id
@@ -116,14 +116,17 @@ class UserController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-
-        $user = User::findorFail($id);
-        $user->name = $req->name;
-        $user->account = $req->account;
-        $user->email = $req->email;
-        $user->role_id = $req->role_id;
-        $user->save();
-        return redirect()->route('backend.user.index');
+        try{
+            $user = User::findorFail($id);
+            $user->name = $req->name;
+            $user->account = $req->account;
+            $user->email = $req->email;
+            $user->role_id = $req->role_id;
+            $user->save();
+            return redirect()->route('backend.user.index');
+        } catch (\Exception $e) {
+            return response()->json(['result' => $e->getMessage()], 422);
+        }
     }
 
 

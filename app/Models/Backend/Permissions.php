@@ -9,6 +9,8 @@ use Session;
 class Permissions extends Model
 {
     protected $table = 'backend_permissions';
+    const default_sidebar = [11,12,13];
+
 
     public static function sidebar()
     {
@@ -44,9 +46,13 @@ class Permissions extends Model
         // $menu[$i]['submenu'][0] = ['title' => 'k線', 'url' => route('backend.stock.kline'), 'id' => 32];
 
 
-        
+        // dump(session('permissions_id') , Auth::guard('backend')->check());
         if(!session('permissions_id') && Auth::guard('backend')->check()){
-            Session::put('permissions_id', Auth::guard('backend')->user()->role->permissions->pluck('permissions_id')->toArray());//設置權限
+            if(Auth::guard('backend')->user()->role){
+                Session::put('permissions_id', Auth::guard('backend')->user()->role->permissions->pluck('permissions_id')->toArray());//設置權限
+            }else{
+                Session::put('permissions_id',self::default_sidebar);//設置預設權限
+            }
         }
         $tree = self::tree($menu);
         $data['all_sidebar'] = $menu;
@@ -78,7 +84,7 @@ class Permissions extends Model
                 $url = $permissions_url_list->first();//無權限 導向第一個權限url
                 return redirect($url)->send();
             }else{
-                return redirect()->route('backend.user.signOut');//都無權限直接登出
+                return redirect()->route('backend.user.signOut')->send();//都無權限直接登出
             }
         }
     }
