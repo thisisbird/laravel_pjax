@@ -43,6 +43,11 @@ class Permissions extends Model
         // $menu[$i] = ['title' => 'Stock', 'url' => '#', 'icon' => 'fas fa-chart-bar', 'id' => 31];
         // $menu[$i]['submenu'][0] = ['title' => 'k線', 'url' => route('backend.stock.kline'), 'id' => 32];
 
+
+        
+        if(!session('permissions_id') && Auth::guard('backend')->check()){
+            Session::put('permissions_id', Auth::guard('backend')->user()->role->permissions->pluck('permissions_id')->toArray());//設置權限
+        }
         $tree = self::tree($menu);
         $data['all_sidebar'] = $menu;
         $data['display_sidebar'] = $tree['display_sidebar'];

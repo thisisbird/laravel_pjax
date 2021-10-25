@@ -28,7 +28,6 @@ class UserController extends Controller
     {
         if ($request->isMethod('get')) {
             if (Auth::guard('backend')->check()) {
-                Session::put('permissions_id', Auth::guard('backend')->user()->role->permissions->pluck('permissions_id')->toArray());//設置權限
                 return redirect()->route('backend.user.dashboard');
             }
             return view('backend.user.login');
@@ -42,7 +41,6 @@ class UserController extends Controller
         $remember = $request->remember ?? 0;
         if (Auth::guard('backend')->attempt($credentials, $remember)) {
             //intended 紀錄之前的網址
-            Session::put('permissions_id', Auth::guard('backend')->user()->role->permissions->pluck('permissions_id')->toArray());//設置權限
             return redirect()->intended('back/dashboard')
                 ->withSuccess('Signed in');
         }

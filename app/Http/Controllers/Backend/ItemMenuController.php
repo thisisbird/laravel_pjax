@@ -23,6 +23,7 @@ class ItemMenuController extends Controller
     public function update(Request $request){
         try{
             if($request->action_type == 'create'){
+                $msg = '新增成功';
                 $data = new ItemMenu();
                 $data->name = $request->name;
                 $data->sort = 99;
@@ -33,15 +34,14 @@ class ItemMenuController extends Controller
                 $data->save();
             }
             if($request->action_type == 'update'){
+                $msg = '更新成功';
                 $data = ItemMenu::find($request->menu_id);
                 if($request->sort_type){
                     if($request->sort_type == 'up'){
                         $symbol = '<';$sort = 'desc';
-                        $msg = '已是最高';
                     }
                     if($request->sort_type == 'down'){
                         $symbol = '>';$sort = 'asc';
-                        $msg = '已是最低';
                     }
                     $other_menu = ItemMenu::where('p_id',$data->p_id)->where('id','!=',$data->id)->where('sort',$symbol,$data->sort)->orderBy('sort',$sort)->first();
                     if($other_menu){
@@ -51,6 +51,12 @@ class ItemMenuController extends Controller
                         $other_menu->save();
                         $data->save();
                     }else{
+                        if($request->sort_type == 'up'){
+                            $msg = '已是最高';
+                        }
+                        if($request->sort_type == 'down'){
+                            $msg = '已是最低';
+                        }
                         return redirect()->back()->withErrors($msg);
                     }
                 }else{
@@ -59,7 +65,7 @@ class ItemMenuController extends Controller
                     $data->save();
                 }
             }
-            return redirect()->back()->withSuccess('更新成功');;
+            return redirect()->back()->withSuccess($msg);;
         } catch (\Exception $e) {
             return redirect()->back()->withErrors($e->getMessage());
         }
