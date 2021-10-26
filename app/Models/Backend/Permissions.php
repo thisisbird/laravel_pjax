@@ -14,8 +14,11 @@ class Permissions extends Model
 
     public static function sidebar()
     {
-        $i = 0; //主選項
+        if(!Auth::guard('backend')->check()){
+            return redirect()->route('backend.user.login');//
+        }
 
+        $i = 0; //主選項
         $menu[$i] = ['title' => 'Menu', 'url' => '#', 'icon' => 'fa fa-fw fa-user-circle', 'type' => 'divider', 'id' => 1]; //type:divider 底下看不到
         $menu[$i]['submenu'][0] = ['title' => '使用者權限1', 'url' => '#', 'id' => 2];
         $menu[$i]['submenu'][0]['submenu'][0] = ['title' => '使用者管理a', 'url' => route('backend.user.index'), 'id' => 3];
@@ -46,45 +49,41 @@ class Permissions extends Model
         // $menu[$i]['submenu'][0] = ['title' => 'k線', 'url' => route('backend.stock.kline'), 'id' => 32];
 
 
-        // dump(session('permissions_id') , Auth::guard('backend')->check());
-        if(!session('permissions_id') && Auth::guard('backend')->check()){
+        if(!session('permissions_id')){
             if(Auth::guard('backend')->user()->role){
                 Session::put('permissions_id', Auth::guard('backend')->user()->role->permissions->pluck('permissions_id')->toArray());//設置權限
-            }else{
-                Session::put('permissions_id',self::default_sidebar);//設置預設權限
             }
+            Session::put('permissions_id', []);//設置權限
         }
         $tree = self::tree($menu);
         $data['all_sidebar'] = $menu;
         $data['display_sidebar'] = $tree['display_sidebar'];
-        self::isPermissions($tree['permissions_url']);
+        if(count($tree['permissions_url']) == 0){
+            $tree['permissions_url'] = route('backend.user.dashboard');
+        }
+        if(Auth::guard('backend')->user()->account == 'admin'){
+            $data['display_sidebar'] = $data['all_sidebar'];
+        }else{
+            self::isPermissions($tree['permissions_url']);
+        }
         return $data;
     }
 
     public static function isPermissions($permissions_url_list)
     {
-        if(!Auth::guard('backend')->check()){
-            return redirect()->route('backend.user.signOut');//都無權限直接登出
-        }
-        $permissions_url_list = collect($permissions_url_list)->unique();
+        $permissions_url_list = collect($permissions_url_list)->unique();//可訪問的url
         $is_allow = false;
         foreach ($permissions_url_list as $key=> $url) {
-            if($url == '#'){
-                unset($permissions_url_list[$key]);
-                continue;
-            }
             $a = str_replace($url,'',url()->current());
             if($a == '' || (isset($a[0]) && $a[0]=='/')){
                 $is_allow = true;
                 break;
             }
         }
-        if(!$is_allow){
+        if(!$is_allow){//無權限 導向第一個權限url
             if($permissions_url_list->count()){
-                $url = $permissions_url_list->first();//無權限 導向第一個權限url
+                $url = $permissions_url_list->first();
                 return redirect($url)->send();
-            }else{
-                return redirect()->route('backend.user.signOut')->send();//都無權限直接登出
             }
         }
     }
@@ -94,7 +93,7 @@ class Permissions extends Model
             if(!in_array($menu_1['id'],session('permissions_id') ?? [])){
                 unset($menu[$key]);
             }else{
-                $permissions_url[] = $menu_1['url'];
+                if($menu_1['url'] != '#') $permissions_url[] = $menu_1['url'];
                 if(isset($menu_1['submenu'])){
                     $menu[$key]['submenu'] = self::tree($menu_1['submenu'],$permissions_url)['display_sidebar'];
                     $permissions_url = array_merge(self::tree($menu_1['submenu'],$permissions_url)['permissions_url'],$permissions_url) ;

@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Routing\Router;
+use App\Http\Controllers\OAuthController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +16,9 @@ use Illuminate\Routing\Router;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/google/auth', [OAuthController::class, 'google']);
+Route::get('/google/auth/callback', [OAuthController::class, 'googleCallback']);
 
 Route::get('/', function () {
     return view('welcome');
