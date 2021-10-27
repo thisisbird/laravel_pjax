@@ -20,6 +20,9 @@ use App\Http\Controllers\OAuthController;
 Route::get('/google/auth', [OAuthController::class, 'google']);
 Route::get('/google/auth/callback', [OAuthController::class, 'googleCallback']);
 
+Route::get('/fb/auth', [OAuthController::class, 'fb']);
+Route::get('/fb/auth/callback', [OAuthController::class, 'fbCallback']);
+
 Route::get('/', function () {
     return view('welcome');
 });

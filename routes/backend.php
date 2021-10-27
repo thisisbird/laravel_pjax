@@ -23,7 +23,10 @@ Route::post('registration', 'App\Http\Controllers\Backend\UserController@postReg
 Route::get('signOut', 'App\Http\Controllers\Backend\UserController@signOut')->name('backend.user.signOut');
 
 
-Route::get('/index/ajaxcontent','App\Http\Controllers\IndexController@ajaxContent');// 載入頁面
+// Route::get('/index/ajaxcontent','App\Http\Controllers\IndexController@ajaxContent');// 載入頁面
+
+Route::post('upload_image', 'App\Http\Controllers\Backend\Controller@uploadImage')->name('backend.uploadImage');
+
 
 Route::group(['middleware'=> 'auth.backend:backend'], function (Router $router) {
     // $router->resource('user', 'App\Http\Controllers\Frontend\UserController');

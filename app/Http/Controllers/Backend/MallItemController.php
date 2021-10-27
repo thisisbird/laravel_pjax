@@ -26,6 +26,7 @@ class MallItemController extends Controller
         return view('backend.mall_item.index',compact('datas','request','select_data'));
     }
     public function update(Request $request){
+        dd($request->all());
         try{
             if($request->action_type == 'create'){
                 $role = new Role();

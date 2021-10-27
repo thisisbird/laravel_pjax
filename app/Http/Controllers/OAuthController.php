@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Google_Client;
 use Google_Service_Oauth2;
 use Illuminate\Http\Request;
-use File;
+
 class OAuthController extends Controller
 {
     /**
@@ -22,7 +22,7 @@ class OAuthController extends Controller
         // 這邊要填寫接受 code 的 API (必須與憑證中設定的網址完全相同)
         // $client->setAccessType('offline'); // offline access
         // $client->setIncludeGrantedScopes(true); // incremental auth
-        $client->setScopes(array('https://www.googleapis.com/auth/userinfo.email','https://www.googleapis.com/auth/userinfo.profile'));
+        $client->setScopes(array('https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile'));
         // 產生 URL 給使用者
         $url = $client->createAuthUrl();
         return redirect($url);
@@ -53,5 +53,9 @@ class OAuthController extends Controller
             $email,
             $name,
             $photo_picture);
+    }
+    public function fb()
+    {
+        return view('backend.fb');
     }
 }
