@@ -14,7 +14,7 @@
                     @foreach ($menus as $menu_1)
                     <li class="dd-item" data-id="2">
                         <div class="dd-handle {{isset($select_menu) && $select_menu->id == $menu_1->id ? 'bg-brand':''}}"> <span class="drag-indicator"></span>
-                            <div> {{$menu_1->name}}</div>
+                            <div> {{$menu_1->name_tw}}({{$menu_1->name_en}})</div>
                             <div class="dd-nodrag btn-group ml-auto">
                                 <a href="{{route('backend.itemMenu.edit',$menu_1->id)}}" class="btn btn-secondary">Edit</a>
                                 <button class="btn btn-sm btn-light" type="submit" data-menu_id="{{$menu_1->id}}">
@@ -26,7 +26,7 @@
                         <ol class="dd-list">
                             <li class="dd-item" data-id="5">
                                 <div class="dd-handle {{isset($select_menu) && $select_menu->id == $menu_2->id ? 'bg-brand':''}}"> <span class="drag-indicator"></span>
-                                    <div> {{$menu_2->name}} </div>
+                                    <div> {{$menu_2->name_tw}}({{$menu_2->name_en}}) </div>
                                     <div class="dd-nodrag btn-group ml-auto">
                                         <a href="{{route('backend.itemMenu.edit',$menu_2->id)}}" class="btn btn-secondary">Edit</a>
                                         <button class="btn btn-sm btn-light" type="submit" data-menu_id="{{$menu_2->id}}">
@@ -38,7 +38,7 @@
                                 <ol class="dd-list">
                                     <li class="dd-item" data-id="6">
                                         <div class="dd-handle {{isset($select_menu) && $select_menu->id == $menu_3->id ? 'bg-brand':''}}"> <span class="drag-indicator"></span>
-                                            <div> {{$menu_3->name}}</div>
+                                            <div> {{$menu_3->name_tw}}</div>
                                             <div class="dd-nodrag btn-group ml-auto">
                                                 <a href="{{route('backend.itemMenu.edit',$menu_3->id)}}" class="btn btn-secondary">Edit</a>
                                                 <button class="btn btn-sm btn-light" type="submit" data-menu_id="{{$menu_3->id}}">
@@ -66,8 +66,12 @@
                 <div class="card-body">
                     <h3 class="font-16">分類名稱</h3>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="basicInput" placeholder="分類名稱" name="name"
-                            value="{{isset($select_menu) ? $select_menu['name'] : ''}}">
+                        <input type="text" class="form-control" id="basicInput" placeholder="分類名稱" name="name_tw"
+                            value="{{isset($select_menu) ? $select_menu['name_tw'] : ''}}">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="basicInput" placeholder="分類名稱(英文)" name="name_en"
+                            value="{{isset($select_menu) ? $select_menu['name_en'] : ''}}">
                     </div>
                     @if($errors->count())
                     @foreach ($errors->all() as $error)
@@ -82,11 +86,11 @@
                     <select class="form-control" name="p_id">
                         <option value=0>頂層</option>
                         @foreach ($menus as $menu_1)
-                        <option value="{{$menu_1->id}}" {{isset($select_menu) && $select_menu->p_id == $menu_1->id ? 'selected':''}} {{isset($select_menu) && $select_menu->id == $menu_1->id ? 'disabled':''}}>&nbsp;∟{{$menu_1->name}}</option>
+                        <option value="{{$menu_1->id}}" {{isset($select_menu) && $select_menu->p_id == $menu_1->id ? 'selected':''}} {{isset($select_menu) && $select_menu->id == $menu_1->id ? 'disabled':''}}>&nbsp;∟{{$menu_1->name_tw}}({{$menu_1->name_en}})</option>
                         @foreach ($menu_1->children as $menu_2)
                             <option value="{{$menu_2->id}}" {{isset($select_menu) && $select_menu->p_id == $menu_2->id ? 'selected':''}} 
                                 {{isset($select_menu) && $select_menu->id == $menu_2->id ? 'disabled':''}}
-                                {{isset($select_menu) && $select_menu->id == $menu_2->p_id ? 'disabled':''}}>&nbsp;&nbsp;&nbsp;&nbsp;∟{{$menu_2->name}}</option>
+                                {{isset($select_menu) && $select_menu->id == $menu_2->p_id ? 'disabled':''}}>&nbsp;&nbsp;&nbsp;&nbsp;∟{{$menu_2->name_tw}}({{$menu_2->name_en}})</option>
                         @endforeach
                         @endforeach
                     </select>

@@ -25,7 +25,8 @@ class ItemMenuController extends Controller
             if($request->action_type == 'create'){
                 $msg = '新增成功';
                 $data = new ItemMenu();
-                $data->name = $request->name;
+                $data->name_tw = $request->name_tw;
+                $data->name_en = $request->name_en;
                 $data->sort = 99;
                 $data->level = 0;
                 $data->p_id = $request->p_id;
@@ -60,7 +61,8 @@ class ItemMenuController extends Controller
                         return redirect()->back()->withErrors($msg);
                     }
                 }else{
-                    $data->name = $request->name;
+                    $data->name_tw = $request->name_tw;
+                    $data->name_en = $request->name_en;
                     $data->p_id = $request->p_id;
                     $data->save();
                 }

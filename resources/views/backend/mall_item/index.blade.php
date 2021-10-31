@@ -1,6 +1,13 @@
 @extends('backend.layout-concept.app')
 @section('content')
+<style>
+    .note-editable{
+        background-color: #ffffff;
+    }
+</style>
+
 <div class="row">
+    
     <!-- ============================================================== -->
     <!-- search bar  -->
     <!-- ============================================================== -->
@@ -113,7 +120,7 @@
                     <div class="form-group row pt-2">
                         <label class="col-md-1 control-label">商品名稱</label>
                         <div class="col-md-11">
-                            <input class="form-control" type="text" name="title">
+                            <input class="form-control" type="text" name="name">
                         </div>
                     </div>
                 </div>
@@ -130,9 +137,15 @@
                         <label class="col-md-1 control-label">分類</label>
                         <div class="col-md-11">
                             <select class="js-example-basic-multiple" multiple="multiple" name="group[]">
-                                <option value="Yellow" selected="selected">Yellow</option>
-                                <option value="White">White</option>
-                                <option value="Blue" selected="selected">Blue</option>
+                                @foreach ($menus as $menu_1)
+                                <option value="{{$menu_1->id}}" {{isset($select_menu) && $select_menu->p_id == $menu_1->id ? 'selected':''}}>&nbsp;∟{{$menu_1->name_tw}}({{$menu_1->name_en}})</option>
+                                @foreach ($menu_1->children as $menu_2)
+                                    <option value="{{$menu_2->id}}" {{isset($select_menu) && $select_menu->p_id == $menu_2->id ? 'selected':''}}>&nbsp;&nbsp;&nbsp;&nbsp;∟{{$menu_2->name_tw}}({{$menu_2->name_en}})</option>
+                                    @foreach ($menu_2->children as $menu_3)
+                                        <option value="{{$menu_3->id}}" {{isset($select_menu) && $select_menu->p_id == $menu_3->id ? 'selected':''}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;∟{{$menu_3->name_tw}}({{$menu_3->name_en}})</option>
+                                    @endforeach
+                                @endforeach
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -159,25 +172,92 @@
                         </div>
                     </div>
                 </div> --}}
+                
+                
             </div>
-            <div class="email editor">
-                <div class="col-md-12 p-0">
-                    <div class="form-group">
-                        <label class="control-label sr-only" for="summernote">Descriptions </label>
-                        <textarea name="discription" class="form-control" id="summernote" name="editordata" rows="6"
-                            placeholder="Write Descriptions"></textarea>
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 px-0" id="checkboxradio">
+                <div class="card">
+                    <div class="card-body">
+                            <label class="custom-control custom-checkbox custom-control-inline">
+                                <input type="checkbox" checked="" class="custom-control-input"><span class="custom-control-label">是否顯示</span>
+                            </label>
+                            <label class="custom-control custom-checkbox custom-control-inline">
+                                <input type="checkbox" class="custom-control-input"><span class="custom-control-label">可否購買</span>
+                            </label>
+                            <hr>
+                            <label class="custom-control custom-checkbox custom-control-inline">
+                                <input type="checkbox" checked="" class="custom-control-input"><span class="custom-control-label">熱銷品</span>
+                            </label>
+                            <label class="custom-control custom-checkbox custom-control-inline">
+                                <input type="checkbox" class="custom-control-input"><span class="custom-control-label">新品</span>
+                            </label>
                     </div>
                 </div>
+            </div>
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-5">
+                {{-- <div class="section-block">
+                    <h5 class="section-title">Basic Tabs</h5>
+                    <p>Takes the basic nav from above and adds the .nav-tabs class to generate a tabbed interface..</p>
+                </div> --}}
+                <div class="tab-regular" id="tabs">
+                    <ul class="nav nav-tabs " id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="false">詳細說明</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="true">商品特色</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">商品規格</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade active show" id="home" role="tabpanel" aria-labelledby="home-tab">
+                            <div class="email editor">
+                                <div class="col-md-12 p-0">
+                                    <div class="form-group">
+                                        <label class="control-label sr-only" for="summernote">Descriptions </label>
+                                        <textarea name="discription" class="form-control" id="summernote" name="editordata" rows="6"
+                                            placeholder="Write Descriptions"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade show" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                            <div class="email editor">
+                                <div class="col-md-12 p-0">
+                                    <div class="form-group">
+                                        <label class="control-label sr-only" for="summernote">Descriptions </label>
+                                        <textarea name="discription" class="form-control" id="summernote" name="editordata" rows="6"
+                                            placeholder="Write Descriptions"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade show" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                            <div class="email editor">
+                                <div class="col-md-12 p-0">
+                                    <div class="form-group">
+                                        <label class="control-label sr-only" for="summernote">Descriptions </label>
+                                        <textarea name="discription" class="form-control" id="summernote" name="editordata" rows="6"
+                                            placeholder="Write Descriptions"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="email editor">
                 @isset($select_data)
                 <input type="hidden" name="data_id" value="{{$select_data['id']}}">
                 <input type="hidden" name="action_type" value="update">
                 <div class="email action-send">
                     <div class="col-md-12 ">
                         <div class="form-group">
-                            <button class="btn btn-primary btn-space" type="submit"><i class="icon s7-mail"></i>
+                            <button class="btn btn-secondary btn-space" type="submit" style="width: 100%;"><i class="icon s7-mail"></i>
                                 更新</button>
-                            <button class="btn btn-secondary btn-space" type="button"><i class="icon s7-close"></i>
-                                取消</button>
                             <a href="{{route('backend.mallItem.index')}}" class="btn btn-dark btn-lg btn-block">取消</a>
                         </div>
                     </div>
@@ -189,7 +269,7 @@
             </div>
             {{-- //email --}}
 
-
+            
 
         </form>
     </div>
@@ -197,7 +277,11 @@
     <!-- end influencer sidebar  -->
     <!-- ============================================================== -->
 </div>
+
 <script>
+    $( function() {
+        $( "#tabs" ).tabs();
+    });
     $(document).ready(function () {
         $('.js-example-basic-multiple').select2({
             tags: true
@@ -208,30 +292,43 @@
 <script>
     $(document).ready(function () {
         $('#summernote').summernote({
+            tabsize: 2,
             height: 300,
             callbacks: {
                 onImageUpload: function(files) {
                     uploadImage(files[0]);
                 }
+            },
+            placeholder: 'type with apple, orange, watermelon and lemon',
+            hint: {
+                words: ['apple', 'orange', 'watermelon', 'lemon','帥帥帥帥哥哥','handsome','handsome2','handsome3'],
+                match: /\b(\w{1,})$/,
+                search: function (keyword, callback) {
+                    callback($.grep(this.words, function (item) {
+                        return item.indexOf(keyword) === 0;
+                    }));
+                }
             }
         });
+        
 
-        function sendFile(file, editor, welEditable) {
-            data = new FormData();
-            data.append("file", file);
-            data.append("_token", "{{csrf_token()}}");
-            $.ajax({
-            data: data,
-            type: "POST",
-            url: "{{route('backend.uploadImage')}}",
-            cache: false,
-            contentType: false,
-            processData: false,
-                success: function(url) {
-                    editor.insertImage(welEditable, url);
-                }
-            });
-        }
+
+        // function sendFile(file, editor, welEditable) {
+        //     data = new FormData();
+        //     data.append("file", file);
+        //     data.append("_token", "{{csrf_token()}}");
+        //     $.ajax({
+        //     data: data,
+        //     type: "POST",
+        //     url: "{{route('backend.uploadImage')}}",
+        //     cache: false,
+        //     contentType: false,
+        //     processData: false,
+        //         success: function(url) {
+        //             editor.insertImage(welEditable, url);
+        //         }
+        //     });
+        // }
         function uploadImage(image) {
             var data = new FormData();
             data.append("image", image);
@@ -244,7 +341,7 @@
                 data: data,
                 type: "post",
                 success: function(url) {
-                    var image = $('<img>').attr('src', 'http://' + url);
+                    var image = $('<img>').attr('src', url);
                     $('#summernote').summernote("insertNode", image[0]);
                 },
                 error: function(data) {

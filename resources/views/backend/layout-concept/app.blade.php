@@ -11,7 +11,8 @@
     <link rel="stylesheet" href="{{asset('concept')}}/assets/libs/css/style.css">
     <link rel="stylesheet" href="{{asset('concept')}}/assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
     <link rel="stylesheet" href="{{asset('concept')}}/assets/vendor/select2/css/select2.css">
-    <link rel="stylesheet" href="{{asset('concept')}}/assets/vendor/summernote/css/summernote-bs4.css">
+    <link rel="stylesheet" href="{{asset('mazer-1.1')}}/dist/assets/vendors/summernote/summernote-lite.min.css">
+
     <link rel="stylesheet" href="{{asset('mazer-1.1/dist')}}/assets/vendors/toastify/toastify.css">
     <link rel='stylesheet' href='{{asset('css')}}/nprogress.css'/>
 
@@ -27,8 +28,10 @@
     <!-- slimscroll js -->
     <script src="{{asset('concept')}}/assets/vendor/slimscroll/jquery.slimscroll.js"></script>
     <script src="{{asset('concept')}}/assets/vendor/select2/js/select2.min.js"></script>
-    <script src="{{asset('concept')}}/assets/vendor/summernote/js/summernote-bs4.js"></script>
+    {{-- <script src="{{asset('concept')}}/assets/vendor/summernote/js/summernote-bs4.js"></script> --}}
 
+    {{-- <script src="{{asset('mazer-1.1')}}/dist/assets/vendors/jquery/jquery.min.js"></script> --}}
+    <script src="{{asset('mazer-1.1')}}/dist/assets/vendors/summernote/summernote-lite.min.js"></script>
 
     <title>Concept - Bootstrap 4 Admin Dashboard Template</title>
 </head>
@@ -134,7 +137,7 @@
 
             
             <!-- main js -->
-            {{-- <script src="{{asset('js')}}/jquery2.1.4.js"></script> --}}
+            <script src="{{asset('concept')}}/assets/vendor/full-calendar/js/jquery-ui.min.js"></script>
             <script src="{{asset('concept')}}/assets/libs/js/main-js.js"></script>
             <script src="{{asset('concept')}}/assets/vendor/parsley/parsley.js"></script>
             <script src="{{asset('js')}}/jquery.pjax.min.js"></script>
