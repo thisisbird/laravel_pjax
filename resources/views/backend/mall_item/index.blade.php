@@ -30,6 +30,7 @@
         <!-- card influencer one -->
         <!-- ============================================================== -->
         @foreach ($datas as $data)
+        {{-- @dd($data) --}}
         <div class="card {{isset($select_data) && $select_data->id == $data->id ? 'bg-brand':''}}">
             <div class="card-body">
                 <div class="row align-items-center">
@@ -53,16 +54,18 @@
                                 </div>
                             </div>
                             <div class="user-avatar-address">
-                                <p class="mb-2"><i class="fa fa-map-marker-alt mr-2  text-primary"></i>Salt Lake City,
-                                    UT <span class="m-l-10">Male<span class="m-l-20">29 Year Old</span><span
-                                            class="m-l-20">{{$data->email}}</span><span
-                                            class="m-l-20">{{$data->account}}</span></span>
+                                <p class="mb-2"><i class="fa fa-map-marker-alt mr-2  text-primary"></i>{{$data->info->where('language',$request->language)->first()->name ?? 'N/A'}} 
+                                    <span class="m-l-10">{{$data->code}}
+                                        <span class="m-l-20">庫存:{{$data->detail->sum('stock')}}</span>
+                                        <span class="m-l-20">購買量:{{$data->detail->sum('buy_stock')}}</span>
+                                        {{-- <span class="m-l-20">{{$data->account}}</span> --}}
+                                    </span>
                                 </p>
                                 <div class="mt-3">
-                                    <a href="#" class="mr-1 badge badge-light">Fitness</a><a href="#"
-                                        class="mr-1 badge badge-light">Life Style</a><a href="#"
-                                        class="mr-1 badge badge-light">Gym</a><a href="#"
-                                        class="badge badge-light">Crossfit</a>
+                                    <a href="##" class="mr-1 badge badge-light">{{$data->is_display ? '顯示':'不顯示'}}</a>
+                                    <a href="##" class="mr-1 badge badge-light">{{$data->is_shopping?'可購買':'不可購買'}}</a>
+                                    <a href="##" class="mr-1 badge badge-light">{{$data->is_new?'新品':''}}</a>
+                                    <a href="##" class="badge badge-light">{{$data->is_hot?'熱銷':''}}</a>
                                 </div>
                             </div>
                         </div>
@@ -70,49 +73,41 @@
                     <div class="col-xl-3 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="float-xl-right float-none mt-xl-0 mt-4">
                             <a href="#" class="btn-wishlist m-r-10"><i class="far fa-star"></i></a>
-                            <a href="{{route('backend.mallItem.edit',$data->id)}}{{$request->search ? '?search='.$request->search:''}}"
-                                class="btn btn-secondary">Edit</a>
+                            <a href="{{route('backend.mallItem.edit',$data->id)}}?language=en{{$request->search ? '&search='.$request->search:''}}" class="btn btn-secondary">編輯英文</a>
+                            <a href="{{route('backend.mallItem.edit',$data->id)}}?language=tw{{$request->search ? '&search='.$request->search:''}}" class="btn btn-secondary">編輯中文</a>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="border-top user-social-box">
                 <div class="user-social-media d-xl-inline-block "><span class="mr-2 twitter-color"> <i
-                            class="fab fa-twitter-square"></i></span><span>13,291</span></div>
+                            class="fab fa-twitter-square"></i>原價</span><span>{{$data->info->where('language',$request->language)->first()->o_price ?? 0}}</span></div>
                 <div class="user-social-media d-xl-inline-block"><span class="mr-2  pinterest-color"> <i
-                            class="fab fa-pinterest-square"></i></span><span>84,019</span></div>
-                <div class="user-social-media d-xl-inline-block"><span class="mr-2 instagram-color"> <i
+                            class="fab fa-pinterest-square"></i>售價</span><span>{{$data->info->where('language',$request->language)->first()->price ?? 0}}</span></div>
+                {{-- <div class="user-social-media d-xl-inline-block"><span class="mr-2 instagram-color"> <i
                             class="fab fa-instagram"></i></span><span>12,300</span></div>
                 <div class="user-social-media d-xl-inline-block"><span class="mr-2  facebook-color"> <i
                             class="fab fa-facebook-square "></i></span><span>92,920</span></div>
                 <div class="user-social-media d-xl-inline-block"><span class="mr-2 medium-color"> <i
                             class="fab fa-medium"></i></span><span>291</span></div>
                 <div class="user-social-media d-xl-inline-block"><span class="mr-2 youtube-color"> <i
-                            class="fab fa-youtube"></i></span><span>1291</span></div>
+                            class="fab fa-youtube"></i></span><span>1291</span></div> --}}
             </div>
         </div>
         @endforeach
-
-        <!-- ============================================================== -->
-        <!-- end card influencer one -->
-        <!-- ============================================================== -->
-
-
     </div>
-    <!-- ============================================================== -->
-    <!-- influencer sidebar  -->
-    <!-- ============================================================== -->
     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-        {{-- //email --}}
         <form action="{{route('backend.mallItem.update')}}" method="POST" pjax-container>
             @csrf
+            <input type="hidden" name="language" value="{{$request->language}}">
+
             @if($errors->count())
                 @foreach ($errors->all() as $error)
                 <ul class="parsley-errors-list filled"><li class="parsley-required">{{$error}}</li></ul>
                 @endforeach
             @endif
             <div class="email-head">
-                <div class="email-head-title">Compose new message<span class="icon mdi mdi-edit"></span></div>
+                <div class="email-head-title">商品資訊<span class="icon mdi mdi-edit"></span></div>
             </div>
 
             <div class="email-compose-fields">
@@ -120,7 +115,7 @@
                     <div class="form-group row pt-2">
                         <label class="col-md-1 control-label">商品名稱</label>
                         <div class="col-md-11">
-                            <input class="form-control" type="text" name="name">
+                            <input class="form-control" type="text" name="name" value="{{isset($select_data) ? ($select_data->info->where('language',$request->language)->first()->name ?? '') : old('name')}}">
                         </div>
                     </div>
                 </div>
@@ -128,11 +123,11 @@
                     <div class="form-group row pt-2">
                         <label class="col-md-1 control-label">商品編號</label>
                         <div class="col-md-11">
-                            <input class="form-control" type="text" name="code">
+                            <input class="form-control" type="text" name="code" value="{{isset($select_data) ? $select_data->code : old('code')}}">
                         </div>
                     </div>
                 </div>
-                <div class="to">
+                <div class="menu">
                     <div class="form-group row pt-0">
                         <label class="col-md-1 control-label">分類</label>
                         <div class="col-md-11">
@@ -150,28 +145,24 @@
                         </div>
                     </div>
                 </div>
-                <div class="to cc">
+
+                <div class="subject">
                     <div class="form-group row pt-2">
-                        <label class="col-md-1 control-label">品項</label>
+                        <label class="col-md-1 control-label">原價 {{$request->language == 'en' ? 'US$':'NT$'}}</label>
                         <div class="col-md-11">
-                            <select class="js-example-basic-multiple" multiple="multiple" name="item_type[]">
-                                <option value="Alabama">Alabama</option>
-                                <option value="Alaska" selected="selected">Alaska</option>
-                                <option value="Melbourne">Melbourne</option>
-                                <option value="Victoria" selected="selected">Victoria</option>
-                                <option value="Newyork">Newyork</option>
-                            </select>
+                            <input class="form-control" type="number" name="o_price" value="{{isset($select_data) ? ($select_data->info->where('language',$request->language)->first()->o_price ?? 0) : old('o_price')}}">
                         </div>
                     </div>
                 </div>
-                {{-- <div class="subject">
+                <div class="subject">
                     <div class="form-group row pt-2">
-                        <label class="col-md-1 control-label">Subject</label>
+                        <label class="col-md-1 control-label">售價 {{$request->language == 'en' ? 'US$':'NT$'}}</label>
                         <div class="col-md-11">
-                            <input class="form-control" type="text">
+                            <input class="form-control" type="number" name="price" value="{{isset($select_data) ? ($select_data->info->where('language',$request->language)->first()->o_price ?? 0) : old('o_price')}}">
                         </div>
                     </div>
-                </div> --}}
+                </div>
+
                 
                 
             </div>
@@ -179,26 +170,75 @@
                 <div class="card">
                     <div class="card-body">
                             <label class="custom-control custom-checkbox custom-control-inline">
-                                <input type="checkbox" checked="" class="custom-control-input"><span class="custom-control-label">是否顯示</span>
+                                <input type="checkbox" value="1" name="is_display" {{isset($select_data) ? ($select_data->is_display?'checked':'') : (old('is_display')?'checked':'')}} class="custom-control-input"><span class="custom-control-label">是否顯示</span>
                             </label>
                             <label class="custom-control custom-checkbox custom-control-inline">
-                                <input type="checkbox" class="custom-control-input"><span class="custom-control-label">可否購買</span>
+                                <input type="checkbox" value="1" name="is_shopping" {{isset($select_data) ? ($select_data->is_shopping?'checked':'') : (old('is_shopping')?'checked':'')}} class="custom-control-input"><span class="custom-control-label">可否購買</span>
                             </label>
                             <hr>
                             <label class="custom-control custom-checkbox custom-control-inline">
-                                <input type="checkbox" checked="" class="custom-control-input"><span class="custom-control-label">熱銷品</span>
+                                <input type="checkbox" value="1" name="is_hot" {{isset($select_data) ? ($select_data->is_hot?'checked':'') : (old('is_hot')?'checked':'')}} class="custom-control-input"><span class="custom-control-label">熱銷品</span>
                             </label>
                             <label class="custom-control custom-checkbox custom-control-inline">
-                                <input type="checkbox" class="custom-control-input"><span class="custom-control-label">新品</span>
+                                <input type="checkbox" value="1" name="is_new" {{isset($select_data) ? ($select_data->is_new?'checked':'') : (old('is_new')?'checked':'')}} class="custom-control-input"><span class="custom-control-label">新品</span>
                             </label>
                     </div>
                 </div>
             </div>
+            <div class="row">
+                @isset($select_data)
+                @foreach ($select_data->detail as $detail)
+                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <div class="card card-figure">
+                        <!-- .card-figure -->
+                        <figure class="figure">
+                            <!-- .figure-img -->
+                            <div class="figure-img">
+                                <img class="img-fluid" src="{{asset('concept')}}/assets/images/card-img.jpg" alt="Card image cap">
+                                {{-- <div class="figure-tools">
+                                    <a href="#" class="tile tile-circle tile-sm mr-auto">
+                                                    <span class="oi-data-transfer-download"></span></a>
+                                    <span class="badge badge-danger">Illustration</span>
+                                </div> --}}
+                                <div class="figure-action">
+                                    <a href="#" class="btn btn-block btn-sm btn-primary">圖片</a>
+                                </div>
+                            </div>
+                        </figure>
+                        <!-- /.card-figure -->
+                        <div class="card-body">
+                            <div class="form-group">
+                                <div class="input-group mb-3"><span class="input-group-prepend"><span class="input-group-text">品項名稱</span></span>
+                                    @if($request->language == 'en')
+                                    <input type="text" placeholder="品項名稱(英文)" class="form-control" name="name_en[]" value="{{$detail->name_en}}">
+                                    <input type="hidden" name="name_tw[]" value="{{$detail->name_tw}}">
+                                    @else
+                                    <input type="text" placeholder="品項名稱" class="form-control" name="name_tw[]" value="{{$detail->name_tw}}">
+                                    <input type="hidden" name="name_en[]" value="{{$detail->name_en}}">
+                                    @endif
+                                </div>
+                                <div class="input-group mb-3"><span class="input-group-prepend"><span class="input-group-text">庫存</span></span>
+                                    <input type="number" min="0" placeholder="庫存" class="form-control" name="stock[]" value="{{$detail->stock}}">
+                                </div>
+                                <div class="input-group mb-3"><span class="input-group-prepend"><span class="input-group-text">已購買量</span></span>
+                                    <input type="number" min="0" placeholder="已購買量" class="form-control" name="buy_stock[]" value="{{$detail->buy_stock}}">
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#" class="btn btn-danger">刪除</a>
+                    </div>
+                    
+                </div>   
+                @endforeach
+                @endisset
+                @for ($i = 0; $i < 3; $i++)
+                
+                @endfor
+            
+
+            </div>
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-5">
-                {{-- <div class="section-block">
-                    <h5 class="section-title">Basic Tabs</h5>
-                    <p>Takes the basic nav from above and adds the .nav-tabs class to generate a tabbed interface..</p>
-                </div> --}}
+                
                 <div class="tab-regular" id="tabs">
                     <ul class="nav nav-tabs " id="myTab" role="tablist">
                         <li class="nav-item">
@@ -216,9 +256,8 @@
                             <div class="email editor">
                                 <div class="col-md-12 p-0">
                                     <div class="form-group">
-                                        <label class="control-label sr-only" for="summernote">Descriptions </label>
-                                        <textarea name="discription" class="form-control" id="summernote" name="editordata" rows="6"
-                                            placeholder="Write Descriptions"></textarea>
+                                        <textarea name="discription" class="form-control summernote" id="summernote" rows="6"
+                                            placeholder="Write Descriptions">{{isset($select_data) ? ($select_data->info->where('language',$request->language)->first()->discription ?? '') : old('discription')}}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -227,9 +266,8 @@
                             <div class="email editor">
                                 <div class="col-md-12 p-0">
                                     <div class="form-group">
-                                        <label class="control-label sr-only" for="summernote">Descriptions </label>
-                                        <textarea name="discription" class="form-control" id="summernote" name="editordata" rows="6"
-                                            placeholder="Write Descriptions"></textarea>
+                                        <textarea name="special" class="form-control summernote" id="summernote"  rows="6"
+                                            placeholder="Write Descriptions">{{isset($select_data) ? ($select_data->info->where('language',$request->language)->first()->special ?? '') : old('special')}}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -238,9 +276,8 @@
                             <div class="email editor">
                                 <div class="col-md-12 p-0">
                                     <div class="form-group">
-                                        <label class="control-label sr-only" for="summernote">Descriptions </label>
-                                        <textarea name="discription" class="form-control" id="summernote" name="editordata" rows="6"
-                                            placeholder="Write Descriptions"></textarea>
+                                        <textarea name="info" class="form-control summernote" id="summernote" rows="6"
+                                            placeholder="Write Descriptions">{{isset($select_data) ? ($select_data->info->where('language',$request->language)->first()->info ?? '') : old('info')}}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -291,7 +328,7 @@
 </script>
 <script>
     $(document).ready(function () {
-        $('#summernote').summernote({
+        $('.summernote').summernote({
             tabsize: 2,
             height: 300,
             callbacks: {

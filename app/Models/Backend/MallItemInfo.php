@@ -9,5 +9,5 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class MallItemInfo extends Model
 {
     use SoftDeletes;
-    
+    protected $primaryKey = 'mall_item_id';
 }
