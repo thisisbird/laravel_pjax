@@ -1,12 +1,13 @@
 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12 detail_div">
     <div class="card card-figure add_detail" style="{{isset($the_detail) ? 'display: none' : ''}}">
-        <a href="##" class="btn btn-rounded btn-success"><i class="fas fa-plus-circle add_detail_icon"></i></a>
+        <a href="##" class="btn btn-rounded btn-success add_detail_icon"><i class="fas fa-plus-circle"></i>  新增品項</a>
     </div>
     <div class="card card-figure detail_data" style="{{isset($the_detail) ? '' : 'display: none'}}">
         <!-- .card-figure -->
         <figure class="figure">
             <!-- .figure-img -->
             <div class="figure-img" style="min-height: 80px">
+                <input type="hidden" name="detail_id[]" value="{{$the_detail->id ?? 0}}" {{isset($the_detail) ? '' : 'disabled'}}>
                 <input type="hidden" name="photo[]" value="{{$the_detail->photo ?? ''}}" {{isset($the_detail) ? '' : 'disabled'}}>
                 <img class="img-fluid detail_img" src="{{isset($the_detail) && $the_detail->photo ? asset($the_detail->photo):asset('img/detail_1_1.png')}}" alt="Card image cap">
                 {{-- <div class="figure-tools">

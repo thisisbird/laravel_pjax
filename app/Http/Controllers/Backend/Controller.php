@@ -30,7 +30,6 @@ class Controller extends BaseController
     public function uploadImagePath($image){
         $path = $image->store('/public/image');
         $path = Storage::url($path);
-
         return $path;
       }
 }

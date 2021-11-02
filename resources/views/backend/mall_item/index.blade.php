@@ -5,8 +5,7 @@
         background-color: #ffffff;
     }
     .add_detail_icon{
-        font-size: 81px;
-        text-align: center;
+        font-size: 25px;
     }
 </style>
 
@@ -88,9 +87,9 @@
                             class="fab fa-twitter-square"></i>原價</span><span>{{$data->info->where('language',$request->language)->first()->o_price ?? 0}}</span></div>
                 <div class="user-social-media d-xl-inline-block"><span class="mr-2  pinterest-color"> <i
                             class="fab fa-pinterest-square"></i>售價</span><span>{{$data->info->where('language',$request->language)->first()->price ?? 0}}</span></div>
-                {{-- <div class="user-social-media d-xl-inline-block"><span class="mr-2 instagram-color"> <i
-                            class="fab fa-instagram"></i></span><span>12,300</span></div>
-                <div class="user-social-media d-xl-inline-block"><span class="mr-2  facebook-color"> <i
+                <div class="user-social-media d-xl-inline-block"><span class="mr-2 instagram-color"> <i
+                            class="fab fa-instagram"></i>成本</span><span>{{$data->info->where('language',$request->language)->first()->cost ?? 0}}</span></div>
+                {{-- <div class="user-social-media d-xl-inline-block"><span class="mr-2  facebook-color"> <i
                             class="fab fa-facebook-square "></i></span><span>92,920</span></div>
                 <div class="user-social-media d-xl-inline-block"><span class="mr-2 medium-color"> <i
                             class="fab fa-medium"></i></span><span>291</span></div>
@@ -138,11 +137,11 @@
                         <div class="col-md-11">
                             <select class="js-example-basic-multiple" multiple="multiple" name="menu[]">
                                 @foreach ($menus as $menu_1)
-                                <option value="{{$menu_1->id}}" {{old('menu') && in_array($menu_1->id,old('menu')) ? 'selected':'' }} {{isset($select_menu) && $select_menu->p_id == $menu_1->id ? 'selected':''}}>&nbsp;∟{{$menu_1->name_tw}}({{$menu_1->name_en}})</option>
+                                <option value="{{$menu_1->id}}" {{old('menu') && in_array($menu_1->id,old('menu')) ? 'selected':'' }} {{isset($select_data) && in_array($menu_1->id,$select_data->menu->pluck('id')->toArray())  ? 'selected':''}}>&nbsp;∟{{$menu_1->name_tw}}({{$menu_1->name_en}})</option>
                                 @foreach ($menu_1->children as $menu_2)
-                                    <option value="{{$menu_2->id}}" {{old('menu') && in_array($menu_2->id,old('menu')) ? 'selected':'' }} {{isset($select_menu) && $select_menu->p_id == $menu_2->id ? 'selected':''}}>&nbsp;&nbsp;&nbsp;&nbsp;∟{{$menu_2->name_tw}}({{$menu_2->name_en}})</option>
+                                    <option value="{{$menu_2->id}}" {{old('menu') && in_array($menu_2->id,old('menu')) ? 'selected':'' }} {{isset($select_data) && in_array($menu_2->id,$select_data->menu->pluck('id')->toArray()) ? 'selected':''}}>&nbsp;&nbsp;&nbsp;&nbsp;∟{{$menu_2->name_tw}}({{$menu_2->name_en}})</option>
                                     @foreach ($menu_2->children as $menu_3)
-                                        <option value="{{$menu_3->id}}" {{old('menu') && in_array($menu_3->id,old('menu')) ? 'selected':'' }} {{isset($select_menu) && $select_menu->p_id == $menu_3->id ? 'selected':''}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;∟{{$menu_3->name_tw}}({{$menu_3->name_en}})</option>
+                                        <option value="{{$menu_3->id}}" {{old('menu') && in_array($menu_3->id,old('menu')) ? 'selected':'' }} {{isset($select_data) && in_array($menu_3->id,$select_data->menu->pluck('id')->toArray()) ? 'selected':''}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;∟{{$menu_3->name_tw}}({{$menu_3->name_en}})</option>
                                     @endforeach
                                 @endforeach
                                 @endforeach
@@ -164,6 +163,14 @@
                         <label class="col-md-1 control-label">售價 {{$request->language == 'en' ? 'US$':'NT$'}}</label>
                         <div class="col-md-11">
                             <input class="form-control" type="number" step={{$request->language == 'en' ? 0.01:1}} name="price" value="{{isset($select_data) ? ($select_data->info->where('language',$request->language)->first()->price ?? 0) : old('price')}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="subject">
+                    <div class="form-group row pt-2">
+                        <label class="col-md-1 control-label">成本 {{$request->language == 'en' ? 'US$':'NT$'}}</label>
+                        <div class="col-md-11">
+                            <input class="form-control" type="number" step={{$request->language == 'en' ? 0.01:1}} name="cost" value="{{isset($select_data) ? ($select_data->info->where('language',$request->language)->first()->cost ?? 0) : old('cost')}}">
                         </div>
                     </div>
                 </div>
@@ -238,8 +245,15 @@
                             <div class="email editor">
                                 <div class="col-md-12 p-0">
                                     <div class="form-group">
-                                        <textarea name="info" class="form-control summernote" id="summernote" rows="6"
-                                            placeholder="Write Descriptions">{{isset($select_data) ? ($select_data->info->where('language',$request->language)->first()->info ?? '') : old('info')}}</textarea>
+                                        @php
+                                            $default_info_str = '<table class="table table-bordered"><tbody><tr><td style="background-color:rgb(247, 248, 250)">規格</td><td>內容</td></tr><tr><td style="background-color:rgb(247, 248, 250)"><br></td><td><br></td></tr></tbody></table>';
+                                        @endphp
+                                        <textarea name="info" class="form-control summernote" id="summernote" rows="6" placeholder="Write Descriptions">
+                                            {{isset($select_data) ? 
+                                            ($select_data->info->where('language',$request->language)->first()->info ?? $default_info_str) 
+                                            : 
+                                            (old('info') ? old('info'):$default_info_str) }}
+                                            </textarea>
                                     </div>
                                 </div>
                             </div>
