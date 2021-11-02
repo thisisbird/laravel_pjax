@@ -18,10 +18,10 @@ class CreateMallItemDetailsTable extends Migration
             $table->integer('mall_item_id');
             $table->string('name_tw',50)->comment('規格名稱-中文');
             $table->string('name_en',50)->comment('規格名稱-英文');
-            $table->integer('stock')->comment('庫存');
-            $table->integer('buy_stock')->comment('已購買數量');
-            $table->text('photo')->comment('照片路徑-單張');
-            $table->text('discription');
+            $table->integer('stock')->default(0)->comment('庫存');
+            $table->integer('buy_stock')->default(0)->comment('已購買數量');
+            $table->text('photo')->nullable()->comment('照片路徑-單張');
+            $table->text('discription')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

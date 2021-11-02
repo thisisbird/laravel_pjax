@@ -9,5 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class MallItemInfo extends Model
 {
     use SoftDeletes;
-    protected $primaryKey = 'mall_item_id';
+    // protected $primaryKey = 'mall_item_id';
+    protected $fillable = ['mall_item_id','language','name','o_price','price','cost','special','info','discription'];
+
 }

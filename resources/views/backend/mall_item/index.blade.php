@@ -4,6 +4,10 @@
     .note-editable{
         background-color: #ffffff;
     }
+    .add_detail_icon{
+        font-size: 81px;
+        text-align: center;
+    }
 </style>
 
 <div class="row">
@@ -72,9 +76,9 @@
                     </div>
                     <div class="col-xl-3 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="float-xl-right float-none mt-xl-0 mt-4">
-                            <a href="#" class="btn-wishlist m-r-10"><i class="far fa-star"></i></a>
-                            <a href="{{route('backend.mallItem.edit',$data->id)}}?language=en{{$request->search ? '&search='.$request->search:''}}" class="btn btn-secondary">編輯英文</a>
-                            <a href="{{route('backend.mallItem.edit',$data->id)}}?language=tw{{$request->search ? '&search='.$request->search:''}}" class="btn btn-secondary">編輯中文</a>
+                            {{-- <a href="#" class="btn-wishlist m-r-10"><i class="far fa-star"></i></a> --}}
+                            <a href="{{route('backend.mallItem.edit',$data->id)}}?language=en{{$request->search ? '&search='.$request->search:''}}" class="btn {{isset($select_data) ? $select_data->id == $data->id && $request->language == 'en' ? 'btn-secondary' :'btn-outline-secondary' :'btn-outline-secondary'}}">編輯英文</a>
+                            <a href="{{route('backend.mallItem.edit',$data->id)}}?language=tw{{$request->search ? '&search='.$request->search:''}}" class="btn {{isset($select_data) ? $select_data->id == $data->id && $request->language == 'tw' ? 'btn-secondary' :'btn-outline-secondary' :'btn-outline-secondary'}}">編輯中文</a>
                         </div>
                     </div>
                 </div>
@@ -97,6 +101,7 @@
         @endforeach
     </div>
     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <div id="pjax-container2">
         <form action="{{route('backend.mallItem.update')}}" method="POST" pjax-container>
             @csrf
             <input type="hidden" name="language" value="{{$request->language}}">
@@ -131,13 +136,13 @@
                     <div class="form-group row pt-0">
                         <label class="col-md-1 control-label">分類</label>
                         <div class="col-md-11">
-                            <select class="js-example-basic-multiple" multiple="multiple" name="group[]">
+                            <select class="js-example-basic-multiple" multiple="multiple" name="menu[]">
                                 @foreach ($menus as $menu_1)
-                                <option value="{{$menu_1->id}}" {{isset($select_menu) && $select_menu->p_id == $menu_1->id ? 'selected':''}}>&nbsp;∟{{$menu_1->name_tw}}({{$menu_1->name_en}})</option>
+                                <option value="{{$menu_1->id}}" {{old('menu') && in_array($menu_1->id,old('menu')) ? 'selected':'' }} {{isset($select_menu) && $select_menu->p_id == $menu_1->id ? 'selected':''}}>&nbsp;∟{{$menu_1->name_tw}}({{$menu_1->name_en}})</option>
                                 @foreach ($menu_1->children as $menu_2)
-                                    <option value="{{$menu_2->id}}" {{isset($select_menu) && $select_menu->p_id == $menu_2->id ? 'selected':''}}>&nbsp;&nbsp;&nbsp;&nbsp;∟{{$menu_2->name_tw}}({{$menu_2->name_en}})</option>
+                                    <option value="{{$menu_2->id}}" {{old('menu') && in_array($menu_2->id,old('menu')) ? 'selected':'' }} {{isset($select_menu) && $select_menu->p_id == $menu_2->id ? 'selected':''}}>&nbsp;&nbsp;&nbsp;&nbsp;∟{{$menu_2->name_tw}}({{$menu_2->name_en}})</option>
                                     @foreach ($menu_2->children as $menu_3)
-                                        <option value="{{$menu_3->id}}" {{isset($select_menu) && $select_menu->p_id == $menu_3->id ? 'selected':''}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;∟{{$menu_3->name_tw}}({{$menu_3->name_en}})</option>
+                                        <option value="{{$menu_3->id}}" {{old('menu') && in_array($menu_3->id,old('menu')) ? 'selected':'' }} {{isset($select_menu) && $select_menu->p_id == $menu_3->id ? 'selected':''}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;∟{{$menu_3->name_tw}}({{$menu_3->name_en}})</option>
                                     @endforeach
                                 @endforeach
                                 @endforeach
@@ -150,7 +155,7 @@
                     <div class="form-group row pt-2">
                         <label class="col-md-1 control-label">原價 {{$request->language == 'en' ? 'US$':'NT$'}}</label>
                         <div class="col-md-11">
-                            <input class="form-control" type="number" name="o_price" value="{{isset($select_data) ? ($select_data->info->where('language',$request->language)->first()->o_price ?? 0) : old('o_price')}}">
+                            <input class="form-control" type="number" step={{$request->language == 'en' ? 0.01:1}} name="o_price" value="{{isset($select_data) ? ($select_data->info->where('language',$request->language)->first()->o_price ?? 0) : old('o_price')}}">
                         </div>
                     </div>
                 </div>
@@ -158,13 +163,10 @@
                     <div class="form-group row pt-2">
                         <label class="col-md-1 control-label">售價 {{$request->language == 'en' ? 'US$':'NT$'}}</label>
                         <div class="col-md-11">
-                            <input class="form-control" type="number" name="price" value="{{isset($select_data) ? ($select_data->info->where('language',$request->language)->first()->o_price ?? 0) : old('o_price')}}">
+                            <input class="form-control" type="number" step={{$request->language == 'en' ? 0.01:1}} name="price" value="{{isset($select_data) ? ($select_data->info->where('language',$request->language)->first()->price ?? 0) : old('price')}}">
                         </div>
                     </div>
                 </div>
-
-                
-                
             </div>
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 px-0" id="checkboxradio">
                 <div class="card">
@@ -187,54 +189,14 @@
             </div>
             <div class="row">
                 @isset($select_data)
-                @foreach ($select_data->detail as $detail)
-                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12">
-                    <div class="card card-figure">
-                        <!-- .card-figure -->
-                        <figure class="figure">
-                            <!-- .figure-img -->
-                            <div class="figure-img">
-                                <img class="img-fluid" src="{{asset('concept')}}/assets/images/card-img.jpg" alt="Card image cap">
-                                {{-- <div class="figure-tools">
-                                    <a href="#" class="tile tile-circle tile-sm mr-auto">
-                                                    <span class="oi-data-transfer-download"></span></a>
-                                    <span class="badge badge-danger">Illustration</span>
-                                </div> --}}
-                                <div class="figure-action">
-                                    <a href="#" class="btn btn-block btn-sm btn-primary">圖片</a>
-                                </div>
-                            </div>
-                        </figure>
-                        <!-- /.card-figure -->
-                        <div class="card-body">
-                            <div class="form-group">
-                                <div class="input-group mb-3"><span class="input-group-prepend"><span class="input-group-text">品項名稱</span></span>
-                                    @if($request->language == 'en')
-                                    <input type="text" placeholder="品項名稱(英文)" class="form-control" name="name_en[]" value="{{$detail->name_en}}">
-                                    <input type="hidden" name="name_tw[]" value="{{$detail->name_tw}}">
-                                    @else
-                                    <input type="text" placeholder="品項名稱" class="form-control" name="name_tw[]" value="{{$detail->name_tw}}">
-                                    <input type="hidden" name="name_en[]" value="{{$detail->name_en}}">
-                                    @endif
-                                </div>
-                                <div class="input-group mb-3"><span class="input-group-prepend"><span class="input-group-text">庫存</span></span>
-                                    <input type="number" min="0" placeholder="庫存" class="form-control" name="stock[]" value="{{$detail->stock}}">
-                                </div>
-                                <div class="input-group mb-3"><span class="input-group-prepend"><span class="input-group-text">已購買量</span></span>
-                                    <input type="number" min="0" placeholder="已購買量" class="form-control" name="buy_stock[]" value="{{$detail->buy_stock}}">
-                                </div>
-                            </div>
-                        </div>
-                        <a href="#" class="btn btn-danger">刪除</a>
-                    </div>
-                    
-                </div>   
-                @endforeach
+                    @foreach ($select_data->detail as $detail)
+                        @include('backend.mall_item.detail',['the_detail'=>$detail])   
+                    @endforeach
                 @endisset
                 @for ($i = 0; $i < 3; $i++)
-                
+                    @include('backend.mall_item.detail')
                 @endfor
-            
+                
 
             </div>
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-5">
@@ -310,6 +272,7 @@
 
         </form>
     </div>
+    </div>
     <!-- ============================================================== -->
     <!-- end influencer sidebar  -->
     <!-- ============================================================== -->
@@ -325,6 +288,28 @@
         });
     });
 
+    $('.add_detail').on('click','a',function () {
+        $(this).closest('.add_detail').hide('fast');
+        $(this).closest('.detail_div').find('.detail_data').show('fast');
+        $(this).closest('.detail_div').find('.detail_data').find('input').attr('disabled',false);
+    });
+    $('.delete_detail').on('click',function () {
+        $(this).closest('.detail_data').hide('fast');
+        $(this).closest('.detail_data').find('input').attr('disabled',true);
+        $(this).closest('.detail_div').find('.add_detail').show('fast');
+    });
+    function readURL(input) {
+            self = $(input);
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    self.closest('.detail_data').find('.detail_img').attr('src', e.target.result);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
 </script>
 <script>
     $(document).ready(function () {
