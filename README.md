@@ -13,3 +13,6 @@
 
 ## 靜態模板
 網址/mazer-1.1/dist/index.html
+
+## 建立資料夾連結
+  php artisan storage:link

@@ -16,7 +16,7 @@
                     <span class="badge badge-danger">Illustration</span>
                 </div> --}}
                 <div class="figure-action">
-                    <a href="#" class="btn btn-block btn-sm btn-primary">圖片</a>
+                    <a href="##" class="btn btn-block btn-sm btn-primary">圖片</a>
                     <input class="form-control" type="file" id="formFile" name="image[]" onchange="readURL(this);">
                 </div>
             </div>
