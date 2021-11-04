@@ -194,6 +194,14 @@
                     </div>
                 </div>
             </div>
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 px-0" id="checkboxradio">
+
+            {{-- <form enctype="multipart/form-data"> --}}
+                <div class="file-loading">
+                    <input id="kv-explorer" type="file" multiple name="cover[]">
+                </div>
+            {{-- </form> --}}
+            </div>
             <div class="row">
                 @isset($select_data)
                     @foreach ($select_data->detail as $detail)
@@ -203,8 +211,6 @@
                 @for ($i = 0; $i < 3; $i++)
                     @include('backend.mall_item.detail')
                 @endfor
-                
-
             </div>
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-5">
                 
@@ -385,6 +391,22 @@
                 }
             });
         }
+        $("#kv-explorer").fileinput({
+            'theme': 'explorer-fas',
+            'uploadUrl': '#',
+            overwriteInitial: false,
+            initialPreviewAsData: true,
+            initialPreview: [
+                "http://lorempixel.com/1920/1080/nature/1",
+                "http://lorempixel.com/1920/1080/nature/2",
+                "http://lorempixel.com/1920/1080/nature/3"
+            ],
+            initialPreviewConfig: [
+                {caption: "nature-1.jpg", size: 329892, width: "120px", url: "{$url}", key: 1},
+                {caption: "nature-2.jpg", size: 872378, width: "120px", url: "{$url}", key: 2},
+                {caption: "nature-3.jpg", size: 632762, width: "120px", url: "{$url}", key: 3}
+            ]
+        });
     });
 
 </script>

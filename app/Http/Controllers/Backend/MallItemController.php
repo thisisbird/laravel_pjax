@@ -47,7 +47,7 @@ class MallItemController extends Controller
     }
     public function update(Request $request)
     {
-        // dd($request->all());
+        dd($request->all());
         $rules = array(
             'name' => 'required',
             'code' => 'required|unique:mall_items,code,' . $request->data_id, //unique:table,欄位,排除的id

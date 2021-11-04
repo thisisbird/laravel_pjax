@@ -6,22 +6,31 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
+    <link href="{{asset('css/fileinput.css')}}" media="all" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" href="{{asset('concept')}}/assets/vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{asset('concept')}}/assets/vendor/fonts/circular-std/style.css">
     <link rel="stylesheet" href="{{asset('concept')}}/assets/libs/css/style.css">
     <link rel="stylesheet" href="{{asset('concept')}}/assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
     <link rel="stylesheet" href="{{asset('concept')}}/assets/vendor/select2/css/select2.css">
     <link rel="stylesheet" href="{{asset('mazer-1.1')}}/dist/assets/vendors/summernote/summernote-lite.min.css">
+    {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" crossorigin="anonymous"> --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.min.css" crossorigin="anonymous">
+    {{-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" crossorigin="anonymous"> --}}
+    
 
     <link rel="stylesheet" href="{{asset('mazer-1.1/dist')}}/assets/vendors/toastify/toastify.css">
     <link rel='stylesheet' href='{{asset('css')}}/nprogress.css'/>
 
     <script src="{{asset('mazer-1.1/dist')}}/assets/vendors/toastify/toastify.js"></script>
 
+    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script> --}}
+   
+
 
 
 <!-- jquery 2.1.4 -->
     <script src="{{asset('js')}}/jquery2.1.4.js"></script>
+
 
     <!-- bootstap bundle js -->
     <script src="{{asset('concept')}}/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
@@ -137,6 +146,9 @@
 
             
             <!-- main js -->
+            <script src="{{asset('js/plugins/sortable.js')}}" type="text/javascript"></script>
+            <script src="{{asset('js/fileinput.js')}}" type="text/javascript"></script>
+
             <script src="{{asset('concept')}}/assets/vendor/full-calendar/js/jquery-ui.min.js"></script>
             <script src="{{asset('concept')}}/assets/libs/js/main-js.js"></script>
             <script src="{{asset('concept')}}/assets/vendor/parsley/parsley.js"></script>
