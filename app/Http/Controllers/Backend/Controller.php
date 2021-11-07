@@ -31,5 +31,9 @@ class Controller extends BaseController
         $path = $image->store('/public/image');
         $path = Storage::url($path);
         return $path;
-      }
+    }
+    public function deleteImagePath($path){
+      $path = str_replace('storage','public',$path);
+      Storage::delete($path);
+    }
 }

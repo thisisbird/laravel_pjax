@@ -8,7 +8,7 @@
             <!-- .figure-img -->
             <div class="figure-img" style="min-height: 80px">
                 <input type="hidden" name="detail_id[]" value="{{$the_detail->id ?? 0}}" {{isset($the_detail) ? '' : 'disabled'}}>
-                <input type="hidden" name="photo[]" value="{{$the_detail->photo ?? ''}}" {{isset($the_detail) ? '' : 'disabled'}}>
+                <input type="hidden" name="detail_photo[]" value="{{$the_detail->photo ?? ''}}" {{isset($the_detail) ? '' : 'disabled'}}>
                 <img class="img-fluid detail_img" src="{{isset($the_detail) && $the_detail->photo ? asset($the_detail->photo):asset('img/detail_1_1.png')}}" alt="Card image cap">
                 {{-- <div class="figure-tools">
                     <a href="#" class="tile tile-circle tile-sm mr-auto">

@@ -7,6 +7,12 @@
     .add_detail_icon{
         font-size: 25px;
     }
+    .kv-file-remove,.kv-file-zoom{
+        width: 50px !important;
+    }
+    .kv-file-upload{
+        display: none !important;
+    }
 </style>
 
 <div class="row">
@@ -117,24 +123,24 @@
             <div class="email-compose-fields">
                 <div class="subject">
                     <div class="form-group row pt-2">
-                        <label class="col-md-1 control-label">商品名稱</label>
-                        <div class="col-md-11">
+                        <label class="col-md-3 control-label">商品名稱</label>
+                        <div class="col-md-9">
                             <input class="form-control" type="text" name="name" value="{{isset($select_data) ? ($select_data->info->where('language',$request->language)->first()->name ?? '') : old('name')}}">
                         </div>
                     </div>
                 </div>
                 <div class="subject">
                     <div class="form-group row pt-2">
-                        <label class="col-md-1 control-label">商品編號</label>
-                        <div class="col-md-11">
+                        <label class="col-md-3 control-label">商品編號</label>
+                        <div class="col-md-9">
                             <input class="form-control" type="text" name="code" value="{{isset($select_data) ? $select_data->code : old('code')}}">
                         </div>
                     </div>
                 </div>
                 <div class="menu">
                     <div class="form-group row pt-0">
-                        <label class="col-md-1 control-label">分類</label>
-                        <div class="col-md-11">
+                        <label class="col-md-3 control-label">分類</label>
+                        <div class="col-md-9">
                             <select class="js-example-basic-multiple" multiple="multiple" name="menu[]">
                                 @foreach ($menus as $menu_1)
                                 <option value="{{$menu_1->id}}" {{old('menu') && in_array($menu_1->id,old('menu')) ? 'selected':'' }} {{isset($select_data) && in_array($menu_1->id,$select_data->menu->pluck('id')->toArray())  ? 'selected':''}}>&nbsp;∟{{$menu_1->name_tw}}({{$menu_1->name_en}})</option>
@@ -152,30 +158,31 @@
 
                 <div class="subject">
                     <div class="form-group row pt-2">
-                        <label class="col-md-1 control-label">原價 {{$request->language == 'en' ? 'US$':'NT$'}}</label>
-                        <div class="col-md-11">
+                        <label class="col-md-3 control-label">原價 {{$request->language == 'en' ? 'US$':'NT$'}}</label>
+                        <div class="col-md-9">
                             <input class="form-control" type="number" step={{$request->language == 'en' ? 0.01:1}} name="o_price" value="{{isset($select_data) ? ($select_data->info->where('language',$request->language)->first()->o_price ?? 0) : old('o_price')}}">
                         </div>
                     </div>
                 </div>
+
                 <div class="subject">
                     <div class="form-group row pt-2">
-                        <label class="col-md-1 control-label">售價 {{$request->language == 'en' ? 'US$':'NT$'}}</label>
-                        <div class="col-md-11">
+                        <label class="col-md-3 control-label">售價 {{$request->language == 'en' ? 'US$':'NT$'}}</label>
+                        <div class="col-md-9">
                             <input class="form-control" type="number" step={{$request->language == 'en' ? 0.01:1}} name="price" value="{{isset($select_data) ? ($select_data->info->where('language',$request->language)->first()->price ?? 0) : old('price')}}">
                         </div>
                     </div>
                 </div>
                 <div class="subject">
                     <div class="form-group row pt-2">
-                        <label class="col-md-1 control-label">成本 {{$request->language == 'en' ? 'US$':'NT$'}}</label>
-                        <div class="col-md-11">
+                        <label class="col-md-3 control-label">成本 {{$request->language == 'en' ? 'US$':'NT$'}}</label>
+                        <div class="col-md-9">
                             <input class="form-control" type="number" step={{$request->language == 'en' ? 0.01:1}} name="cost" value="{{isset($select_data) ? ($select_data->info->where('language',$request->language)->first()->cost ?? 0) : old('cost')}}">
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 px-0" id="checkboxradio">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 px-0">
                 <div class="card">
                     <div class="card-body">
                             <label class="custom-control custom-checkbox custom-control-inline">
@@ -194,12 +201,14 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 px-0" id="checkboxradio">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 px-0">
 
             {{-- <form enctype="multipart/form-data"> --}}
-                <div class="file-loading">
-                    <input id="kv-explorer" type="file" multiple name="cover[]">
-                </div>
+            <input type="hidden" name="delete_cover" id='delete_cover'>
+            <input type="hidden" name="sort_cover" id='sort_cover'>
+            <div class="file-loading">
+                <input id="kv-explorer" type="file" multiple name="cover[]">
+            </div>
             {{-- </form> --}}
             </div>
             <div class="row">
@@ -372,6 +381,7 @@
         //     });
         // }
         function uploadImage(image) {
+            
             var data = new FormData();
             data.append("image", image);
             data.append("_token", "{{csrf_token()}}");
@@ -391,22 +401,38 @@
                 }
             });
         }
+        let photo = [];
+        let config = [];
+        @isset($select_data->photo)
+        photo = @json($select_data->photo);
+        photo = JSON.parse(photo);
+        photo.forEach(function (v) {
+            config.push({url: "{{route('backend.mallItem.deletePhoto')}}", key: v,extra: {_token: "{{csrf_token()}}"}})
+        });
+        @endisset
         $("#kv-explorer").fileinput({
             'theme': 'explorer-fas',
-            'uploadUrl': '#',
+            // 'uploadUrl': '#',
+            showUpload: false,
+            showRemove: false,
             overwriteInitial: false,
             initialPreviewAsData: true,
-            initialPreview: [
-                "http://lorempixel.com/1920/1080/nature/1",
-                "http://lorempixel.com/1920/1080/nature/2",
-                "http://lorempixel.com/1920/1080/nature/3"
-            ],
-            initialPreviewConfig: [
-                {caption: "nature-1.jpg", size: 329892, width: "120px", url: "{$url}", key: 1},
-                {caption: "nature-2.jpg", size: 872378, width: "120px", url: "{$url}", key: 2},
-                {caption: "nature-3.jpg", size: 632762, width: "120px", url: "{$url}", key: 3}
-            ]
+            initialPreview: photo,
+            initialPreviewConfig: config
         });
+        $('#kv-explorer').on('filesorted', function(event, params) {
+            // console.log('File sorted ', params.previewId, params.oldIndex, params.newIndex, params.stack);
+            sort = params.stack.map(function (item, index, array) {
+                return item.key;
+            })
+            $('#sort_cover').val(sort);
+        });
+        var delete_cover_array = [];
+        $('#kv-explorer').on('filedeleted', function(event, id) {
+            delete_cover_array.push(id)
+            $('#delete_cover').val(delete_cover_array);
+        });
+     
     });
 
 </script>

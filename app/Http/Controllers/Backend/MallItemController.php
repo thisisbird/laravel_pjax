@@ -47,7 +47,7 @@ class MallItemController extends Controller
     }
     public function update(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
         $rules = array(
             'name' => 'required',
             'code' => 'required|unique:mall_items,code,' . $request->data_id, //unique:table,欄位,排除的id
@@ -75,7 +75,34 @@ class MallItemController extends Controller
             $mall_item->is_shopping = $request->is_shopping ?? 0;
             $mall_item->is_hot = $request->is_hot ?? 0;
             $mall_item->is_new = $request->is_new ?? 0;
-            $mall_item->photo = json_encode($request->photo) ?? json_encode([]); //none
+            $img = [];
+            if($request->sort_cover){
+                $sort_cover = explode(',',$request->sort_cover);
+                foreach ($sort_cover as $photo) {
+                    $img[] = $photo;
+                }
+            }else{
+                $img = json_decode($mall_item->photo);
+            }
+            if($request->delete_cover){
+                $delete_cover = explode(',',$request->delete_cover);
+                foreach ($delete_cover as $photo) {
+                    if (($key = array_search($photo, $img)) !== false) {
+                        unset($img[$key]);
+                        $this->deleteImagePath($photo);
+                    }
+                }
+            }
+
+            if($request->cover && count($request->cover)){
+                foreach ($request->cover as $i => $cover) {
+                    if($cover != null){
+                        $img[] = $this->uploadImagePath($cover);
+                    }
+                }
+            }
+            $img = array_values($img);
+            $mall_item->photo = json_encode($img); //none
             $mall_item->save();
 
             $mall_item_id = $request->data_id ?? $mall_item->id;
@@ -116,7 +143,7 @@ class MallItemController extends Controller
                     $mall_item_detail->name_en = $request->name_en[$i] ?? '';
                     $mall_item_detail->stock = $request->stock[$i] ?? 0;
                     $mall_item_detail->buy_stock = $request->buy_stock[$i] ?? 0;
-                    $mall_item_detail->photo = $request->photo[$i] ?? '';
+                    $mall_item_detail->photo = $request->detail_photo[$i] ?? '';
                     if (isset($request->image[$i])) {
                         $mall_item_detail->photo = $this->uploadImagePath($request->image[$i]);
                     }
@@ -128,6 +155,7 @@ class MallItemController extends Controller
             DB::commit();
             return redirect()->back()->withSuccess('更新成功');
         } catch (\Exception $e) {
+            dd($e);
             DB::rollback();
             return redirect()->back()->withErrors($e->getMessage())->withInput();
         }
@@ -154,5 +182,8 @@ class MallItemController extends Controller
             DB::rollback();
             return redirect()->back()->withErrors($e->getMessage());
         }
+    }
+    public function deletePhoto(Request $request){
+        return response()->json(['success'=>true], 200);
     }
 }
