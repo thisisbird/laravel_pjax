@@ -16,5 +16,7 @@ class ItemMenu extends Model
         return $this->hasMany(self::class, 'p_id', 'id')->with('children')->orderBy('sort');
     }
 
-    
+    public static function getMenuTree(){
+        return self::with('children')->where('p_id',0)->orderBy('sort')->get();
+    }
 }

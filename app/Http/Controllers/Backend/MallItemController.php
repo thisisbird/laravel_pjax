@@ -26,7 +26,7 @@ class MallItemController extends Controller
         } else {
             $datas = $datas->get();
         }
-        $menus = ItemMenu::with('children')->where('p_id', 0)->orderBy('sort')->get();
+        $menus = ItemMenu::getMenuTree();
         return ['datas' => $datas, 'menus' => $menus, 'request' => $request];
     }
     public function index(Request $request)
@@ -76,14 +76,16 @@ class MallItemController extends Controller
             $mall_item->is_hot = $request->is_hot ?? 0;
             $mall_item->is_new = $request->is_new ?? 0;
             $img = [];
+
             if($request->sort_cover){
                 $sort_cover = explode(',',$request->sort_cover);
                 foreach ($sort_cover as $photo) {
                     $img[] = $photo;
                 }
             }else{
-                $img = json_decode($mall_item->photo);
+                $img = $mall_item->photo;
             }
+
             if($request->delete_cover){
                 $delete_cover = explode(',',$request->delete_cover);
                 foreach ($delete_cover as $photo) {
@@ -101,8 +103,10 @@ class MallItemController extends Controller
                     }
                 }
             }
+
             $img = array_values($img);
-            $mall_item->photo = json_encode($img); //none
+            $mall_item->photo = $img; //none
+
             $mall_item->save();
 
             $mall_item_id = $request->data_id ?? $mall_item->id;

@@ -11,12 +11,12 @@ use DB;
 class ItemMenuController extends Controller
 {
     public function index(Request $request){
-        $menus = ItemMenu::with('children')->where('p_id',0)->orderBy('sort')->get();
+        $menus = ItemMenu::getMenuTree();
         return view('backend.item_menu.index',compact('menus','request'));
     }
     public function edit(Request $request,$id){
 
-        $menus = ItemMenu::with('children')->where('p_id',0)->orderBy('sort')->get();
+        $menus = ItemMenu::getMenuTree();
         $select_menu = ItemMenu::find($id);
         return view('backend.item_menu.index',compact('menus','request','select_menu'));
     }
