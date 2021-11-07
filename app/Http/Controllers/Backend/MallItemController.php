@@ -10,7 +10,7 @@ use App\Models\Backend\ItemMenuMallItem;
 use App\Models\Backend\ItemMenu;
 use DB;
 use Illuminate\Support\Facades\Validator;
-
+use Exception;
 class MallItemController extends Controller
 {
     private function common($request)
@@ -75,17 +75,14 @@ class MallItemController extends Controller
             $mall_item->is_shopping = $request->is_shopping ?? 0;
             $mall_item->is_hot = $request->is_hot ?? 0;
             $mall_item->is_new = $request->is_new ?? 0;
-            $img = [];
+            $img = $mall_item->photo ?? [];
 
             if($request->sort_cover){
                 $sort_cover = explode(',',$request->sort_cover);
                 foreach ($sort_cover as $photo) {
                     $img[] = $photo;
                 }
-            }else{
-                $img = $mall_item->photo;
             }
-
             if($request->delete_cover){
                 $delete_cover = explode(',',$request->delete_cover);
                 foreach ($delete_cover as $photo) {
@@ -158,8 +155,7 @@ class MallItemController extends Controller
             }
             DB::commit();
             return redirect()->back()->withSuccess('更新成功');
-        } catch (\Exception $e) {
-            dd($e);
+        } catch (Exception $e) {
             DB::rollback();
             return redirect()->back()->withErrors($e->getMessage())->withInput();
         }

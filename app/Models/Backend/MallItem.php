@@ -15,11 +15,21 @@ class MallItem extends Model
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
 
-    // public $casts  = ['code'=>'array'];
+    public $casts  = ['photo'=>'array'];
+    
     public function info()
     {
         return $this->hasMany(MallItemInfo::class);
     }
+    public function infoTw()
+    {
+        return $this->hasOne(MallItemInfo::class)->where('language','tw');
+    }
+    public function infoEn()
+    {
+        return $this->hasOne(MallItemInfo::class)->where('language','en');
+    }
+
     public function detail()
     {
         return $this->hasMany(MallItemDetail::class);

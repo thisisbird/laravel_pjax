@@ -405,7 +405,6 @@
         let config = [];
         @isset($select_data->photo)
         photo = @json($select_data->photo);
-        photo = JSON.parse(photo);
         photo.forEach(function (v) {
             config.push({url: "{{route('backend.mallItem.deletePhoto')}}", key: v,extra: {_token: "{{csrf_token()}}"}})
         });
