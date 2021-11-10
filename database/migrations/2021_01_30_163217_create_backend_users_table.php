@@ -23,6 +23,7 @@ class CreateBackendUsersTable extends Migration
             $table->string('account')->unique();
             $table->tinyInteger('role_id');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

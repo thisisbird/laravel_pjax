@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserCartsTable extends Migration
+class CreateArticlesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,18 @@ class CreateUserCartsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_carts', function (Blueprint $table) {
+        Schema::create('articles', function (Blueprint $table) {
             $table->id();
-            $table->string('cookies',10)->nullable();
             $table->integer('user_id')->nullable();
-            $table->integer('mall_item_detail_id');
-            $table->integer('qty');
-            $table->decimal('price',10,2)->comment('價格');
+            $table->integer('article_menu_id')->nullable();
+            $table->string('title');
+            $table->string('cover')->comment('封面照路徑');
+            $table->text('content')->comment('文章內容');
+            $table->tinyInteger('is_display')->comment('是否顯示');
             $table->string('language',5)->comment('語系: tw,en');
+
             $table->timestamps();
-            $table->index(['user_id']);
+            $table->softDeletes();
 
         });
     }
@@ -34,6 +36,6 @@ class CreateUserCartsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_carts');
+        Schema::dropIfExists('articles');
     }
 }

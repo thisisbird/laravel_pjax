@@ -16,9 +16,9 @@ class CreateMallItemInfosTable extends Migration
         Schema::create('mall_item_infos', function (Blueprint $table) {
             $table->integer('mall_item_id');
             $table->string('name',50);
-            $table->decimal('o_price',8,2)->comment('原價');;
-            $table->decimal('price',8,2)->comment('售價');;
-            $table->decimal('cost',8,2)->comment('成本');;
+            $table->decimal('o_price',8,2)->comment('原價');
+            $table->decimal('price',8,2)->comment('售價');
+            $table->decimal('cost',8,2)->comment('成本');
             $table->text('special')->comment('特色');
             $table->text('info')->comment('規格');
             $table->text('discription')->comment('詳細說明');
