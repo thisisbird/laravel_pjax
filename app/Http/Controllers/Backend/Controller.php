@@ -33,6 +33,7 @@ class Controller extends BaseController
         return $path;
     }
     public function deleteImagePath($path){
+      return false;//先不刪除 複製功能使用
       $path = str_replace('storage','public',$path);
       Storage::delete($path);
     }

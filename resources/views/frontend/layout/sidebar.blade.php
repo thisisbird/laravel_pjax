@@ -13,13 +13,13 @@
                     @foreach (App\Models\Backend\ItemMenu::getMenuTree() as $i => $menu1)
     
                     <li class="nav-item">
-                        <a class="nav-link" href="{{asset('product_list')}}/{{$menu1->id}}" data-toggle="collapse" aria-expanded="false" data-target="#submenu-{{$i}}" aria-controls="submenu-{{$i}}"><i class="fas fa-f fa-folder"></i>{{$menu1->name_tw}}</a>
+                        <a class="nav-link" href="{{asset('product_list')}}/{{$menu1->id}}" aria-expanded="false" data-target="#submenu-{{$i}}" aria-controls="submenu-{{$i}}"><i class="fas fa-f fa-folder"></i>{{$menu1->name_tw}}</a>
                         @if(count($menu1->children))
                         <div id="submenu-{{$i}}" class="collapse submenu show" style="">
                             <ul class="nav flex-column">
                                 @foreach ($menu1->children as $j=> $menu2)
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{asset('product_list')}}/{{$menu2->id}}" data-toggle="collapse" aria-expanded="false" data-target="#submenu-{{$i}}-{{$j}}" aria-controls="submenu-{{$i}}-{{$j}}">{{$menu2->name_tw}}</a>
+                                    <a class="nav-link" href="{{asset('product_list')}}/{{$menu2->id}}" aria-expanded="false" data-target="#submenu-{{$i}}-{{$j}}" aria-controls="submenu-{{$i}}-{{$j}}">{{$menu2->name_tw}}</a>
                                     @if(count($menu2->children))
                                     <div id="submenu-{{$i}}-{{$j}}" class="collapse submenu show" style="">
                                         <ul class="nav flex-column">

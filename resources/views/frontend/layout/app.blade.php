@@ -36,7 +36,7 @@
                             </div>
                         </li>
                         <li class="nav-item dropdown notification">
-                            <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-bell"></i> <span class="indicator"></span></a>
+                            <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-shopping-cart"></i> <span class="indicator"></span></a>
                             <ul class="dropdown-menu dropdown-menu-right notification-dropdown">
                                 <li>
                                     <div class="notification-title"> Notification</div>
@@ -78,7 +78,7 @@
                                     </div>
                                 </li>
                                 <li>
-                                    <div class="list-footer"> <a href="#">View all notifications</a></div>
+                                     <a href="{{route('frontend.userCart.index')}}"><div class="list-footer">前往購物車</div></a>
                                 </li>
                             </ul>
                         </li>
@@ -144,7 +144,56 @@
         <!-- wrapper  -->
         <!-- ============================================================== -->
         <div class="dashboard-wrapper">
-            @yield('content')
+            <div class="dashboard-ecommerce">
+                <div class="container-fluid dashboard-content ">
+                    <!-- ============================================================== -->
+                    <!-- pageheader  -->
+                    <!-- ============================================================== -->
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="page-header">
+                                <h2 class="pageheader-title">Concept - Bootstrap 4 Admin Dashboard Template </h2>
+                                <p class="pageheader-text">Nulla euismod urna eros, sit amet scelerisque torton lectus vel mauris facilisis faucibus at enim quis massa lobortis rutrum.</p>
+                                <div class="page-breadcrumb">
+                                    <nav aria-label="breadcrumb">
+                                        <ol class="breadcrumb">
+                                            <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">E-coommerce</a></li>
+                                            <li class="breadcrumb-item active" aria-current="page">Concept - Bootstrap 4 Admin Dashboard Template</li>
+                                        </ol>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ============================================================== -->
+                    <!-- end pageheader  -->
+                    <!-- ============================================================== -->
+                    @yield('content')
+                    
+                </div>
+                <!-- ============================================================== -->
+                <!-- footer -->
+                <!-- ============================================================== -->
+                <div class="footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                Copyright © 2018 Concept. All rights reserved. Dashboard by <a href="https://colorlib.com/wp/">Colorlib</a>.
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="text-md-right footer-links d-none d-sm-block">
+                                    <a href="javascript: void(0);">About</a>
+                                    <a href="javascript: void(0);">Support</a>
+                                    <a href="javascript: void(0);">Contact Us</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- end footer -->
+                <!-- ============================================================== -->
+            </div>
             <!-- ============================================================== -->
             <!-- end wrapper  -->
             <!-- ============================================================== -->
@@ -162,6 +211,8 @@
         <script src="{{asset('concept')}}/assets/vendor/slimscroll/jquery.slimscroll.js"></script>
         <!-- main js -->
         <script src="{{asset('concept')}}/assets/libs/js/main-js.js"></script>
+        <script src="{{asset('concept')}}/assets/vendor/parsley/parsley.js"></script>
+
 </body>
  
 </html>

@@ -42,7 +42,8 @@ Route::get('/pjax4', function () {
 
 Route::get('/index/ajaxcontent','App\Http\Controllers\IndexController@ajaxContent');// 載入頁面
 
-$router->get('/product_list/{id?}', 'App\Http\Controllers\Frontend\ProductListController@index');
+Route::get('/product_list/{id?}', 'App\Http\Controllers\Frontend\ProductListController@index');
+Route::get('/cart/{cookies_id?}', 'App\Http\Controllers\Frontend\UserCartController@index')->name('frontend.userCart.index');
 
 Route::group(['middleware'=> 'auth:web'], function (Router $router) {
     // $router->resource('user', 'App\Http\Controllers\Frontend\UserController');
