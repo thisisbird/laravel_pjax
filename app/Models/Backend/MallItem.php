@@ -42,5 +42,50 @@ class MallItem extends Model
     public function menu()
     {
         return $this->belongsToMany(ItemMenu::class, 'item_menu_mall_items', 'mall_item_id', 'item_menu_id');
-    }      
+    }
+    public static function getShoppingMallItemById($id,$language = 'tw'){
+        $mall_item = MallItem::with('detail','infoTw','infoEn')->where('is_shopping',1)->find($id);
+        if(is_array($id)){
+            foreach ($mall_item as $item) {
+                $get_info = self::MallItemFormat($item,$language);
+                if($get_info) $data[] = $get_info;
+            }
+        }else{
+            $data = self::MallItemFormat($mall_item,$language);
+        }
+        return $data;
+    }
+    public static function MallItemFormat($mall_item,$language){
+        if($language == 'tw'){
+            $info_key = 'infoTw';
+        }    
+        if($language == 'en'){
+            $info_key = 'infoEn';
+        }
+        try{
+            // $data['detail_id'] = $mall_item->detail->id;
+            // $data['detail_name'] = $mall_item->detail->$datail_name_key;
+            // $data['detail_stock'] = $mall_item->detail->stock;
+            // $data['detail_buy_stock'] = $mall_item->detail->buy_stock;
+            // $data['detail_photo'] = $mall_item->detail->photo;
+            $data['detail'] = $mall_item->detail->toArray();
+            $data['id'] = $mall_item->id;
+            $data['code'] = $mall_item->code;
+            $data['photo'] = $mall_item->photo;
+            $data['is_hot'] = $mall_item->is_hot;
+            $data['is_new'] = $mall_item->is_new;
+            $data['is_shopping'] = $mall_item->is_shopping;
+            $data['name'] = $mall_item->$info_key->name;
+            $data['o_price'] = $mall_item->$info_key->o_price;
+            $data['price'] = $mall_item->$info_key->price;
+            $data['cost'] = $mall_item->$info_key->cost;
+            $data['special'] = $mall_item->$info_key->special;
+            $data['info'] = $mall_item->$info_key->info;
+            $data['discription'] = $mall_item->$info_key->discription;
+            return $data;
+        } catch (\Exception $e) {
+            dd($e);
+            return null;
+        }
+    }
 }

@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Cookie;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    public $cookies;
+    public $language;
 
     public function __construct()
     {
@@ -28,7 +30,8 @@ class Controller extends BaseController
           $cookies = $this->generateRandomString(10);
           Cookie::queue('cart', $cookies, 50000);//如果不適用上面的use Cookie,這裏可以直接調用 \Cookie
         }
-
+        $this->cookies = Cookie::get('cart');
+        $this->language = 'tw';
     }
     function generateRandomString($length = 10) {
       $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';

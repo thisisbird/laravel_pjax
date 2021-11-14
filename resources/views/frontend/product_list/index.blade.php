@@ -10,20 +10,21 @@
                     <div class="product-img-head">
                         <div class="product-img">
                             
-                            <img src="{{$mall_item->photo[0] ?? asset('img/detail_1_1.png')}}" alt="" class="img-fluid"></div>
-                        @if($mall_item->is_new)
+                            <img src="{{$mall_item['photo'][0] ?? asset('img/detail_1_1.png')}}" alt="" class="img-fluid"></div>
+                        @if($mall_item['is_new'])
                         <div class="ribbons"></div>
                         <div class="ribbons-text">New</div>
                         @endif
-                        @if($mall_item->is_hot)
+                        @if($mall_item['is_hot'])
                         <div class="ribbons bg-danger"></div>
                         <div class="ribbons-text">Hot</div>
                         @endif
                         <div class=""><a href="#" class="product-wishlist-btn"><i class="fas fa-heart"></i></a></div>
                     </div>
+                    
                     <div class="product-content">
                         <div class="product-content-head">
-                            <h3 class="product-title">{{$mall_item->infoTw ? $mall_item->infoTw->name : $mall_item->infoEn->name}} {{$mall_item->code}}</h3>
+                            <h3 class="product-title">{{$mall_item['name']}} {{$mall_item['code']}}</h3>
                             <div class="product-rating d-inline-block">
                                 <i class="fa fa-fw fa-star"></i>
                                 <i class="fa fa-fw fa-star"></i>
@@ -31,12 +32,27 @@
                                 <i class="fa fa-fw fa-star"></i>
                                 <i class="fa fa-fw fa-star"></i>
                             </div>
-                            <div class="product-price">${{$mall_item->infoTw->price}}</div>
+                            <div class="product-price">${{$mall_item['price']}}</div>
+                        </div>
+                        <div class="product-size border-bottom">
+                            <div class="btn-group" role="group" aria-label="First group">
+                                @foreach ($mall_item['detail'] as $detail)
+                                {{-- <button data-detail_id ={{$detail['id']}} type="button" class="btn btn-outline-light">{{$detail['name_tw']}}</button> --}}
+                                <label class="btn btn-outline-light custom-control custom-radio custom-control-inline">
+                                    <input type="radio" name="detail_{{$mall_item['id']}}" value="{{$detail['id']}}" class="custom-control-input detail"><span class="custom-control-label">{{$detail['name_tw']}}</span>
+                                </label>
+                                @endforeach
+                            </div>
+                            <div class="product-qty">
+                                <div class="quantity">
+                                    <input class="qty" type="number" min="1" max="9" step="1" value="1"><div class="quantity-nav"><div class="quantity-button quantity-up">+</div><div class="quantity-button quantity-down">-</div></div>
+                                </div>
+                            </div>
                         </div>
                         <div class="product-btn">
-                            <a href="#" class="btn btn-primary">Add to Cart</a>
-                            <a href="#" class="btn btn-outline-light">Details</a>
-                            <a href="#" class="btn btn-outline-light"><i class="fas fa-exchange-alt"></i></a>
+                            <a href="##" class="btn btn-primary add_cart">Add to Cart</a>
+                            <a href="##" class="btn btn-outline-light">Details</a>
+                            {{-- <a href="#" class="btn btn-outline-light"><i class="fas fa-exchange-alt"></i></a> --}}
                         </div>
                     </div>
                 </div>
@@ -45,7 +61,7 @@
             
         </div>
     </div>
-    <div class="col-xl-3 col-lg-4 col-md-4 col-sm-12 col-12">
+    {{-- <div class="col-xl-3 col-lg-4 col-md-4 col-sm-12 col-12">
         <div class="product-sidebar">
             <div class="product-sidebar-widget">
                 <h4 class="mb-0">E-Commerce Filter</h4>
@@ -149,9 +165,87 @@
                 <a href="#" class="btn btn-outline-light">Reset Filter</a>
             </div>
         </div>
-    </div>
+    </div> --}}
 </div>
 
 
+<script>
+    // jQuery('<div class="quantity-nav"><div class="quantity-button quantity-up">+</div><div class="quantity-button quantity-down">-</div></div>').insertAfter('.quantity input');
+    jQuery('.quantity').each(function() {
+        var spinner = jQuery(this),
+            input = spinner.find('input[type="number"]'),
+            btnUp = spinner.find('.quantity-up'),
+            btnDown = spinner.find('.quantity-down'),
+            min = input.attr('min'),
+            max = input.attr('max');
 
+        btnUp.click(function() {
+            var oldValue = parseFloat(input.val());
+            if (oldValue >= max) {
+                var newVal = oldValue;
+            } else {
+                var newVal = oldValue + 1;
+            }
+            spinner.find("input").val(newVal);
+            spinner.find("input").trigger("change");
+        });
+
+        btnDown.click(function() {
+            var oldValue = parseFloat(input.val());
+            if (oldValue <= min) {
+                var newVal = oldValue;
+            } else {
+                var newVal = oldValue - 1;
+            }
+            spinner.find("input").val(newVal);
+            spinner.find("input").trigger("change");
+        });
+
+    });
+
+
+    </script>
+    <script>
+        $('.add_cart').on('click',function () {
+            self = $(this);
+            product = self.closest('.product-content');
+            detail = product.find('.detail:checked').val();
+            qty = product.find('.qty').val();
+            var data = {
+                            "_token" : "{{ csrf_token() }}",
+                            "_method": 'POST',
+                            "mall_item_detail_id":detail,
+                            "qty":qty
+                        }
+            $.ajax({
+                        type: 'post',
+                        url: "{{route('frontend.userCart.addCart')}}",
+                        dataType : 'json', // 預期從server接收的資料型態
+                        contentType : 'application/json; charset=utf-8', // 要送到server的資料型態
+                        data: JSON.stringify(data),
+
+                        success: function (data) {
+                            console.log(data);
+                            Toastify({
+                                text: "已加入購物車",
+                                duration: 3000,
+                                close:true,
+                                gravity:"bottom",
+                                position: "center",
+                                backgroundColor: "#4fbe87",
+                            }).showToast();
+                        },
+                        error: function (data) {
+                            Toastify({
+                                text: data.responseJSON,
+                                duration: 3000,
+                                close:true,
+                                gravity:"bottom",
+                                position: "center",
+                                backgroundColor: "#ef172c",
+                            }).showToast();
+                        }
+            });
+        });
+    </script>
 @endsection

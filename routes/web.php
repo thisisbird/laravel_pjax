@@ -44,6 +44,10 @@ Route::get('/index/ajaxcontent','App\Http\Controllers\IndexController@ajaxConten
 
 Route::get('/product_list/{id?}', 'App\Http\Controllers\Frontend\ProductListController@index');
 Route::get('/cart/{cookies_id?}', 'App\Http\Controllers\Frontend\UserCartController@index')->name('frontend.userCart.index');
+Route::post('/add_cart', 'App\Http\Controllers\Frontend\UserCartController@addCart')->name('frontend.userCart.addCart');
+Route::delete('/add_cart', 'App\Http\Controllers\Frontend\UserCartController@deleteCart')->name('frontend.userCart.deleteCart');
+
+Route::post('/create_order', 'App\Http\Controllers\Frontend\UserCartController@createOrder')->name('frontend.userCart.createOrder');
 
 Route::group(['middleware'=> 'auth:web'], function (Router $router) {
     // $router->resource('user', 'App\Http\Controllers\Frontend\UserController');

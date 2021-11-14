@@ -24,7 +24,7 @@ class ItemTableSeeder extends Seeder
         ItemMenu::create(['name_tw' => '鍵盤', 'name_en' => 'keyboard', 'sort' => 0, 'level' => 1, 'p_id' => 2]);
         ItemMenu::create(['name_tw' => '滑鼠', 'name_en' => 'mouse', 'sort' => 0, 'level' => 1, 'p_id' => 2]);
 
-        for ($i = 1; $i <= 2; $i++) {
+        for ($i = 1; $i <= 4; $i++) {
             MallItem::create([
                 'code' => 'product_' . $i,
                 'sort' => $i,
@@ -34,19 +34,23 @@ class ItemTableSeeder extends Seeder
                 'is_new' => 1,
                 'photo' => [],
             ]);
-            if($i == 1){//鍵盤
+            if(in_array($i,[1,2])){//鍵盤
                 MallItemDetail::create(['mall_item_id'=>$i,'name_tw'=>'紅軸','name_en'=>'red type','stock'=>888,'buy_stock'=>100,'photo'=>'','discription'=>'']);
                 MallItemDetail::create(['mall_item_id'=>$i,'name_tw'=>'青軸','name_en'=>'blue type','stock'=>888,'buy_stock'=>100,'photo'=>'','discription'=>'']);
                 MallItemInfo::create(['mall_item_id'=>$i,'name'=>'機械鍵盤','o_price'=>1500,'price'=>1200,'cost'=>600,'language'=>'tw','special'=>'特色描述','info'=>'商品規格','discription'=>'商品描述']);
                 MallItemInfo::create(['mall_item_id'=>$i,'name'=>'keyboard','o_price'=>49.9,'price'=>39.9,'cost'=>19.9,'language'=>'en','special'=>'special','info'=>'info','discription'=>'discription']);
+                ItemMenuMallItem::create(['item_menu_id'=>1,'mall_item_id'=>$i]);
+                ItemMenuMallItem::create(['item_menu_id'=>2,'mall_item_id'=>$i]);
                 ItemMenuMallItem::create(['item_menu_id'=>3,'mall_item_id'=>$i]);
                 
             }
-            if($i == 2){//滑鼠
+            if(in_array($i,[3,4])){//滑鼠
                 MallItemDetail::create(['mall_item_id'=>$i,'name_tw'=>'大','name_en'=>'XL','stock'=>777,'buy_stock'=>200,'photo'=>'','discription'=>'']);
                 MallItemDetail::create(['mall_item_id'=>$i,'name_tw'=>'小','name_en'=>'M','stock'=>777,'buy_stock'=>200,'photo'=>'','discription'=>'']);
                 MallItemInfo::create(['mall_item_id'=>$i,'name'=>'光學滑鼠','o_price'=>1500,'price'=>1200,'cost'=>600,'language'=>'tw','special'=>'特色描述','info'=>'商品規格','discription'=>'商品描述']);
                 MallItemInfo::create(['mall_item_id'=>$i,'name'=>'the Mouse','o_price'=>49.9,'price'=>39.9,'cost'=>19.9,'language'=>'en','special'=>'special','info'=>'info','discription'=>'discription']);
+                ItemMenuMallItem::create(['item_menu_id'=>1,'mall_item_id'=>$i]);
+                ItemMenuMallItem::create(['item_menu_id'=>2,'mall_item_id'=>$i]);
                 ItemMenuMallItem::create(['item_menu_id'=>4,'mall_item_id'=>$i]);
             }
         }

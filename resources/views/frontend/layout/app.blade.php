@@ -11,6 +11,11 @@
     <link href="{{asset('concept')}}/assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('concept')}}/assets/libs/css/style.css">
     <link rel="stylesheet" href="{{asset('concept')}}/assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
+    <script src="{{asset('mazer-1.1/dist')}}/assets/vendors/toastify/toastify.js"></script>
+    <link rel="stylesheet" href="{{asset('mazer-1.1/dist')}}/assets/vendors/toastify/toastify.css">
+
+    <!-- jquery 3.3.1 -->
+    <script src="{{asset('concept')}}/assets/vendor/jquery/jquery-3.3.1.min.js"></script>
     <title>Concept - Bootstrap 4 Admin Dashboard Template</title>
 </head>
 
@@ -203,8 +208,7 @@
         <!-- end main wrapper  -->
         <!-- ============================================================== -->
         <!-- Optional JavaScript -->
-        <!-- jquery 3.3.1 -->
-        <script src="{{asset('concept')}}/assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+        
         <!-- bootstap bundle js -->
         <script src="{{asset('concept')}}/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
         <!-- slimscroll js -->
