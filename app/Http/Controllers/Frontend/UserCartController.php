@@ -8,19 +8,17 @@ use Illuminate\Http\Request;
 use App\Models\Frontend\UserCart;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\Backend\MallOrder;
+use App\Models\Backend\MallOrderItem;
+use DB;
 class UserCartController extends Controller
 {
     function getCart(){
-        $language = $this->language;
-        $cookies = $this->cookies;
-
-        $user_cart = UserCart::where('language',$language);
-        if(Auth::user()){
-            $user_id = Auth::user()->id;
-            $user_cart = $user_cart->where('user_id',$user_id);
+        $user_cart = UserCart::where('language',$this->language);
+        if($this->user_id){
+            $user_cart = $user_cart->where('user_id',$this->user_id);
         }else{
-            $user_cart = $user_cart->where('cookies',$cookies);
+            $user_cart = $user_cart->where('cookies',$this->cookies);
         }
         return $user_cart;
     }
@@ -44,34 +42,23 @@ class UserCartController extends Controller
         $language = $request->language ?? $this->language;
         $mall_item = MallItemDetail::getShoppingMallItemByDetailId($mall_item_detail_id,$language);
         if(!$mall_item) return response()->json($nodata, 400);
-        $cookies = $this->cookies;
-        $qty = $request->qty;
-        $user_id = null;
-        $user_cart = UserCart::where('mall_item_detail_id',$mall_item_detail_id)->where('language',$language);
-        if(Auth::user()){
-            $user_id = Auth::user()->id;
-            $user_cart = $user_cart->where('user_id',$user_id);
-        }else{
-            $user_cart = $user_cart->where('cookies',$cookies);
-        }
-        $user_cart = $user_cart->first();
+        $user_cart = $this->getCart()->where('mall_item_detail_id',$mall_item_detail_id)->first();
         if($user_cart){
-            $user_cart->qty += $qty;
+            $user_cart->qty += $request->qty;
             $user_cart->save();
         }else{
-            UserCart::create(['cookies'=>$cookies,'user_id'=>$user_id,'mall_item_detail_id'=>$mall_item_detail_id,'qty'=>$qty,'price'=>$mall_item['price'],'language'=>$language]);
+            UserCart::create(['cookies'=>$this->cookies,'user_id'=>$this->user_id,'mall_item_detail_id'=>$mall_item_detail_id,'qty'=>$request->qty,'price'=>$mall_item['price'],'language'=>$language]);
         }
 
         if(Auth::user()){
-            $data['cart_count']=UserCart::where('user_id',$user_id)->count();
+            $data['cart_count']=UserCart::where('user_id',$this->user_id)->count();
         }else{
-            $data['cart_count']=UserCart::where('cookies',$cookies)->count();
+            $data['cart_count']=UserCart::where('cookies',$this->cookies)->count();
         }
         return response()->json($data, 200);
     }
     public function deleteCart(Request $request){
-        $mall_item_detail_id = $request->mall_item_detail_id;
-        $check = $this->getCart()->where('mall_item_detail_id',$mall_item_detail_id)->delete();
+        $check = $this->getCart()->where('mall_item_detail_id',$request->mall_item_detail_id)->delete();
         if($check){
             $data['msg'] = '刪除成功';
             $count = $this->getCart()->count();
@@ -82,7 +69,46 @@ class UserCartController extends Controller
     }
 
     public function createOrder(Request $request){
-        dd($request->all());
+        // dd($request->all());
+        try{
+            DB::beginTransaction();
+            $mall_order = new MallOrder;
+            $mall_order->user_id = $this->user_id;
+            $mall_order->cookies = $this->cookies;
+            $mall_order->state = MallOrder::UNPAID;
+            $mall_order->email = $request->email;
+            $mall_order->name = $request->name;
+            $mall_order->phone = $request->phone;
+            $mall_order->zip = $request->zip ?? 812;
+            $mall_order->city = $request->city ?? '';
+            $mall_order->dist = $request->dist ?? '';
+            $mall_order->address = $request->address ?? '';
+            $mall_order->shipping_price = $request->shipping_price ?? 0;//運費
+            $mall_order->discount = $request->discount ?? 0;
+            $mall_order->payment_type = $request->payment_type ?? 1;
+            $mall_order->payment_at = $request->payment_at;
+            $mall_order->tax_id_number = $request->tax_id_number;//統編
+            $mall_order->invoice = $request->invoice;//發票號碼
+            $mall_order->carrier = $request->carrier;//載具
+            $mall_order->price = $request->price;//統編
+            $mall_order->language = $this->language;//統編
+            $mall_order->save();
 
+        $get_cart = $this->getCart()->get();
+        if(!$get_cart->count()) return redirect()->back()->withErrors(['error'=>'購物車已空'])->withInput();
+            
+        
+        foreach ($get_cart as $item) {
+            MallOrderItem::create(['order_id'=>$mall_order->id,'mall_item_detail_id'=>$item->mall_item_detail_id,'qty'=>$item->qty,'price'=>$item->price,'discription'=>'']);
+            $item->delete();
+        }
+        DB::commit();
+        Cookie::queue(Cookie::forget('cart'));
+        //TODO 寄信 or 轉跳付款頁面
+        //TODO 轉跳訂單成立頁面
+    } catch (\Exception $e) {
+        DB::rollback();
+        return response()->json(['result' => $e->getMessage()], 422);
+    }
     }
 }

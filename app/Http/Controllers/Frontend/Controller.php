@@ -12,12 +12,14 @@ use Storage;
 use App\Models\Frontend\UserCart;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Auth;
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
     public $cookies;
     public $language;
+    public $user_id = null;
 
     public function __construct()
     {
@@ -32,6 +34,7 @@ class Controller extends BaseController
         }
         $this->cookies = Cookie::get('cart');
         $this->language = 'tw';
+        if(Auth::user()) $this->user_id = Auth::user()->id;
     }
     function generateRandomString($length = 10) {
       $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -41,6 +44,9 @@ class Controller extends BaseController
           $randomString .= $characters[rand(0, $charactersLength - 1)];
       }
       return $randomString;
+    }
+    function forgetCookies(){
+      
     }
 
 }

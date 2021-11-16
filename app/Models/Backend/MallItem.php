@@ -46,6 +46,7 @@ class MallItem extends Model
     public static function getShoppingMallItemById($id,$language = 'tw'){
         $mall_item = MallItem::with('detail','infoTw','infoEn')->where('is_shopping',1)->find($id);
         if(is_array($id)){
+            $data = [];
             foreach ($mall_item as $item) {
                 $get_info = self::MallItemFormat($item,$language);
                 if($get_info) $data[] = $get_info;

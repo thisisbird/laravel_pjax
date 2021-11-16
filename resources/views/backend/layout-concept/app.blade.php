@@ -155,7 +155,9 @@
             <script src="{{asset('js')}}/jquery.pjax.min.js"></script>
             <script src='{{asset('js')}}/nprogress.js'></script>
             <script>
-                $(document).pjax('a:not(a[target="_blank"])', '#pjax-container');
+                $.pjax.defaults.scrollTo = false;
+                $(document).pjax('a:not(a[target="_blank"]):not(#order a)', '#pjax-container');
+                // $(document).pjax('#order a:not(a[target="_blank"])', '#pjax-container2');
                 $(document).on("pjax:timeout", function(event) {
                     // 阻止超時導致連結跳轉事件發生
                     event.preventDefault()
