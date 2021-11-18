@@ -19,10 +19,10 @@ class ItemTableSeeder extends Seeder
     public function run()
     {
         // \App\Models\User::factory(10)->create();
-        ItemMenu::create(['name_tw' => '3C商品', 'name_en' => '3C product', 'sort' => 0, 'level' => 1, 'p_id' => 0]);
-        ItemMenu::create(['name_tw' => '羅技', 'name_en' => 'logi', 'sort' => 0, 'level' => 1, 'p_id' => 1]);
-        ItemMenu::create(['name_tw' => '鍵盤', 'name_en' => 'keyboard', 'sort' => 0, 'level' => 1, 'p_id' => 2]);
-        ItemMenu::create(['name_tw' => '滑鼠', 'name_en' => 'mouse', 'sort' => 0, 'level' => 1, 'p_id' => 2]);
+        ItemMenu::create(['name_tw' => '3C商品', 'name_en' => '3C product', 'sort' => 1, 'level' => 1, 'p_id' => 0]);
+        ItemMenu::create(['name_tw' => '羅技', 'name_en' => 'logi', 'sort' => 2, 'level' => 1, 'p_id' => 1]);
+        ItemMenu::create(['name_tw' => '鍵盤', 'name_en' => 'keyboard', 'sort' => 3, 'level' => 1, 'p_id' => 2]);
+        ItemMenu::create(['name_tw' => '滑鼠', 'name_en' => 'mouse', 'sort' => 4, 'level' => 1, 'p_id' => 2]);
 
         for ($i = 1; $i <= 4; $i++) {
             MallItem::create([

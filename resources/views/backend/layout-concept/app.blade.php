@@ -156,6 +156,7 @@
             <script src='{{asset('js')}}/nprogress.js'></script>
             <script>
                 $.pjax.defaults.scrollTo = false;
+                $(document).pjax('#order a:not(a[target="_blank"])', '#pjax-order_detail');//給訂單管理面用的
                 $(document).pjax('a:not(a[target="_blank"]):not(#order a)', '#pjax-container');
                 // $(document).pjax('#order a:not(a[target="_blank"])', '#pjax-container2');
                 $(document).on("pjax:timeout", function(event) {
