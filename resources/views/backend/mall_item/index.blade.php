@@ -13,6 +13,13 @@
     .kv-file-upload{
         display: none !important;
     }
+    #pjax-container2{
+        position: sticky;
+        top: 70px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        height: 80vh;
+    }
 </style>
 
 <div class="row">
