@@ -13,7 +13,7 @@
     .kv-file-upload{
         display: none !important;
     }
-    #pjax-container2{
+    #pjax-mall_item{
         position: sticky;
         top: 70px;
         overflow-y: scroll;
@@ -31,8 +31,68 @@
         <div class="card">
             <div class="card-body">
                 <form action="{{route('backend.mallItem.index')}}" method="GET" pjax-container>
-                    <input class="form-control form-control-lg" type="search" placeholder="Search" aria-label="Search"
-                        name="search" value="{{$request->search}}">
+                    <input type="hidden" name="language" value="{{$request->language}}">
+                    <div class="row">
+                        <div class="col-3 mb-3">
+                            <div class="input-group">
+                                <select class="js-example-basic-multiple" multiple="multiple" name="menu[]">
+                                    @foreach ($menus as $menu_1)
+                                    <option value="{{$menu_1->id}}" {{is_array($request->menu) && in_array($menu_1->id,$request->menu) ? 'selected':'' }}>&nbsp;∟{{$menu_1->name_tw}}({{$menu_1->name_en}})</option>
+                                        @foreach ($menu_1->children as $menu_2)
+                                            <option value="{{$menu_2->id}}" {{is_array($request->menu) && in_array($menu_2->id,$request->menu) ? 'selected':'' }}>&nbsp;&nbsp;&nbsp;&nbsp;∟{{$menu_2->name_tw}}({{$menu_2->name_en}})</option>
+                                            @foreach ($menu_2->children as $menu_3)
+                                                <option value="{{$menu_3->id}}" {{is_array($request->menu) && in_array($menu_3->id,$request->menu) ? 'selected':'' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;∟{{$menu_3->name_tw}}({{$menu_3->name_en}})</option>
+                                            @endforeach
+                                        @endforeach
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-text">關鍵字</span></div>
+                                <input class="form-control form-control-lg" type="search" placeholder="商品名稱或編號" aria-label="Search" name="search" value="{{$request->search}}">
+                            </div>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-text">是否顯示</span></div>
+                                <select class="form-control form-control-lg" name="is_display">
+                                    <option value="all" {{$request->is_display == 'all' ? 'selected':''}}>全部</option>
+                                    <option value="1" {{$request->is_display === "1" ? 'selected':''}}>是</option>
+                                    <option value="0" {{$request->is_display === "0" ? 'selected':''}}>否</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-text">可否購買</span></div>
+                                <select class="form-control form-control-lg" name="is_shopping">
+                                    <option value="all" {{$request->is_shopping == 'all' ? 'selected':''}}>全部</option>
+                                    <option value="1" {{$request->is_shopping === "1" ? 'selected':''}}>是</option>
+                                    <option value="0" {{$request->is_shopping === "0" ? 'selected':''}}>否</option>
+                                </select>
+                            </div>
+                        </div><div class="col-3 mb-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-text">熱銷品</span></div>
+                                <select class="form-control form-control-lg" name="is_hot">
+                                    <option value="all" {{$request->is_hot == 'all' ? 'selected':''}}>全部</option>
+                                    <option value="1" {{$request->is_hot === "1" ? 'selected':''}}>是</option>
+                                    <option value="0" {{$request->is_hot === "0" ? 'selected':''}}>否</option>
+                                </select>
+                            </div>
+                        </div><div class="col-3 mb-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-text">新品</span></div>
+                                <select class="form-control form-control-lg" name="is_new">
+                                    <option value="all" {{$request->is_new === 'all' ? 'selected':''}}>全部</option>
+                                    <option value="1" {{$request->is_new === "1" ? 'selected':''}}>是</option>
+                                    <option value="0" {{$request->is_new === "0" ? 'selected':''}}>否</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                     <button class="btn btn-primary search-btn" type="submit">Search</button>
                 </form>
             </div>
@@ -41,7 +101,7 @@
     <!-- ============================================================== -->
     <!-- end search bar  -->
     <!-- ============================================================== -->
-    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" id="mall_item">
         <!-- ============================================================== -->
         <!-- card influencer one -->
         <!-- ============================================================== -->
@@ -89,8 +149,8 @@
                     <div class="col-xl-3 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="float-xl-right float-none mt-xl-0 mt-4">
                             {{-- <a href="#" class="btn-wishlist m-r-10"><i class="far fa-star"></i></a> --}}
-                            <a href="{{route('backend.mallItem.edit',$data->id)}}?language=en{{$request->search ? '&search='.$request->search:''}}" class="btn {{isset($select_data) ? $select_data->id == $data->id && $request->language == 'en' ? 'btn-secondary' :'btn-outline-secondary' :'btn-outline-secondary'}}">編輯英文</a>
-                            <a href="{{route('backend.mallItem.edit',$data->id)}}?language=tw{{$request->search ? '&search='.$request->search:''}}" class="btn {{isset($select_data) ? $select_data->id == $data->id && $request->language == 'tw' ? 'btn-secondary' :'btn-outline-secondary' :'btn-outline-secondary'}}">編輯中文</a>
+                            <a href="{{route('backend.mallItem.edit',$data->id)}}?language=en&{{http_build_query(Request::except('language'))}}" class="btn {{isset($select_data) ? $select_data->id == $data->id && $request->language == 'en' ? 'btn-secondary' :'btn-outline-secondary' :'btn-outline-secondary'}}">編輯英文</a>
+                            <a href="{{route('backend.mallItem.edit',$data->id)}}?language=tw&{{http_build_query(Request::except('language'))}}" class="btn {{isset($select_data) ? $select_data->id == $data->id && $request->language == 'tw' ? 'btn-secondary' :'btn-outline-secondary' :'btn-outline-secondary'}}">編輯中文</a>
                         </div>
                     </div>
                 </div>
@@ -113,7 +173,7 @@
         @endforeach
     </div>
     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-        <div id="pjax-container2">
+        <div id="pjax-mall_item">
         <form action="{{route('backend.mallItem.update')}}" method="POST" pjax-container>
             @csrf
             <input type="hidden" name="language" value="{{$request->language}}">
@@ -286,14 +346,15 @@
             
             <div class="email editor">
                 @isset($select_data)
-                <input type="hidden" name="data_id" value="{{$select_data['id']}}">
+                <input type="hidden" name="data_id" value="{{$select_data['id']}}" id="data_id">
                 <input type="hidden" name="action_type" value="update">
                 <div class="email action-send">
                     <div class="col-md-12 ">
                         <div class="form-group">
-                            <button class="btn btn-secondary btn-space" type="submit" style="width: 100%;"><i class="icon s7-mail"></i>
+                            <button class="btn btn-secondary btn-space" type="submit" style="width: 100%;" id="update"><i class="icon s7-mail"></i>
                                 更新</button>
                             <a href="{{route('backend.mallItem.index')}}" class="btn btn-dark btn-lg btn-block">取消</a>
+                            {{-- <button class="btn btn-success btn-lg btn-block" type="submit" style="width: 100%;" id="copy">複製</button> --}}
                         </div>
                     </div>
                 </div>
@@ -317,6 +378,12 @@
 <script>
     $( function() {
         $( "#tabs" ).tabs();
+        $("#copy").on('click',function () {
+            $("#data_id").attr('disabled',true);
+        });
+        $("#update").on('click',function () {
+            $("#data_id").attr('disabled',false);
+        })
     });
     $(document).ready(function () {
         $('.js-example-basic-multiple').select2({

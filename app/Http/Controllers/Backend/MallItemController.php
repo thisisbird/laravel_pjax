@@ -21,11 +21,22 @@ class MallItemController extends Controller
         $datas = MallItem::with('menu', 'info', 'detail');
         if ($request->search) {
             $keyword = '%' . $request->search . '%';
-            $mall_item_ids = MallItemInfo::where('name', 'like', $keyword)->orWhere('price', 'like', $keyword)->pluck('mall_item_id');
-            $datas = $datas->whereIn('id', $mall_item_ids)->orWhere('code', 'like', $keyword)->get();
-        } else {
-            $datas = $datas->get();
-        }
+            $mall_item_ids = MallItemInfo::where('name', 'like', $keyword)->orWhere('price',$request->search)->orWhere('o_price',$request->search)->orWhere('cost',$request->search)->pluck('mall_item_id')->toArray();
+            $datas = $datas->where(function($q) use ($mall_item_ids,$keyword){
+                $q->whereIn('id', $mall_item_ids)->orWhere('code', 'like', $keyword);
+            });
+        } 
+        if ($request->menu) {
+            $mall_item_ids = ItemMenuMallItem::whereIn('item_menu_id',$request->menu)->pluck('mall_item_id')->toArray();
+            $datas = $datas->whereIn('id', $mall_item_ids);
+        }    
+        if ($request->is_display === '1' || $request->is_display === '0') $datas = $datas->where('is_display',$request->is_display);
+        if ($request->is_shopping === '1' || $request->is_shopping === '0') $datas = $datas->where('is_shopping',$request->is_shopping);
+        if ($request->is_hot === '1' || $request->is_hot === '0') $datas = $datas->where('is_hot',$request->is_hot);
+        if ($request->is_new === '1' || $request->is_new === '0') $datas = $datas->where('is_new',$request->is_new);
+        
+        $datas = $datas->get();
+        
         $menus = ItemMenu::getMenuTree();
         return ['datas' => $datas, 'menus' => $menus, 'request' => $request];
     }
@@ -47,7 +58,6 @@ class MallItemController extends Controller
     }
     public function update(Request $request)
     {
-        // dd($request->all());
         $rules = array(
             'name' => 'required',
             'code' => 'required|unique:mall_items,code,' . $request->data_id, //unique:table,欄位,排除的id

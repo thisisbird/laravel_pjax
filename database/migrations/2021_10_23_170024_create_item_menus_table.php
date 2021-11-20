@@ -21,6 +21,7 @@ class CreateItemMenusTable extends Migration
             $table->tinyInteger('level');
             $table->tinyInteger('p_id');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
