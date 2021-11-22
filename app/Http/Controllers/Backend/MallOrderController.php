@@ -8,7 +8,7 @@ class MallOrderController extends Controller
 {
     //
     public function index(Request $request){
-
+        // dump($request->all());
         return view('backend.mall_order.index', compact('request'));
     }
 }

@@ -51,7 +51,7 @@
                         <div class="col-3 mb-3">
                             <div class="input-group">
                                 <div class="input-group-prepend"><span class="input-group-text">關鍵字</span></div>
-                                <input class="form-control form-control-lg" type="search" placeholder="商品名稱或編號" aria-label="Search" name="search" value="{{$request->search}}">
+                                <input class="form-control form-control-lg" type="search" placeholder="商品名稱、編號或金額" aria-label="Search" name="search" value="{{$request->search}}">
                             </div>
                         </div>
                         <div class="col-3 mb-3">
@@ -387,7 +387,7 @@
     });
     $(document).ready(function () {
         $('.js-example-basic-multiple').select2({
-            tags: true
+            tags: false
         });
     });
 

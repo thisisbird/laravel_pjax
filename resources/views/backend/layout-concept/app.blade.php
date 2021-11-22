@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="{{asset('concept')}}/assets/libs/css/style.css">
     <link rel="stylesheet" href="{{asset('concept')}}/assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
     <link rel="stylesheet" href="{{asset('concept')}}/assets/vendor/select2/css/select2.css">
+    <link rel="stylesheet" href="{{asset('concept')}}/assets/vendor/datepicker/tempusdominus-bootstrap-4.css" />
     <link rel="stylesheet" href="{{asset('mazer-1.1')}}/dist/assets/vendors/summernote/summernote-lite.min.css">
     {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" crossorigin="anonymous"> --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.min.css" crossorigin="anonymous">
@@ -30,7 +31,8 @@
 
 <!-- jquery 2.1.4 -->
     <script src="{{asset('js')}}/jquery2.1.4.js"></script>
-
+    <script src="{{asset('concept')}}/assets/vendor/datepicker/moment.js"></script>
+    <script src="{{asset('concept')}}/assets/vendor/datepicker/tempusdominus-bootstrap-4.js"></script>
 
     <!-- bootstap bundle js -->
     <script src="{{asset('concept')}}/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>

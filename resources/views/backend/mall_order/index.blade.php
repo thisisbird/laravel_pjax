@@ -11,7 +11,88 @@
 </style>
 
 <div class="row">
-    
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="card">
+            <div class="card-body">
+                <form action="{{route('backend.mallOrder.index')}}" method="GET" pjax-container="">
+                    <div class="row">
+                        <div class="col-3 mb-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-text">訂單編號</span></div>
+                                <input class="form-control form-control-lg" type="search" placeholder="訂單編號" aria-label="Search" name="order_code" value="{{$request->order_code}}">
+                            </div>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-text">會員姓名/購買人</span></div>
+                                <input class="form-control form-control-lg" type="search" placeholder="會員姓名/購買人" aria-label="Search" name="user_name" value="{{$request->user_name}}">
+                            </div>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-text">Email</span></div>
+                                <input class="form-control form-control-lg" type="search" placeholder="Email" aria-label="Search" name="email" value="{{$request->email}}">
+                            </div>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-text">收件人</span></div>
+                                <input class="form-control form-control-lg" type="search" placeholder="收件人" aria-label="Search" name="name" value="{{$request->name}}">
+                            </div>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-text">電話</span></div>
+                                <input class="form-control form-control-lg" type="search" placeholder="電話" aria-label="Search" name="phone" value="{{$request->phone}}">
+                            </div>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-text">配送狀態</span></div>
+                                <select class="form-control form-control-lg" name="shipping_type">
+                                    <option value="all" {{$request->shipping_type === 'all' ? 'selected':''}}>全部</option>
+                                    <option value="1" {{$request->shipping_type === '1' ? 'selected':''}}>已配送</option>
+                                    <option value="0" {{$request->shipping_type === '0' ? 'selected':''}}>未配送</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-text">開始</span></div>
+                                <input type="text" autocomplete="off" class="form-control datetimepicker-input" id="datetimepicker_start" data-toggle="datetimepicker" data-target="#datetimepicker_start" name="created_at_start" />
+                            </div>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-text">結束</span></div>
+                                <input type="text" autocomplete="off" class="form-control datetimepicker-input" id="datetimepicker_end" data-toggle="datetimepicker" data-target="#datetimepicker_end" name="created_at_end" />
+                            </div>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <div class="input-group">
+                                <select class="js-example-basic-multiple" multiple="multiple" name="state[]">
+                                    @for ($i = 0; $i < 5; $i++)
+                                    <option value="{{$i}}" {{is_array($request->state) && in_array($i,$request->state) ? 'selected':''}} >{{$i}}</option>
+                                    @endfor
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-text">國內外訂單</span></div>
+                                <select class="form-control form-control-lg" name="language">
+                                    <option value="all" {{$request->language === 'all' ? 'selected':''}}>全部</option>
+                                    <option value="tw" {{$request->language === 'tw' ? 'selected':''}}>國內</option>
+                                    <option value="en" {{$request->language === 'en' ? 'selected':''}}>國外</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary search-btn" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </div>
     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
         <div class="card">
             <div class="card-header">
@@ -250,16 +331,26 @@
     </div>
 </div>
 
+
 <script>
+    
+    $(document).ready(function () {
+        if ($("#datetimepicker_start,#datetimepicker_end").length) {
+            $('#datetimepicker_start').datetimepicker({
+                format:'YYYY-MM-DD',
+                defaultDate: @json($request->created_at_start),
+            });
+            $('#datetimepicker_end').datetimepicker({
+                format:'YYYY-MM-DD',
+                defaultDate: @json($request->created_at_end),
+            });
+        }
+        
+        $('.js-example-basic-multiple').select2({
+            tags: false
+        });
+    });
     $(document).pjax('#order a:not(a[target="_blank"])', '#pjax-order_detail');
-    // $(document).on("pjax:timeout", function(event) {
-    //     // 阻止超時導致連結跳轉事件發生
-    //     event.preventDefault()
-    // });
-    // $(document).on('submit', 'form[pjax-container]', function (event) {
-    //     $.pjax.submit(event, '#pjax-container')
-    // });
-    // $(document).on('pjax:start', function() { NProgress.start(); });
-    // $(document).on('pjax:end',   function() { NProgress.done();  });
+
 </script>
 @endsection
