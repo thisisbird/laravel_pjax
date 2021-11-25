@@ -13,5 +13,6 @@ class MallOrder extends Model
     public const PAIDED = 2;
     public const SHIPPING = 3;
     public const FINISH = 4;
+    public static $order_state = [ self::UNPAID=>'未付款',self::PAIDED=>'已付款',self::SHIPPING=>'已出貨',self::FINISH=>'已完成'];
 
 }

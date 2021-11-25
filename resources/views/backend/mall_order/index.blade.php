@@ -8,6 +8,12 @@
         overflow-x: hidden;
         height: 80vh;
     }
+    .pagination{
+        flex-wrap: wrap;
+    }
+    .page-item{
+        margin: 2px 0;
+    }
 </style>
 
 <div class="row">
@@ -71,9 +77,9 @@
                         <div class="col-3 mb-3">
                             <div class="input-group">
                                 <select class="js-example-basic-multiple" multiple="multiple" name="state[]">
-                                    @for ($i = 0; $i < 5; $i++)
-                                    <option value="{{$i}}" {{is_array($request->state) && in_array($i,$request->state) ? 'selected':''}} >{{$i}}</option>
-                                    @endfor
+                                    @foreach ($order_state as $i => $state)
+                                        <option value="{{$i}}" {{is_array($request->state) && in_array($i,$request->state) ? 'selected':''}} >{{$state}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -117,23 +123,20 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @for ($i = 0; $i < 50; $i++)
-                                
+                            @foreach ($mall_order as $i => $order)
                             <tr>
-                                <td><a href="mall_order?test={{$i}}">#ID{{$i}}</a></td>
-                                <td>2021-11-13 16:36</td>
-                                <td>張凱鈞</td>
+                                <td><a href="{{route('backend.mallOrder.index',$i)}}?{{http_build_query(Request::except('_pjax'))}}">#ID{{$i}} {{$order->cookies}}</a></td>
+                                <td>{{$order->created_at}}</td>
+                                <td>{{$order->name}}</td>
                                 <td>電腦</td>
-                                <td>已付款</td>
-                                <td>未出貨</td>
+                                <td>{{$order->state == 1 ? '未付款':'已付款'}}</td>
+                                <td>{{$order->state <= 2 ? '未出貨':'已出貨'}}</td>
                                 <td>宅配</td>
                                 <td>早上(09:00~13:00)</td>
-                                <td>NT$2080</td>
+                                <td>{{$order->language == 'tw' ?'NT$':'$'}} {{$order->price}} </td>
                                 <td></td>
                             </tr>
-                            @endfor
-                            
-                           
+                            @endforeach
                         </tbody>
                         <tfoot>
                             <tr>
@@ -152,14 +155,32 @@
                     </table>
                 </div>
             </div>
+            <div class="card-body border-top">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item">
+                            <a class="page-link" href="{{$mall_order->previousPageUrl()}}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span><span class="sr-only">Previous</span>      </a>
+                        </li>
+                        @for ($i = 1; $i <= $mall_order->lastPage(); $i++)
+                            <li class="page-item {{$mall_order->currentPage() == $i ? 'active':'' }}"><a class="page-link" href="{{$mall_order->url($i)}}">{{$i}}</a></li>
+                        @endfor
+                        <li class="page-item">
+                            <a class="page-link" href="{{$mall_order->nextPageUrl()}}" aria-label="Next"><span aria-hidden="true">&raquo;</span>
+                               <span class="sr-only">Next</span></a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
         </div>
     </div>
     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
         <div id="pjax-order_detail">
+            @if($id !== null)
             <div class="row">
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
                     <div class="card">
-                        <h5 class="card-header">訂單明細 #ID{{$request->test}}</h5>
+                        <h5 class="card-header">訂單明細 #ID{{$id}}</h5>
                         <div class="card-body">
                             <table class="table table-striped">
                                 <thead>
@@ -234,7 +255,6 @@
                             
                         </div>
                     </div>
-
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
                     <div class="card">
@@ -247,9 +267,13 @@
                         </ul>
                     </div>
                     <div class="card">
-                        <div class="card-body">
-                            <h3 class="card-title">出貨</h3>
-                        </div>
+                        <form action="{{route('backend.mallOrder.update',$id)}}" method="post" pjax-container>
+                            @csrf
+                            <div class="card-body border-top">
+                                <button type="submit" class="btn btn-space btn-brand">出貨</button>
+                                <button type="submit" class="btn btn-space btn-success" disabled>完成</button>
+                            </div>
+                        </form>
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">指定配送時間: 早上(09:30~12:00)</li>
                             <li class="list-group-item">配送方式: 宅配</li>
@@ -327,6 +351,7 @@
                 </div>
                 
             </div>
+            @endif
         </div>
     </div>
 </div>

@@ -16,6 +16,7 @@ class CreateMallOrdersTable extends Migration
         Schema::create('mall_orders', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id')->nullable();
+            $table->string('order_code',10)->comment('訂單序號');
             $table->string('cookies',10)->nullable();
             $table->tinyInteger('state')->comment('狀態0:取消 1:未付款 2:待出貨 3:已出貨 4:已完成');
             $table->string('email')->nullable();

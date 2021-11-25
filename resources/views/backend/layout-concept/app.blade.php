@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="{{asset('concept')}}/assets/vendor/select2/css/select2.css">
     <link rel="stylesheet" href="{{asset('concept')}}/assets/vendor/datepicker/tempusdominus-bootstrap-4.css" />
     <link rel="stylesheet" href="{{asset('mazer-1.1')}}/dist/assets/vendors/summernote/summernote-lite.min.css">
+    <link rel="stylesheet" href="{{asset('concept')}}/assets/vendor/bootstrap-select/css/bootstrap-select.css">
+
     {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" crossorigin="anonymous"> --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.min.css" crossorigin="anonymous">
     {{-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" crossorigin="anonymous"> --}}
@@ -154,8 +156,10 @@
             <script src="{{asset('concept')}}/assets/vendor/full-calendar/js/jquery-ui.min.js"></script>
             <script src="{{asset('concept')}}/assets/libs/js/main-js.js"></script>
             <script src="{{asset('concept')}}/assets/vendor/parsley/parsley.js"></script>
+            <script src="{{asset('concept')}}/assets/vendor/bootstrap-select/js/bootstrap-select.js"></script>
             <script src="{{asset('js')}}/jquery.pjax.min.js"></script>
             <script src='{{asset('js')}}/nprogress.js'></script>
+
             <script>
                 $.pjax.defaults.scrollTo = false;
                 $(document).pjax('#order a:not(a[target="_blank"])', '#pjax-order_detail');//給訂單管理面用的

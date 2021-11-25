@@ -53,7 +53,8 @@ Route::group(['middleware'=> 'auth.backend:backend'], function (Router $router) 
     $router->post('mall_item/delete_photo', 'App\Http\Controllers\Backend\MallItemController@deletePhoto')->name('backend.mallItem.deletePhoto');
     $router->delete('mall_item', 'App\Http\Controllers\Backend\MallItemController@delete')->name('backend.mallItem.delete');
 
-    $router->get('mall_order/', 'App\Http\Controllers\Backend\MallOrderController@index')->name('backend.mallOrder.index');
+    $router->get('mall_order/{id?}', 'App\Http\Controllers\Backend\MallOrderController@index')->name('backend.mallOrder.index');
+    $router->post('mall_order/{id?}', 'App\Http\Controllers\Backend\MallOrderController@update')->name('backend.mallOrder.update');
 
 
     // $router->get('pixi', 'App\Http\Controllers\Backend\PixiController@test')->name('backend.pixi.test');
