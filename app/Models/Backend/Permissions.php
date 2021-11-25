@@ -37,8 +37,10 @@ class Permissions extends Model
 
         $i = 3;
         $menu[$i] = ['title' => '訂單管理', 'url' => '#', 'icon' => 'fas fa-shopping-cart', 'id' => 31];
-        $menu[$i]['submenu'][0] = ['title' => '未完成訂單', 'url' => route('backend.mallOrder.index'), 'id' => 32];
-        $menu[$i]['submenu'][1] = ['title' => '已完成訂單', 'url' => route('backend.mallOrder.index'), 'id' => 33];
+        $menu[$i]['submenu'][0] = ['title' => '未付款訂單', 'url' => route('backend.mallOrder.index').'?state%5B%5D=1', 'id' => 32];
+        $menu[$i]['submenu'][1] = ['title' => '已付款訂單', 'url' => route('backend.mallOrder.index').'?state%5B%5D=2', 'id' => 32];
+        $menu[$i]['submenu'][2] = ['title' => '已出貨訂單', 'url' => route('backend.mallOrder.index').'?state%5B%5D=3', 'id' => 32];
+        $menu[$i]['submenu'][3] = ['title' => '已完成訂單', 'url' => route('backend.mallOrder.index').'?state%5B%5D=4', 'id' => 33];
         // $i = 2;
         // $menu[$i] = ['title' => 'PIXI', 'url' => '#', 'icon' => 'fa fa-fw fa-user-circle', 'id' => 21];
         // $menu[$i]['submenu'][0] = ['title' => '測試', 'url' => route('backend.pixi.test'), 'id' => 22];

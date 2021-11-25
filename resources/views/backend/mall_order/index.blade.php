@@ -14,6 +14,7 @@
     .page-item{
         margin: 2px 0;
     }
+
 </style>
 
 <div class="row">
@@ -124,12 +125,12 @@
                         </thead>
                         <tbody>
                             @foreach ($mall_order as $i => $order)
-                            <tr>
-                                <td><a href="{{route('backend.mallOrder.index',$i)}}?{{http_build_query(Request::except('_pjax'))}}">#ID{{$i}} {{$order->cookies}}</a></td>
+                            <tr class="{{$select_order && $order->id == $select_order->id ? 'table-success':''}} ">
+                                <td><a href="{{route('backend.mallOrder.index',$order->id)}}?{{http_build_query(Request::except('_pjax'))}}">#ID{{$i}} {{$order->cookies}}</a></td>
                                 <td>{{$order->created_at}}</td>
                                 <td>{{$order->name}}</td>
                                 <td>電腦</td>
-                                <td>{{$order->state == 1 ? '未付款':'已付款'}}</td>
+                                <td>{{$order->state <= 1 ? '未付款':'已付款'}}</td>
                                 <td>{{$order->state <= 2 ? '未出貨':'已出貨'}}</td>
                                 <td>宅配</td>
                                 <td>早上(09:00~13:00)</td>
@@ -176,11 +177,11 @@
     </div>
     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
         <div id="pjax-order_detail">
-            @if($id !== null)
+            @if($select_order !== null)
             <div class="row">
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
                     <div class="card">
-                        <h5 class="card-header">訂單明細 #ID{{$id}}</h5>
+                        <h5 class="card-header">訂單明細 #ID{{$select_order->id}}</h5>
                         <div class="card-body">
                             <table class="table table-striped">
                                 <thead>
@@ -267,11 +268,17 @@
                         </ul>
                     </div>
                     <div class="card">
-                        <form action="{{route('backend.mallOrder.update',$id)}}" method="post" pjax-container>
+                        <form action="{{route('backend.mallOrder.update',$select_order->id)}}" method="post" pjax-container>
                             @csrf
                             <div class="card-body border-top">
-                                <button type="submit" class="btn btn-space btn-brand">出貨</button>
-                                <button type="submit" class="btn btn-space btn-success" disabled>完成</button>
+                                @if($select_order->state == 2)
+                                <input type="hidden" name="state" value="3" id="state">
+                                @endif
+                                @if($select_order->state == 3)
+                                <input type="hidden" name="state" value="4" id="state">
+                                @endif
+                                <button type="submit" id="SHIPPING" class="btn btn-space btn-brand" {{$select_order->state == 2 ? '':'disabled'}}>確定出貨</button>
+                                <button type="submit" id="FINISH" class="btn btn-space btn-success" {{$select_order->state == 3 ? '':'disabled'}}>完成</button>
                             </div>
                         </form>
                         <ul class="list-group list-group-flush">
@@ -374,8 +381,14 @@
         $('.js-example-basic-multiple').select2({
             tags: false
         });
-    });
-    $(document).pjax('#order a:not(a[target="_blank"])', '#pjax-order_detail');
 
+        $(document).pjax('#order a:not(a[target="_blank"])', '#pjax-order_detail');
+        $('tr').on('click','a',function(){
+            $('tr').removeClass('table-success');
+            $(this).closest('tr').addClass('table-success');
+        })
+    });
+    
+   
 </script>
 @endsection
