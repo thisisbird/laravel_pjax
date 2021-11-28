@@ -13,6 +13,7 @@ use App\Models\Frontend\UserCart;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Auth;
+use Session;
 
 class Controller extends BaseController
 {
@@ -23,18 +24,21 @@ class Controller extends BaseController
 
     public function __construct()
     {
-        // $this->middleware(function ($request, $next) {
-          
-        //     return $next($request);
-        // });
+        $this->middleware(function ($request, $next) {
+        // dd(Auth::guard('web')->user(),123);
+            if(!Cookie::get('cart')){
+              $cookies = $this->generateRandomString(10);
+              Cookie::queue('cart', $cookies, 50000);//如果不適用上面的use Cookie,這裏可以直接調用 \Cookie
+            }
+            $this->cookies = Cookie::get('cart');
+            $this->language = 'tw';
+            if(Auth::guard('web')->check()) $this->user_id = Auth::user()->id;
+
+
+            return $next($request);
+        });
         
-        if(!Cookie::get('cart')){
-          $cookies = $this->generateRandomString(10);
-          Cookie::queue('cart', $cookies, 50000);//如果不適用上面的use Cookie,這裏可以直接調用 \Cookie
-        }
-        $this->cookies = Cookie::get('cart');
-        $this->language = 'tw';
-        if(Auth::user()) $this->user_id = Auth::user()->id;
+        
     }
     function generateRandomString($length = 10) {
       $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';

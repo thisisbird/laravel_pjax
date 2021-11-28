@@ -61,6 +61,7 @@
 <script>
     $(document).ready(function () {
         var selectedMenu = "{!! url()->current() !!}";
+        console.log(selectedMenu);
         var selector = $('#navbarNav').find('a[href="' + selectedMenu + '"]');
         selector.addClass('active');
         selector.closest('.submenu').addClass('show');

@@ -58,7 +58,14 @@
             <!-- cd-timeline__img -->
             <div class="cd-timeline__content js-cd-content">
                 <h3>會員專區</h3>
+                <div class="form-group row">
+                    <label class="col-12 col-sm-3 col-form-label text-sm-right">快速登入</label>
+                    <a href="/fb/auth" class="btn btn-primary mr-2">FB</a>
+                    <a href="/google/auth" class="btn btn-secondary mr-2">GOOGLE</a>
+                    {{-- <a href="##" class="btn btn-success mr-2">Line</a> --}}
+                    <a href="{{route('frontend.user.login')}}" class="btn btn-light mr-2">會員登入</a>
 
+                </div>
                 <div class="form-group row">
                     <label class="col-12 col-sm-3 col-form-label text-sm-right">非會員</label>
                     <div class="col-12 col-sm-8 col-lg-6">
@@ -87,7 +94,7 @@
                     <label class="col-12 col-sm-3 col-form-label text-sm-right">請選擇物流</label>
                     <div class="col-12 col-sm-8 col-lg-6">
                         <select name="shipping_type" id="" class="form-control">
-                            <option value="">宅配</option>
+                            <option value="1">宅配</option>
                         </select>
                     </div>
                 </div>
@@ -95,9 +102,9 @@
                     <label class="col-12 col-sm-3 col-form-label text-sm-right">付款方式</label>
                     <div class="col-12 col-sm-8 col-lg-6">
                         <select name="payment_type" id="" class="form-control">
-                            <option value="">信用卡</option>
-                            <option value="">貨到付款</option>
-                            <option value="">ATM</option>
+                            <option value="1">信用卡</option>
+                            <option value="2">ATM</option>
+                            <option value="3">貨到付款</option>
                         </select>
                     </div>
                 </div>

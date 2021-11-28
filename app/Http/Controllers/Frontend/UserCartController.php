@@ -10,7 +10,11 @@ use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Backend\MallOrder;
 use App\Models\Backend\MallOrderItem;
+use App\Http\Controllers\Frontend\Controller;
+
 use DB;
+use Session;
+
 class UserCartController extends Controller
 {
     function getCart(){
@@ -24,6 +28,11 @@ class UserCartController extends Controller
     }
 
     public function index($cookies_id = ''){
+       
+        // $a = Auth::guard('web')->check();
+        dump($this->user_id);
+        
+
         $language = $this->language;
         $get_cart = $this->getCart()->get();
         $mall_item_detail_ids = $get_cart->pluck('mall_item_detail_id')->toArray();
@@ -62,17 +71,28 @@ class UserCartController extends Controller
         if($check){
             $data['msg'] = '刪除成功';
             $count = $this->getCart()->count();
-            $data['is_clear'] = $count ? false :true;//沒東西要清空填寫資本資料
+            $data['is_clear'] = $count ? false :true;//沒東西要清空 填寫資本資料
             return response()->json($data, 200);
         }
         return response()->json('刪除失敗', 400);
     }
 
     public function createOrder(Request $request){
-        // dd($request->all());
+            $last = MallOrder::orderBy('id','desc')->first();
+            $order_code = 'SN'.date('Ymd');
+            if($last && strpos($last->order_code,$order_code) !== false){
+                $num = str_replace($order_code,'',$last->order_code);
+                $num += 1;
+                $num=str_pad($num,4,"0",STR_PAD_LEFT);
+                $order_code .= $num;
+            }else{
+                $order_code = $order_code.'0001';
+            }
         try{
+            // dd($order_code,$request->all());
             DB::beginTransaction();
             $mall_order = new MallOrder;
+            $mall_order->order_code = $order_code;
             $mall_order->user_id = $this->user_id;
             $mall_order->cookies = $this->cookies;
             $mall_order->state = MallOrder::UNPAID;
@@ -83,15 +103,19 @@ class UserCartController extends Controller
             $mall_order->city = $request->city ?? '';
             $mall_order->dist = $request->dist ?? '';
             $mall_order->address = $request->address ?? '';
-            $mall_order->shipping_price = $request->shipping_price ?? 0;//運費
-            $mall_order->discount = $request->discount ?? 0;
+            $mall_order->tip = $request->tip ?? '';
+            $mall_order->shipping_price = 0;//運費
+            $mall_order->shipping_type = $request->shipping_type;//運送方式 1:宅配
+            $mall_order->discount = 0;
             $mall_order->payment_type = $request->payment_type ?? 1;
-            $mall_order->payment_at = $request->payment_at;
+            $mall_order->payment_at = $request->payment_at; //付款方式 1:信用卡 2:ATM 3:貨到付款
+            $mall_order->invoice_type = $request->invoice_type ?? 0;//發票類型0:列印 1:載具 2:統編 3:愛心
             $mall_order->tax_id_number = $request->tax_id_number;//統編
             $mall_order->invoice = $request->invoice;//發票號碼
             $mall_order->carrier = $request->carrier;//載具
-            $mall_order->price = $request->price;//統編
-            $mall_order->language = $this->language;//統編
+            $mall_order->price = 0;//統編
+            $mall_order->language = $this->language;
+            $mall_order->source = '手機';
             $mall_order->save();
 
         $get_cart = $this->getCart()->get();
@@ -106,9 +130,12 @@ class UserCartController extends Controller
         Cookie::queue(Cookie::forget('cart'));
         //TODO 寄信 or 轉跳付款頁面
         //TODO 轉跳訂單成立頁面
+        return redirect()->back()->withSuccess('訂單成功');
+
     } catch (\Exception $e) {
         DB::rollback();
-        return response()->json(['result' => $e->getMessage()], 422);
+        return redirect()->back()->withErrors($e->getMessage());
+
     }
     }
 }

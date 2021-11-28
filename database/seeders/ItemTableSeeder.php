@@ -32,11 +32,11 @@ class ItemTableSeeder extends Seeder
                 'is_shopping' => 1,
                 'is_hot' => 1,
                 'is_new' => 1,
-                'photo' => [],
+                'photo' => ["/storage/image/5IMcHa4YwsvTccZ3jEYBhyBVRS5DjDoqf7vVLi7R.jpg","/storage/image/5eKsBFhkImpjhIn7TuOQU8EOcQkB3h4aj5K9FdVs.jpg"],
             ]);
             if(in_array($i,[1,2])){//鍵盤
-                MallItemDetail::create(['mall_item_id'=>$i,'name_tw'=>'紅軸','name_en'=>'red type','stock'=>888,'buy_stock'=>100,'photo'=>'','discription'=>'']);
-                MallItemDetail::create(['mall_item_id'=>$i,'name_tw'=>'青軸','name_en'=>'blue type','stock'=>888,'buy_stock'=>100,'photo'=>'','discription'=>'']);
+                MallItemDetail::create(['mall_item_id'=>$i,'name_tw'=>'紅軸','name_en'=>'red type','stock'=>888,'buy_stock'=>100,'photo'=>'/storage/image/5eKsBFhkImpjhIn7TuOQU8EOcQkB3h4aj5K9FdVs.jpg','discription'=>'']);
+                MallItemDetail::create(['mall_item_id'=>$i,'name_tw'=>'青軸','name_en'=>'blue type','stock'=>888,'buy_stock'=>100,'photo'=>'/storage/image/5IMcHa4YwsvTccZ3jEYBhyBVRS5DjDoqf7vVLi7R.jpg','discription'=>'']);
                 MallItemInfo::create(['mall_item_id'=>$i,'name'=>'機械鍵盤','o_price'=>1500,'price'=>1200,'cost'=>600,'language'=>'tw','special'=>'特色描述','info'=>'商品規格','discription'=>'商品描述']);
                 MallItemInfo::create(['mall_item_id'=>$i,'name'=>'keyboard','o_price'=>49.9,'price'=>39.9,'cost'=>19.9,'language'=>'en','special'=>'special','info'=>'info','discription'=>'discription']);
                 ItemMenuMallItem::create(['item_menu_id'=>1,'mall_item_id'=>$i]);
@@ -45,8 +45,8 @@ class ItemTableSeeder extends Seeder
                 
             }
             if(in_array($i,[3,4])){//滑鼠
-                MallItemDetail::create(['mall_item_id'=>$i,'name_tw'=>'大','name_en'=>'XL','stock'=>777,'buy_stock'=>200,'photo'=>'','discription'=>'']);
-                MallItemDetail::create(['mall_item_id'=>$i,'name_tw'=>'小','name_en'=>'M','stock'=>777,'buy_stock'=>200,'photo'=>'','discription'=>'']);
+                MallItemDetail::create(['mall_item_id'=>$i,'name_tw'=>'大','name_en'=>'XL','stock'=>777,'buy_stock'=>200,'photo'=>'/storage/image/5eKsBFhkImpjhIn7TuOQU8EOcQkB3h4aj5K9FdVs.jpg','discription'=>'']);
+                MallItemDetail::create(['mall_item_id'=>$i,'name_tw'=>'小','name_en'=>'M','stock'=>777,'buy_stock'=>200,'photo'=>'/storage/image/5IMcHa4YwsvTccZ3jEYBhyBVRS5DjDoqf7vVLi7R.jpg','discription'=>'']);
                 MallItemInfo::create(['mall_item_id'=>$i,'name'=>'光學滑鼠','o_price'=>1500,'price'=>1200,'cost'=>600,'language'=>'tw','special'=>'特色描述','info'=>'商品規格','discription'=>'商品描述']);
                 MallItemInfo::create(['mall_item_id'=>$i,'name'=>'the Mouse','o_price'=>49.9,'price'=>39.9,'cost'=>19.9,'language'=>'en','special'=>'special','info'=>'info','discription'=>'discription']);
                 ItemMenuMallItem::create(['item_menu_id'=>1,'mall_item_id'=>$i]);

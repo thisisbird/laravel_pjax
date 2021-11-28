@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Google_Client;
 use Google_Service_Oauth2;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Frontend\Controller;
+use Illuminate\Support\Facades\Cookie;
 
 class OAuthController extends Controller
 {
@@ -16,6 +17,8 @@ class OAuthController extends Controller
      */
     public function google()
     {
+        Cookie::queue('pre_url', url()->previous(), 50000);//如果不適用上面的use Cookie,這裏可以直接調用 \Cookie
+        // Session::put('current_url',request()->fullUrl());
         $client = new Google_Client();
         // 設定憑證 (前面下載的 json 檔)
         $client->setAuthConfig(base_path('google_key.json'));
@@ -49,10 +52,12 @@ class OAuthController extends Controller
         $email = $user_info->email;
         $name = $user_info->name;
         $photo_picture = $user_info->picture;
+
         dd($open_id,
             $email,
             $name,
-            $photo_picture);
+            $photo_picture,
+            Cookie::get('pre_url'));//取得登入前的網址
     }
     public function fb()
     {

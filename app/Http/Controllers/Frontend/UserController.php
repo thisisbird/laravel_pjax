@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use Illuminate\Http\Request;
 use Hash;
 use Session;
+use Cookie;
 use App\Models\Frontend\User;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Frontend\Controller;
@@ -20,39 +21,39 @@ class UserController extends Controller
         } else {
             $users = User::all();
         }
-        return view('backend.user.index', compact('users', 'request'));
+        return view('frontend.user.index', compact('users', 'request'));
     }
 
 
     public function login(Request $request)
     {
         if ($request->isMethod('get')) {
-            if (Auth::guard('backend')->check()) {
-                return redirect()->route('backend.user.dashboard');
+            if (Auth::guard('web')->check()) {
+                return redirect('/product_list');
             }
-            return view('backend.user.login');
+            Cookie::queue('pre_url', url()->previous(), 50000);//如果不適用上面的use Cookie,這裏可以直接調用 \Cookie
+            return view('frontend.user.login');
         }
 
         $request->validate([
-            'account' => 'required',
+            'email' => 'required',
             'password' => 'required',
         ]);
-        $credentials = $request->only('account', 'password');
+        $credentials = $request->only('email', 'password');
         $remember = $request->remember ?? 0;
-        if (Auth::guard('backend')->attempt($credentials, $remember)) {
+        if (Auth::guard('web')->attempt($credentials, $remember)) {
             //intended 紀錄之前的網址
-            return redirect()->intended('back/dashboard')
+            return redirect()->intended(Cookie::get('pre_url'))
                 ->withSuccess('Signed in');
         }
-
-        return redirect()->route('backend.user.login')->withSuccess('Login details are not valid');
+        return redirect()->route('frontend.user.login')->withSuccess('Login details are not valid');
     }
 
 
 
     public function registration()
     {
-        return view('backend.user.registration');
+        return view('frontend.user.registration');
     }
 
 
@@ -60,8 +61,7 @@ class UserController extends Controller
     {
         $rules = array(
             'name' => 'required',
-            'account' => 'required|unique:backend_users',
-            'email' => 'required|email|unique:backend_users',
+            'email' => 'required|email|unique:users',
             'password' => 'required|min:6',
         );
         $message = array(
@@ -74,19 +74,17 @@ class UserController extends Controller
         $data = $request->all();
         $check = $this->create($data);
         if($check){
-            Auth::guard('backend')->loginUsingId($check->id);
+            Auth::guard('web')->loginUsingId($check->id);
         }
-        return redirect()->route('backend.user.dashboard')->withSuccess('You have signed-in');
+        return redirect()->route('frontend.user.info')->withSuccess('You have signed-in');
     }
 
 
     public function create(array $data)
     {
         return User::create([
-            'account' => $data['account'],
             'name' => $data['name'],
             'email' => $data['email'],
-            'role_id' => $data['role_id'] ?? 1,
             'password' => Hash::make($data['password'])
         ]);
     }
@@ -95,7 +93,7 @@ class UserController extends Controller
     {
         $user = User::findorFail($id);
         $roles = Role::get();
-        return view('backend.user.edit', compact('user','roles'));
+        return view('frontend.user.edit', compact('user','roles'));
     }
     
     public function update($id, Request $req)
@@ -123,7 +121,7 @@ class UserController extends Controller
             $user->email = $req->email;
             $user->role_id = $req->role_id;
             $user->save();
-            return redirect()->route('backend.user.index');
+            return redirect()->route('frontend.user.index');
         } catch (\Exception $e) {
             return response()->json(['result' => $e->getMessage()], 422);
         }
@@ -133,23 +131,24 @@ class UserController extends Controller
     public function signOut()
     {
         Session::flush();
-        Auth::guard('backend')->logout();
-        return redirect()->route('backend.user.login');
+        Auth::guard('web')->logout();
+        return redirect()->back();
+        // return redirect()->route('frontend.user.login');
     }
     public function dashboard()
     {
-        if (Auth::guard('backend')->check()) {
-            return view('backend.dashboard');
+        if (Auth::guard('web')->check()) {
+            return view('frontend.dashboard');
         }
 
-        return redirect()->route('backend.user.login')->withSuccess('You are not allowed to access');
+        return redirect()->route('frontend.user.login')->withSuccess('You are not allowed to access');
     }
     public function dashboard2()
     {
-        if (Auth::guard('backend')->check()) {
-            return view('backend.dashboard2');
+        if (Auth::guard('web')->check()) {
+            return view('frontend.dashboard2');
         }
 
-        return redirect()->route('backend.user.login')->withSuccess('You are not allowed to access');
+        return redirect()->route('frontend.user.login')->withSuccess('You are not allowed to access');
     }
 }

@@ -16,6 +16,11 @@ use App\Http\Controllers\OAuthController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::any('login', 'App\Http\Controllers\Frontend\UserController@login')->name('frontend.user.login');
+Route::get('registration', 'App\Http\Controllers\Frontend\UserController@registration')->name('frontend.user.registration');
+Route::post('registration', 'App\Http\Controllers\Frontend\UserController@postRegistration');
+Route::get('signOut', 'App\Http\Controllers\Frontend\UserController@signOut')->name('frontend.user.signOut');
+
 
 Route::get('/google/auth', [OAuthController::class, 'google']);
 Route::get('/google/auth/callback', [OAuthController::class, 'googleCallback']);
@@ -24,8 +29,9 @@ Route::get('/fb/auth', [OAuthController::class, 'fb']);
 Route::get('/fb/auth/callback', [OAuthController::class, 'fbCallback']);
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('welcome')->name('frontend.user.info');
 });
+
 
 Route::get('/pjax', function () {
     return view('pjax');

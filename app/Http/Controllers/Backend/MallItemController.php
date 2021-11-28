@@ -187,7 +187,7 @@ class MallItemController extends Controller
                 }
             }
             DB::commit();
-            return redirect()->back()->withSuccess('刪除成功');;
+            return redirect()->back()->withSuccess('刪除成功');
         } catch (\Exception $e) {
             DB::rollback();
             return redirect()->back()->withErrors($e->getMessage());
