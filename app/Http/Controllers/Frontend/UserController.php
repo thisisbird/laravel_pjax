@@ -43,10 +43,16 @@ class UserController extends Controller
         $remember = $request->remember ?? 0;
         if (Auth::guard('web')->attempt($credentials, $remember)) {
             //intended 紀錄之前的網址
+            if($this->getCart()->count()){
+                $this->getCart(Auth::user()->id)->delete();
+                $this->getCart()->update(['user_id'=>Auth::user()->id]);//登入後更新購物車
+                //todo 清除user_cart的cookies
+
+            }
             return redirect()->intended(Cookie::get('pre_url'))
                 ->withSuccess('Signed in');
         }
-        return redirect()->route('frontend.user.login')->withSuccess('Login details are not valid');
+        return redirect()->route('frontend.user.login')->withErrors('Login details are not valid');
     }
 
 
@@ -76,7 +82,7 @@ class UserController extends Controller
         if($check){
             Auth::guard('web')->loginUsingId($check->id);
         }
-        return redirect()->route('frontend.user.info')->withSuccess('You have signed-in');
+        // return redirect()->route('frontend.user.info')->withSuccess('You have signed-in');
     }
 
 

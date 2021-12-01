@@ -12,4 +12,5 @@ class UserCart extends Model
 
     protected $fillable = ['cookies','user_id','mall_item_detail_id','qty','price','language'];
     
+
 }

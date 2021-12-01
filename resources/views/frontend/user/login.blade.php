@@ -51,6 +51,11 @@
                     </div>
                     <button type="submit" class="btn btn-primary btn-lg btn-block">Sign in</button>
                 </form>
+                @if($errors->count())
+                    @foreach ($errors->all() as $error)
+                    <ul class="parsley-errors-list filled"><li class="parsley-required">{{$error}}</li></ul>
+                    @endforeach
+                @endif
             </div>
             <div class="card-footer bg-white p-0  ">
                 <div class="card-footer-item card-footer-item-bordered">

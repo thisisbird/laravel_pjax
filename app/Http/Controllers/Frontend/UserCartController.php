@@ -17,15 +17,6 @@ use Session;
 
 class UserCartController extends Controller
 {
-    function getCart(){
-        $user_cart = UserCart::where('language',$this->language);
-        if($this->user_id){
-            $user_cart = $user_cart->where('user_id',$this->user_id);
-        }else{
-            $user_cart = $user_cart->where('cookies',$this->cookies);
-        }
-        return $user_cart;
-    }
 
     public function index($cookies_id = ''){
        
@@ -34,7 +25,7 @@ class UserCartController extends Controller
         
 
         $language = $this->language;
-        $get_cart = $this->getCart()->get();
+        $get_cart = $this->getCart($this->user_id)->get();
         $mall_item_detail_ids = $get_cart->pluck('mall_item_detail_id')->toArray();
         $mall_item_details = MallItemDetail::getShoppingMallItemByDetailId($mall_item_detail_ids,$language);
         $mall_item_details = collect($mall_item_details)->keyBy('detail_id')->toArray();
@@ -51,7 +42,7 @@ class UserCartController extends Controller
         $language = $request->language ?? $this->language;
         $mall_item = MallItemDetail::getShoppingMallItemByDetailId($mall_item_detail_id,$language);
         if(!$mall_item) return response()->json($nodata, 400);
-        $user_cart = $this->getCart()->where('mall_item_detail_id',$mall_item_detail_id)->first();
+        $user_cart = $this->getCart($this->user_id)->where('mall_item_detail_id',$mall_item_detail_id)->first();
         if($user_cart){
             $user_cart->qty += $request->qty;
             $user_cart->save();
@@ -67,10 +58,10 @@ class UserCartController extends Controller
         return response()->json($data, 200);
     }
     public function deleteCart(Request $request){
-        $check = $this->getCart()->where('mall_item_detail_id',$request->mall_item_detail_id)->delete();
+        $check = $this->getCart($this->user_id)->where('mall_item_detail_id',$request->mall_item_detail_id)->delete();
         if($check){
             $data['msg'] = '刪除成功';
-            $count = $this->getCart()->count();
+            $count = $this->getCart($this->user_id)->count();
             $data['is_clear'] = $count ? false :true;//沒東西要清空 填寫資本資料
             return response()->json($data, 200);
         }
@@ -118,7 +109,7 @@ class UserCartController extends Controller
             $mall_order->source = '手機';
             $mall_order->save();
 
-        $get_cart = $this->getCart()->get();
+        $get_cart = $this->getCart($this->user_id)->get();
         if(!$get_cart->count()) return redirect()->back()->withErrors(['error'=>'購物車已空'])->withInput();
             
         

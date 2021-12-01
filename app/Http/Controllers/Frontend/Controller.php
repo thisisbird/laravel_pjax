@@ -21,6 +21,7 @@ class Controller extends BaseController
     public $cookies;
     public $language;
     public $user_id = null;
+    public $user = null;
 
     public function __construct()
     {
@@ -32,7 +33,10 @@ class Controller extends BaseController
             }
             $this->cookies = Cookie::get('cart');
             $this->language = 'tw';
-            if(Auth::guard('web')->check()) $this->user_id = Auth::user()->id;
+            if(Auth::guard('web')->check()){
+              $this->user_id = Auth::user()->id;
+              $this->user = Auth::user();
+            } 
 
 
             return $next($request);
@@ -49,8 +53,15 @@ class Controller extends BaseController
       }
       return $randomString;
     }
-    function forgetCookies(){
-      
-    }
+   
+    function getCart($user_id = null){
+      $user_cart = UserCart::where('language',$this->language);
+      if($user_id == null){
+          $user_cart = $user_cart->where('cookies',$this->cookies);
+      }else{
+          $user_cart = $user_cart->where('user_id',$user_id);
+      }
+      return $user_cart;
+  }
 
 }
