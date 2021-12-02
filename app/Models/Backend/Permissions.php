@@ -29,18 +29,22 @@ class Permissions extends Model
         $menu[$i]['submenu'][0] = ['title' => '使用者權限', 'url' => route('backend.user.index'), 'id' => 12];
         $menu[$i]['submenu'][1] = ['title' => '角色管理', 'url' => route('backend.role.index'), 'id' => 13];
 
-
         $i = 2;
         $menu[$i] = ['title' => '商品管理', 'url' => '#', 'icon' => 'fas fa-shopping-basket', 'id' => 21];
         $menu[$i]['submenu'][0] = ['title' => '商城分類', 'url' => route('backend.itemMenu.index'), 'id' => 22];
         $menu[$i]['submenu'][1] = ['title' => '商品資訊', 'url' => route('backend.mallItem.index'), 'id' => 23];
 
         $i = 3;
-        $menu[$i] = ['title' => '訂單管理', 'url' => '#', 'icon' => 'fas fa-shopping-cart', 'id' => 31];
-        $menu[$i]['submenu'][0] = ['title' => '未付款訂單', 'url' => route('backend.mallOrder.index').'?state%5B%5D=1', 'id' => 32];
-        $menu[$i]['submenu'][1] = ['title' => '已付款訂單', 'url' => route('backend.mallOrder.index'), 'id' => 33];
-        $menu[$i]['submenu'][2] = ['title' => '已出貨訂單', 'url' => route('backend.mallOrder.index').'?state%5B%5D=3', 'id' => 34];
-        $menu[$i]['submenu'][3] = ['title' => '已完成訂單', 'url' => route('backend.mallOrder.index').'?state%5B%5D=4', 'id' => 35];
+        $menu[$i] = ['title' => '文章管理', 'url' => '#', 'icon' => 'fas fa-shopping-basket', 'id' => 31];
+        $menu[$i]['submenu'][0] = ['title' => '文章分類', 'url' => route('backend.articleMenu.index'), 'id' => 32];
+        $menu[$i]['submenu'][1] = ['title' => '文章資訊', 'url' => route('backend.article.index'), 'id' => 33];
+
+        $i = 4;
+        $menu[$i] = ['title' => '訂單管理', 'url' => '#', 'icon' => 'fas fa-shopping-cart', 'id' => 41];
+        $menu[$i]['submenu'][0] = ['title' => '未付款訂單', 'url' => route('backend.mallOrder.index').'?state%5B%5D=1', 'id' => 42];
+        $menu[$i]['submenu'][1] = ['title' => '已付款訂單', 'url' => route('backend.mallOrder.index'), 'id' => 43];
+        $menu[$i]['submenu'][2] = ['title' => '已出貨訂單', 'url' => route('backend.mallOrder.index').'?state%5B%5D=3', 'id' => 44];
+        $menu[$i]['submenu'][3] = ['title' => '已完成訂單', 'url' => route('backend.mallOrder.index').'?state%5B%5D=4', 'id' => 45];
         // $i = 2;
         // $menu[$i] = ['title' => 'PIXI', 'url' => '#', 'icon' => 'fa fa-fw fa-user-circle', 'id' => 21];
         // $menu[$i]['submenu'][0] = ['title' => '測試', 'url' => route('backend.pixi.test'), 'id' => 22];

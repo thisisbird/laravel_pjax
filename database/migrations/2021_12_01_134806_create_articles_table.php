@@ -16,13 +16,11 @@ class CreateArticlesTable extends Migration
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id')->nullable();
-            $table->integer('article_menu_id')->nullable();
-            $table->string('title');
-            $table->string('cover')->comment('封面照路徑');
-            $table->text('content')->comment('文章內容');
-            $table->tinyInteger('is_display')->comment('是否顯示');
-            $table->string('language',5)->comment('語系: tw,en');
 
+            // $table->string('title',50)->comment('文章標題');
+            $table->integer('sort');
+            $table->boolean('is_display')->comment('是否顯示');
+            $table->json('photo')->comment('陣列-照片路徑');
             $table->timestamps();
             $table->softDeletes();
 

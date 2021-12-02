@@ -42,6 +42,18 @@ Route::group(['middleware'=> 'auth.backend:backend'], function (Router $router) 
     $router->post('role/', 'App\Http\Controllers\Backend\RoleController@update')->name('backend.role.update');
     $router->delete('role/{id}', 'App\Http\Controllers\Backend\RoleController@delete')->name('backend.role.delete');
 
+    $router->get('article_menu/', 'App\Http\Controllers\Backend\ArticleMenuController@index')->name('backend.articleMenu.index');
+    $router->get('article_menu/{id}', 'App\Http\Controllers\Backend\ArticleMenuController@edit')->name('backend.articleMenu.edit');
+    $router->post('article_menu/', 'App\Http\Controllers\Backend\ArticleMenuController@update')->name('backend.articleMenu.update');
+    $router->delete('article_menu', 'App\Http\Controllers\Backend\ArticleMenuController@delete')->name('backend.articleMenu.delete');
+
+    $router->get('article/', 'App\Http\Controllers\Backend\ArticleController@index')->name('backend.article.index');
+    $router->get('article/{id}', 'App\Http\Controllers\Backend\ArticleController@edit')->name('backend.article.edit');
+    $router->post('article/', 'App\Http\Controllers\Backend\ArticleController@update')->name('backend.article.update');
+    $router->delete('article', 'App\Http\Controllers\Backend\ArticleController@delete')->name('backend.article.delete');
+    $router->post('article/delete_photo', 'App\Http\Controllers\Backend\MallItemController@deletePhoto')->name('backend.article.deletePhoto');
+
+
     $router->get('item_menu/', 'App\Http\Controllers\Backend\ItemMenuController@index')->name('backend.itemMenu.index');
     $router->get('item_menu/{id}', 'App\Http\Controllers\Backend\ItemMenuController@edit')->name('backend.itemMenu.edit');
     $router->post('item_menu/', 'App\Http\Controllers\Backend\ItemMenuController@update')->name('backend.itemMenu.update');

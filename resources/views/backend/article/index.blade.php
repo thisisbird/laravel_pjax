@@ -1,0 +1,411 @@
+@extends('backend.layout-concept.app')
+@section('content')
+<style>
+    .note-editable{
+        background-color: #ffffff;
+    }
+    .add_detail_icon{
+        font-size: 25px;
+    }
+    .kv-file-remove,.kv-file-zoom{
+        width: 50px !important;
+    }
+    .kv-file-upload{
+        display: none !important;
+    }
+    #pjax-mall_item{
+        position: sticky;
+        top: 70px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        height: 80vh;
+    }
+</style>
+
+<div class="row">
+    
+    <!-- ============================================================== -->
+    <!-- search bar  -->
+    <!-- ============================================================== -->
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="card">
+            <div class="card-body">
+                <form action="{{route('backend.article.index')}}" method="GET" pjax-container>
+                    <input type="hidden" name="language" value="{{$request->language}}">
+                    <div class="row">
+                        <div class="col-3 mb-3">
+                            <div class="input-group">
+                                <select class="js-example-basic-multiple" multiple="multiple" name="menu[]">
+                                    @foreach ($menus as $menu_1)
+                                    <option value="{{$menu_1->id}}" {{is_array($request->menu) && in_array($menu_1->id,$request->menu) ? 'selected':'' }}>&nbsp;∟{{$menu_1->name_tw}}({{$menu_1->name_en}})</option>
+                                        @foreach ($menu_1->children as $menu_2)
+                                            <option value="{{$menu_2->id}}" {{is_array($request->menu) && in_array($menu_2->id,$request->menu) ? 'selected':'' }}>&nbsp;&nbsp;&nbsp;&nbsp;∟{{$menu_2->name_tw}}({{$menu_2->name_en}})</option>
+                                            @foreach ($menu_2->children as $menu_3)
+                                                <option value="{{$menu_3->id}}" {{is_array($request->menu) && in_array($menu_3->id,$request->menu) ? 'selected':'' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;∟{{$menu_3->name_tw}}({{$menu_3->name_en}})</option>
+                                            @endforeach
+                                        @endforeach
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-text">關鍵字</span></div>
+                                <input class="form-control form-control-lg" type="search" placeholder="文章名稱、編號或金額" aria-label="Search" name="search" value="{{$request->search}}">
+                            </div>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-text">是否顯示</span></div>
+                                <select class="form-control form-control-lg" name="is_display">
+                                    <option value="all" {{$request->is_display == 'all' ? 'selected':''}}>全部</option>
+                                    <option value="1" {{$request->is_display === "1" ? 'selected':''}}>是</option>
+                                    <option value="0" {{$request->is_display === "0" ? 'selected':''}}>否</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-text">可否購買</span></div>
+                                <select class="form-control form-control-lg" name="is_shopping">
+                                    <option value="all" {{$request->is_shopping == 'all' ? 'selected':''}}>全部</option>
+                                    <option value="1" {{$request->is_shopping === "1" ? 'selected':''}}>是</option>
+                                    <option value="0" {{$request->is_shopping === "0" ? 'selected':''}}>否</option>
+                                </select>
+                            </div>
+                        </div><div class="col-3 mb-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-text">熱銷品</span></div>
+                                <select class="form-control form-control-lg" name="is_hot">
+                                    <option value="all" {{$request->is_hot == 'all' ? 'selected':''}}>全部</option>
+                                    <option value="1" {{$request->is_hot === "1" ? 'selected':''}}>是</option>
+                                    <option value="0" {{$request->is_hot === "0" ? 'selected':''}}>否</option>
+                                </select>
+                            </div>
+                        </div><div class="col-3 mb-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend"><span class="input-group-text">新品</span></div>
+                                <select class="form-control form-control-lg" name="is_new">
+                                    <option value="all" {{$request->is_new === 'all' ? 'selected':''}}>全部</option>
+                                    <option value="1" {{$request->is_new === "1" ? 'selected':''}}>是</option>
+                                    <option value="0" {{$request->is_new === "0" ? 'selected':''}}>否</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary search-btn" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- end search bar  -->
+    <!-- ============================================================== -->
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" id="mall_item">
+        <!-- ============================================================== -->
+        <!-- card influencer one -->
+        <!-- ============================================================== -->
+        @foreach ($datas as $data)
+        {{-- @dd($data) --}}
+        <div class="card {{isset($select_data) && $select_data->id == $data->id ? 'bg-brand':''}}">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="user-avatar float-xl-left pr-4 float-none">
+                            <img src="{{asset('concept')}}/assets/images/avatar-1.jpg" alt="User Avatar"
+                                class="rounded-circle user-avatar-xl">
+                        </div>
+                        <div class="pl-xl-3">
+                            <div class="m-b-0">
+                                <div class="user-avatar-name d-inline-block">
+                                    <h2 class="font-24 m-b-10">{{$data->name}}</h2>
+                                </div>
+                                <div class="rating-star d-inline-block pl-xl-2 mb-2 mb-xl-0">
+                                    <i class="fa fa-fw fa-star"></i>
+                                    <i class="fa fa-fw fa-star"></i>
+                                    <i class="fa fa-fw fa-star"></i>
+                                    <i class="fa fa-fw fa-star"></i>
+                                    <i class="fa fa-fw fa-star"></i>
+                                    <p class="d-inline-block text-dark">14 Reviews </p>
+                                </div>
+                            </div>
+                            <div class="user-avatar-address">
+                                <div class="mt-3">
+                                    <a href="##" class="mr-1 badge badge-light">{{$data->is_display ? '顯示':'不顯示'}}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="float-xl-right float-none mt-xl-0 mt-4">
+                            {{-- <a href="#" class="btn-wishlist m-r-10"><i class="far fa-star"></i></a> --}}
+                            <a href="{{route('backend.article.edit',$data->id)}}?language=en&{{http_build_query(Request::except('language'))}}" class="btn {{isset($select_data) ? $select_data->id == $data->id && $request->language == 'en' ? 'btn-secondary' :'btn-outline-secondary' :'btn-outline-secondary'}}">編輯英文</a>
+                            <a href="{{route('backend.article.edit',$data->id)}}?language=tw&{{http_build_query(Request::except('language'))}}" class="btn {{isset($select_data) ? $select_data->id == $data->id && $request->language == 'tw' ? 'btn-secondary' :'btn-outline-secondary' :'btn-outline-secondary'}}">編輯中文</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="border-top user-social-box">
+               
+                {{-- <div class="user-social-media d-xl-inline-block"><span class="mr-2  facebook-color"> <i
+                            class="fab fa-facebook-square "></i></span><span>92,920</span></div>
+                <div class="user-social-media d-xl-inline-block"><span class="mr-2 medium-color"> <i
+                            class="fab fa-medium"></i></span><span>291</span></div>
+                <div class="user-social-media d-xl-inline-block"><span class="mr-2 youtube-color"> <i
+                            class="fab fa-youtube"></i></span><span>1291</span></div> --}}
+            </div>
+        </div>
+        @endforeach
+    </div>
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+        <div id="pjax-mall_item">
+        <form action="{{route('backend.article.update')}}" method="POST" pjax-container>
+            @csrf
+            <input type="hidden" name="language" value="{{$request->language}}">
+
+            @if($errors->count())
+                @foreach ($errors->all() as $error)
+                <ul class="parsley-errors-list filled"><li class="parsley-required">{{$error}}</li></ul>
+                @endforeach
+            @endif
+            <div class="email-head">
+                <div class="email-head-title">文章資訊<span class="icon mdi mdi-edit"></span></div>
+            </div>
+
+            <div class="email-compose-fields">
+                <div class="subject">
+                    <div class="form-group row pt-2">
+                        <label class="col-md-3 control-label">文章名稱</label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" name="title" value="{{isset($select_data) ? ($select_data->info->where('language',$request->language)->first()->title ?? '') : old('name')}}">
+                        </div>
+                    </div>
+                </div>
+ 
+                <div class="menu">
+                    <div class="form-group row pt-0">
+                        <label class="col-md-3 control-label">分類</label>
+                        <div class="col-md-9">
+                            <select class="js-example-basic-multiple" multiple="multiple" name="menu[]">
+                                @foreach ($menus as $menu_1)
+                                <option value="{{$menu_1->id}}" {{old('menu') && in_array($menu_1->id,old('menu')) ? 'selected':'' }} {{isset($select_data) && in_array($menu_1->id,$select_data->menu->pluck('id')->toArray())  ? 'selected':''}}>&nbsp;∟{{$menu_1->name_tw}}({{$menu_1->name_en}})</option>
+                                @foreach ($menu_1->children as $menu_2)
+                                    <option value="{{$menu_2->id}}" {{old('menu') && in_array($menu_2->id,old('menu')) ? 'selected':'' }} {{isset($select_data) && in_array($menu_2->id,$select_data->menu->pluck('id')->toArray()) ? 'selected':''}}>&nbsp;&nbsp;&nbsp;&nbsp;∟{{$menu_2->name_tw}}({{$menu_2->name_en}})</option>
+                                    @foreach ($menu_2->children as $menu_3)
+                                        <option value="{{$menu_3->id}}" {{old('menu') && in_array($menu_3->id,old('menu')) ? 'selected':'' }} {{isset($select_data) && in_array($menu_3->id,$select_data->menu->pluck('id')->toArray()) ? 'selected':''}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;∟{{$menu_3->name_tw}}({{$menu_3->name_en}})</option>
+                                    @endforeach
+                                @endforeach
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 px-0">
+                <div class="card">
+                    <div class="card-body">
+                            <label class="custom-control custom-checkbox custom-control-inline">
+                                <input type="checkbox" value="1" name="is_display" {{isset($select_data) ? ($select_data->is_display?'checked':'') : (old('is_display')?'checked':'')}} class="custom-control-input"><span class="custom-control-label">是否顯示</span>
+                            </label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 px-0">
+
+            <input type="hidden" name="delete_cover" id='delete_cover'>
+            <input type="hidden" name="sort_cover" id='sort_cover'>
+            <div class="file-loading">
+                <input id="kv-explorer" type="file" multiple name="cover[]">
+            </div>
+            </div>
+
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-5">
+                
+                <div class="tab-regular" id="tabs">
+                    <ul class="nav nav-tabs " id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">文章內容</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade active show" id="home" role="tabpanel" aria-labelledby="home-tab">
+                            <div class="email editor">
+                                <div class="col-md-12 p-0">
+                                    <div class="form-group">
+                                        <textarea name="discription" class="form-control summernote" id="summernote" rows="6"
+                                            placeholder="Write Descriptions">{{isset($select_data) ? ($select_data->info->where('language',$request->language)->first()->discription ?? '') : old('discription')}}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="email editor">
+                @isset($select_data)
+                <input type="hidden" name="data_id" value="{{$select_data['id']}}" id="data_id">
+                <input type="hidden" name="action_type" value="update">
+                <div class="email action-send">
+                    <div class="col-md-12 ">
+                        <div class="form-group">
+                            <button class="btn btn-secondary btn-space" type="submit" style="width: 100%;" id="update"><i class="icon s7-mail"></i>
+                                更新</button>
+                            <a href="{{route('backend.article.index')}}" class="btn btn-dark btn-lg btn-block">取消</a>
+                            {{-- <button class="btn btn-success btn-lg btn-block" type="submit" style="width: 100%;" id="copy">複製</button> --}}
+                        </div>
+                    </div>
+                </div>
+                @else
+                <input type="hidden" name="action_type" value="create">
+                <button class="btn btn-success btn-lg btn-block" type="submit" style="width: 100%;">新增</button>
+                @endisset
+            </div>
+            {{-- //email --}}
+
+            
+
+        </form>
+    </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- end influencer sidebar  -->
+    <!-- ============================================================== -->
+</div>
+
+<script>
+    $( function() {
+        $( "#tabs" ).tabs();
+        $("#copy").on('click',function () {
+            $("#data_id").attr('disabled',true);
+        });
+        $("#update").on('click',function () {
+            $("#data_id").attr('disabled',false);
+        })
+    });
+    $(document).ready(function () {
+        $('.js-example-basic-multiple').select2({
+            tags: false
+        });
+    });
+
+    $('.add_detail').on('click','a',function () {
+        $(this).closest('.add_detail').hide('fast');
+        $(this).closest('.detail_div').find('.detail_data').show('fast');
+        $(this).closest('.detail_div').find('.detail_data').find('input').attr('disabled',false);
+    });
+    $('.delete_detail').on('click',function () {
+        $(this).closest('.detail_data').hide('fast');
+        $(this).closest('.detail_data').find('input').attr('disabled',true);
+        $(this).closest('.detail_div').find('.add_detail').show('fast');
+    });
+    function readURL(input) {
+            self = $(input);
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    self.closest('.detail_data').find('.detail_img').attr('src', e.target.result);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+</script>
+<script>
+    $(document).ready(function () {
+        $('.summernote').summernote({
+            tabsize: 2,
+            height: 300,
+            callbacks: {
+                onImageUpload: function(files) {
+                    uploadImage(files[0]);
+                }
+            },
+            placeholder: 'type with apple, orange, watermelon and lemon',
+            hint: {
+                words: ['apple', 'orange', 'watermelon', 'lemon','帥帥帥帥哥哥','handsome','handsome2','handsome3'],
+                match: /\b(\w{1,})$/,
+                search: function (keyword, callback) {
+                    callback($.grep(this.words, function (item) {
+                        return item.indexOf(keyword) === 0;
+                    }));
+                }
+            }
+        });
+        
+
+
+        // function sendFile(file, editor, welEditable) {
+        //     data = new FormData();
+        //     data.append("file", file);
+        //     data.append("_token", "{{csrf_token()}}");
+        //     $.ajax({
+        //     data: data,
+        //     type: "POST",
+        //     url: "{{route('backend.uploadImage')}}",
+        //     cache: false,
+        //     contentType: false,
+        //     processData: false,
+        //         success: function(url) {
+        //             editor.insertImage(welEditable, url);
+        //         }
+        //     });
+        // }
+        function uploadImage(image) {
+            
+            var data = new FormData();
+            data.append("image", image);
+            data.append("_token", "{{csrf_token()}}");
+            $.ajax({
+                url: '{{route('backend.uploadImage')}}',
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: data,
+                type: "post",
+                success: function(url) {
+                    var image = $('<img>').attr('src', url);
+                    $('#summernote').summernote("insertNode", image[0]);
+                },
+                error: function(data) {
+                    console.log(data);
+                }
+            });
+        }
+        let photo = [];
+        let config = [];
+        @isset($select_data->photo)
+        photo = @json($select_data->photo);
+        photo.forEach(function (v) {
+            config.push({url: "{{route('backend.article.deletePhoto')}}", key: v,extra: {_token: "{{csrf_token()}}"}})
+        });
+        @endisset
+        $("#kv-explorer").fileinput({
+            'theme': 'explorer-fas',
+            // 'uploadUrl': '#',
+            showUpload: false,
+            showRemove: false,
+            overwriteInitial: false,
+            initialPreviewAsData: true,
+            initialPreview: photo,
+            initialPreviewConfig: config
+        });
+        $('#kv-explorer').on('filesorted', function(event, params) {
+            // console.log('File sorted ', params.previewId, params.oldIndex, params.newIndex, params.stack);
+            sort = params.stack.map(function (item, index, array) {
+                return item.key;
+            })
+            $('#sort_cover').val(sort);
+        });
+        var delete_cover_array = [];
+        $('#kv-explorer').on('filedeleted', function(event, id) {
+            delete_cover_array.push(id)
+            $('#delete_cover').val(delete_cover_array);
+        });
+     
+    });
+
+</script>
+@endsection

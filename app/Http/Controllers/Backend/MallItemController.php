@@ -11,6 +11,7 @@ use App\Models\Backend\ItemMenu;
 use DB;
 use Illuminate\Support\Facades\Validator;
 use Exception;
+
 class MallItemController extends Controller
 {
     private function common($request)
